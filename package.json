@@ -22,7 +22,8 @@
 		"@servicenow/sass-kit": "quebec",
 		"@servicenow/sass-theme": "quebec",
 		"@servicenow/ui-core": "quebec",
-		"@servicenow/ui-renderer-snabbdom": "quebec"
+		"@servicenow/ui-renderer-snabbdom": "quebec",
+		"date-fns": "^2.29.1"
 	},
 	"devDependencies": {
 		"@servicenow/cli-archetype-dev": "20.0.0",
