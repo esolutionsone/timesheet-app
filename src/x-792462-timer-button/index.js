@@ -19,7 +19,6 @@ const difference = (current, load) => {
 	}
 
 	let {hours, minutes, seconds} = duration;
-
 	return `${hours}:${minutes}:${seconds}`;
 }
 
@@ -27,6 +26,7 @@ const view = (state, {updateState}) => {
 	const {seconds, loadTime, currentTime} = state;
 	const isActive = true;
 
+	// Update every second
 	let interval = null;
     if (isActive) {
       interval = setInterval(() => {
@@ -54,7 +54,11 @@ createCustomElement('x-792462-timer-button', {
 	},
 	actionHandlers: {
 		[COMPONENT_BOOTSTRAPPED]: ({updateState}) => updateState({loadTime: new Date()}), // replace with REST
-		'NOW_BUTTON#CLICKED': ({action}) => console.log('clicked'),
+		'NOW_BUTTON#CLICKED': ({action, dispatch, state}) => {
+			console.log('clicked');
+			dispatch('TIMER_BUTTON#CLICKED', state);
+			
+		},
 		'TIMER_BUTTON#CLICKED': ({action}) => console.log(action.payload),
 	}
 });
