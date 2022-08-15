@@ -13,18 +13,14 @@ const difference = (current, load) => {
 		end: differenceInMilliseconds(current, load) || 0,
 	});
 
-	let {hours, minutes, seconds} = duration;
-
-	const leadZeroString = (num) => {
-		num = num.toString();
-		if(num.length == 1){
-			return '0' + num;
-		}else{
-			return num;
-		}
+	// coerce to strings and pad to get hh:mm:ss format
+	for (let el in duration){
+		duration[el] = duration[el].toString().padStart(2, '0');
 	}
 
-	return `${leadZeroString(hours)}:${leadZeroString(minutes)}:${leadZeroString(seconds)}`;
+	let {hours, minutes, seconds} = duration;
+
+	return `${hours}:${minutes}:${seconds}`;
 }
 
 const view = (state, {updateState}) => {
