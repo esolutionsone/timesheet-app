@@ -1,4 +1,5 @@
 import {createCustomElement, actionTypes} from '@servicenow/ui-core';
+import {createHttpEffect} from '@servicenow/ui-effect-http';
 import snabbdom from '@servicenow/ui-renderer-snabbdom';
 import '@servicenow/now-button';
 import styles from './styles.scss';
@@ -30,7 +31,7 @@ const view = (state, {updateState}) => {
 	let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        updateState({seconds: seconds + 1, currentTime: new Date()});
+        updateState({currentTime: new Date()});
 		clearInterval(interval);
       }, 1000);
     } else if (!isActive && seconds !== 0) {
@@ -48,17 +49,30 @@ createCustomElement('x-792462-timer-button', {
 	styles,
 	initialState: {
 		previousTime: 0,
-		seconds: 0,
 		currentTime: null,
 		loadTime: null,
+	},
+	properties: {
+		timestampTable: {default: "x_esg_one_delivery_timestamps"}
 	},
 	actionHandlers: {
 		[COMPONENT_BOOTSTRAPPED]: ({updateState}) => updateState({loadTime: new Date()}), // replace with REST
 		'NOW_BUTTON#CLICKED': ({action, dispatch, state}) => {
 			console.log('clicked');
 			dispatch('TIMER_BUTTON#CLICKED', state);
-			
+			dispatch('INSERT_TIMESTAMP');
+			console.log('both actions dispatched');
 		},
 		'TIMER_BUTTON#CLICKED': ({action}) => console.log(action.payload),
+		'INSERT_TIMESTAMP': ({properties}) => createHttpEffect(`api/now/table/${properties.timestampTable}`, {
+			method: 'POST',
+			dataParam: {timestamp: new Date()},
+			onStartActionType: 'INSERT_START',
+			onSuccessAction: 'INSERT_SUCCESS',
+			onErrorAction: 'INSERT_ERROR',
+		}),
+		'INSERT_START': () => console.log('REST called'),
+		'INSERT_SUCCESS': ({action}) => console.log(action.payload),
+		'INSERT_ERROR': ({action}) => console.log(action.payload),
 	}
 });
