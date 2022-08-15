@@ -1,7 +1,7 @@
 import {createCustomElement, actionTypes} from '@servicenow/ui-core';
-import {createHttpEffect} from '@servicenow/ui-effect-http';
-import snabbdom from '@servicenow/ui-renderer-snabbdom';
-import '@servicenow/now-button';
+import { createHttpEffect } from '@servicenow/ui-effect-http';
+import {snabbdom, Fragment} from '@servicenow/ui-renderer-snabbdom';
+// import '@servicenow/now-button';
 import styles from './styles.scss';
 import { differenceInMilliseconds, intervalToDuration, parseISO } from 'date-fns';
 
@@ -23,9 +23,12 @@ const difference = (current, load) => {
 	return `${hours}:${minutes}:${seconds}`;
 }
 
-const view = (state, {updateState}) => {
+const view = (state, {updateState, dispatch}) => {
 	const {seconds, loadTime, currentTime} = state;
-	const isActive = true;
+	const isActive = state.timerActive;
+	const styles = {
+		color: state.timerActive ? 'green' : 'red'
+	}
 
 	// Update every second
 	let interval = null;
@@ -38,8 +41,26 @@ const view = (state, {updateState}) => {
       clearInterval(interval);
     }
 
+	console.log('renders correctly')
+
+
 	return (
-		<now-button>{difference(currentTime, loadTime)}</now-button>
+		<Fragment>
+		{/* <button on-click={() => dispatch('TEST_GET', {
+			table_name: 'x_esg_one_delivery_timestamps',
+			sysparm_limit: '10', 
+			sysparm_query: 'active=true',
+		})}>{difference(currentTime, loadTime)}</button> */}
+		<button 
+		style={styles}
+		on-click={() => {
+			updateState({timerActive: !state.timerActive});
+		// 	dispatch('INSERT_TIMESTAMP', {
+		// 	short_description: 'test'
+		// })
+	}
+		}>{difference(currentTime, loadTime)}</button>
+		</Fragment>
 	);
 };
 
@@ -48,7 +69,7 @@ createCustomElement('x-792462-timer-button', {
 	view,
 	styles,
 	initialState: {
-		previousTime: 0,
+		timerActive: false,
 		currentTime: null,
 		loadTime: null,
 	},
@@ -60,19 +81,30 @@ createCustomElement('x-792462-timer-button', {
 		'NOW_BUTTON#CLICKED': ({action, dispatch, state}) => {
 			console.log('clicked');
 			dispatch('TIMER_BUTTON#CLICKED', state);
-			dispatch('INSERT_TIMESTAMP');
+			dispatch('INSERT_TIMESTAMP', {short_description: 'test'});
+			dispatch('TEST_GET');
 			console.log('both actions dispatched');
 		},
 		'TIMER_BUTTON#CLICKED': ({action}) => console.log(action.payload),
-		'INSERT_TIMESTAMP': ({properties}) => createHttpEffect(`api/now/table/${properties.timestampTable}`, {
+		'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/x_esg_one_delivery_timestamps`, {
 			method: 'POST',
-			dataParam: {timestamp: new Date()},
-			onStartActionType: 'INSERT_START',
-			onSuccessAction: 'INSERT_SUCCESS',
-			onErrorAction: 'INSERT_ERROR',
+			dataParam: 'data',
+			headers: {},
+			startActionType: 'INSERT_START',
+			successActionType: 'INSERT_SUCCESS',
+			errorActionType: 'INSERT_ERROR',
 		}),
-		'INSERT_START': () => console.log('REST called'),
+		'INSERT_START': ({host}) => console.log('REST called', host),
 		'INSERT_SUCCESS': ({action}) => console.log(action.payload),
 		'INSERT_ERROR': ({action}) => console.log(action.payload),
+		'TEST_GET': createHttpEffect(`api/now/table/:table_name`, {
+				pathParams: ['table_name'],
+				method: 'GET',
+				queryParams: ['sysparm_limit'],
+				startActionType: 'TEST_START',
+				successActionType: 'INSERT_SUCCESS',
+
+			}),
+		'TEST_START': () => console.log('test start'),
 	}
 });

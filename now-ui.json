@@ -1,9 +1,7 @@
 {
 	"components": {
 	    "x-792462-timer-button": {
-	        "innerComponents": [
-				"now-button"
-			],
+	        "innerComponents": [],
 			"uiBuilder": {
 				"associatedTypes": ["global.core", "global.landing-page"],
 				"label": "My Component",
