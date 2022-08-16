@@ -21,7 +21,14 @@ const difference = (current, load) => {
 	}
 
 	let {hours, minutes, seconds} = duration;
-	return `${hours}:${minutes}:${seconds}`;
+
+	// get rounded Hours and Minutes
+	let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+	let totalMinutes = Math.ceil(totalSeconds / (60 * 15));
+	let roundedHours = Math.floor(totalMinutes / 60).toString().padStart(2, '0');
+	let roundedMinutes = ((totalMinutes % 60) * 15).toString().padStart(2, '0');
+
+	return `${hours}:${minutes}:${seconds} - ${roundedHours}:${roundedMinutes}:00`;
 }
 
 const view = (state, {updateState, dispatch }) => {
