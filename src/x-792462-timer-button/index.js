@@ -3,7 +3,7 @@ import { createHttpEffect } from '@servicenow/ui-effect-http';
 import {snabbdom, Fragment} from '@servicenow/ui-renderer-snabbdom';
 // import '@servicenow/now-button';
 import styles from './styles.scss';
-import { differenceInMilliseconds, intervalToDuration, parseISO, format } from 'date-fns';
+import { differenceInMilliseconds, intervalToDuration } from 'date-fns';
 
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
@@ -14,7 +14,7 @@ const difference = (current, load) => {
 		end: differenceInMilliseconds(current, load) || 0,
 	});
 
-	console.log('current:', current, '\nload:', load);
+
 	// coerce to strings and pad to get hh:mm:ss format
 	for (let el in duration){
 		duration[el] = duration[el].toString().padStart(2, '0');
@@ -23,16 +23,16 @@ const difference = (current, load) => {
 	let {hours, minutes, seconds} = duration;
 
 	// get rounded Hours and Minutes
-	let totalSeconds = hours * 3600 + minutes * 60 + seconds;
-	let totalMinutes = Math.ceil(totalSeconds / (60 * 15));
+	let totalSeconds = hours * 3600 + minutes * 60 + Number(seconds);
+	let totalMinutes = Math.ceil(totalSeconds / 60 / 15) * 15;
 	let roundedHours = Math.floor(totalMinutes / 60).toString().padStart(2, '0');
-	let roundedMinutes = ((totalMinutes % 60) * 15).toString().padStart(2, '0');
+	let roundedMinutes = ((totalMinutes % 60)).toString().padStart(2, '0');
 
 	return `${hours}:${minutes}:${seconds} - ${roundedHours}:${roundedMinutes}:00`;
 }
 
 const view = (state, {updateState, dispatch }) => {
-	const {properties, seconds, currentTime, test_start_time} = state;
+	const {properties, seconds, currentTime} = state;
 	const { active, start } = properties;
 	const styles = { color: active == "true" ? 'green' : 'red' }
 
@@ -92,7 +92,7 @@ createCustomElement('x-792462-timer-button', {
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
-		sysId: { default: "ed0141aa1b595190048f64a1b24bcba6" },
+		sysId: { default: null },
 		active: { default: "false" },
 		start: { default: null }
 	},
