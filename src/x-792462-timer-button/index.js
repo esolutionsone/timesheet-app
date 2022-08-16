@@ -14,6 +14,7 @@ const difference = (current, load) => {
 		end: differenceInMilliseconds(current, load) || 0,
 	});
 
+	console.log('current:', current, '\nload:', load);
 	// coerce to strings and pad to get hh:mm:ss format
 	for (let el in duration){
 		duration[el] = duration[el].toString().padStart(2, '0');
@@ -24,31 +25,36 @@ const difference = (current, load) => {
 }
 
 const view = (state, {updateState, dispatch }) => {
-	const {properties, seconds, startTime, currentTime, test_start_time} = state;
-	const isActive = state.timerActive;
-	const styles = {
-		color: state.timerActive ? 'green' : 'red'
-	}
+	const {properties, seconds, currentTime, test_start_time} = state;
+	const { active, start } = properties;
+	const styles = { color: active == "true" ? 'green' : 'red' }
 
 	// Update every second
 	let interval = null;
-    if (isActive) {
+    if ( active == "true" ) {
       interval = setInterval(() => {
         updateState({currentTime: new Date()});
 		clearInterval(interval);
       }, 1000);
-    } else if (!isActive && seconds !== 0) {
+    } else if (active != "true" && seconds !== 0) {
       clearInterval(interval);
     }
 
-	console.log(state);
+	const getUTCTime = (d) => {
+		// 2022-08-16 18:08:40
+		if(!d)return;
+		const arr = d.split(/[\-\s:]/g);
+		arr[1] = arr[1] - 1;
+		return new Date(Date.UTC(...arr));
+	}
+
 	return (
 		<Fragment>
 			<button 
 			style={styles}
 			on-click={() => {
-				const {timestampTable} = properties;
-				if(state.timerActive !==  "true"){
+				const {timestampTable } = properties;
+				if(active !==  "true"){
 					dispatch('INSERT_TIMESTAMP', {
 						timestampTable,
 						data: { active: true }
@@ -63,7 +69,7 @@ const view = (state, {updateState, dispatch }) => {
 				}
 				// updateState({timerActive: !state.timerActive});
 			}
-			}>{difference(currentTime, parseISO(test_start_time))}</button>
+			}>{difference(currentTime, getUTCTime(start))}</button>
 		</Fragment>
 	);
 };
@@ -73,14 +79,15 @@ createCustomElement('x-792462-timer-button', {
 	view,
 	styles,
 	initialState: {
-		timerActive: false,
 		currentTime: null,
 		startTime: null,
 		test_start_time: null,
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
-		sysId: {default: null},
+		sysId: { default: "ed0141aa1b595190048f64a1b24bcba6" },
+		active: { default: "false" },
+		start: { default: null }
 	},
 	actionHandlers: {
 		[COMPONENT_BOOTSTRAPPED]: ({state, dispatch, properties}) => {
@@ -92,26 +99,30 @@ createCustomElement('x-792462-timer-button', {
 		'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:timestampTable/:sys_id`, {
 			method: 'PUT',
 			pathParams: ['timestampTable', 'sys_id'],
-			successActionType: 'LOG_RESULT',
+			successActionType: 'UPDATE_SUCCESS',
 			errorActionType: 'LOG_RESULT',
 			startActionType: 'LOG_RESULT',
 			dataParam: 'data',
 		}),
-		'FETCH_TIMER_STATUS': createHttpEffect(`api/now/table/:timestampTable`, {
+		'FETCH_TIMER_STATUS': createHttpEffect(`api/now/table/:timestampTable/:sys_id`, {
 			method: 'GET',
-			pathParams: ['timestampTable'],
-			queryParams: ['sys_id'],
+			pathParams: ['timestampTable', 'sys_id'],
 			successActionType: 'SET_TIMER_STATUS',
 			startActionType: 'LOG_RESULT',
 			errorActionType: 'LOG_RESULT',
 		}),
-		'SET_TIMER_STATUS': ({action, updateState}) => {
-			console.log(action.payload);
-			console.log(action.payload.result[0].sys_created_on);
-			updateState({
-				startTime: action.payload.result[0].sys_created_on,
-				test_start_time: action.payload.result[0].test_start_time
-			})
+		'SET_TIMER_STATUS': ({action, updateState, updateProperties}) => {
+			console.log('SET_TIMER_STATUS ', action.payload);
+			// console.log(action.payload.result[0].sys_created_on);
+			// updateState({
+			// 	startTime: action.payload.result[0].sys_created_on,
+			// 	test_start_time: action.payload.result[0].test_start_time
+			// })
+			updateProperties({
+				start: action.payload.result.start_time,
+				active: action.payload.result.active
+			});
+
 		},
 		'TIMER_BUTTON#CLICKED': ({action}) => console.log(action.payload),
 		'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:timestampTable`, {
@@ -126,14 +137,22 @@ createCustomElement('x-792462-timer-button', {
 		'INSERT_START': ({host}) => console.log('REST called', host),
 		'INSERT_SUCCESS': ({action, updateProperties, updateState}) => {
 			console.log('INSERT RESULT:', action.payload);
-			updateProperties({sysId: action.payload.result.sys_id});
-			updateState({
-				startTime: action.payload.result.start_time,
-				timerActive: action.payload.result.active,
-				// test_start_time: action.payload.result.test_start_time
+			updateProperties({
+				sysId: action.payload.result.sys_id,
+				active: action.payload.result.active,
+				start: action.payload.result.start_time,
 			});
+			// updateState({
+			// 	startTime: action.payload.result.start_time,
+			// 	// timerActive: action.payload.result.active,
+			// 	// test_start_time: action.payload.result.test_start_time
+			// });
 		},
 		'INSERT_ERROR': ({action}) => console.log(action.payload),
+		'UPDATE_SUCCESS': ({action, updateProperties}) => {
+			const {active} = action.payload.result;
+			updateProperties({active});
+		},
 		'TEST_GET': createHttpEffect(`api/now/table/:table_name`, {
 				pathParams: ['table_name'],
 				method: 'GET',

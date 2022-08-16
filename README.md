@@ -30,6 +30,9 @@ props = {
 ## Concerns
 - Dealing with the times is a big problem, when using the Javascript Date object, since SN doesn't use automatic detection of timezones. Better to rely completely on SN patterns and scripting, probably.
 
+## Stuff we learned
+- When setting dates in business rules, use .getDisplayValue() instead of .getValue(). 
+
 ## Issues
 
 WILL DO
