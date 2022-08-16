@@ -24,7 +24,7 @@ const difference = (current, load) => {
 }
 
 const view = (state, {updateState, dispatch }) => {
-	const {seconds, startTime, currentTime, test_start_time} = state;
+	const {properties, seconds, startTime, currentTime, test_start_time} = state;
 	const isActive = state.timerActive;
 	const styles = {
 		color: state.timerActive ? 'green' : 'red'
@@ -44,30 +44,24 @@ const view = (state, {updateState, dispatch }) => {
 	console.log(state);
 	return (
 		<Fragment>
-			{/* <button on-click={() => dispatch('TEST_GET', {
-				table_name: 'x_esg_one_delivery_timestamps',
-				sysparm_limit: '10', 
-				sysparm_query: 'active=true',
-			})}>{difference(currentTime, startTime)}</button> */}
 			<button 
 			style={styles}
 			on-click={() => {
-				if(!state.properties.timerActive){
-					let d = new Date().toLocaleString();
-					console.log(d);
+				const {timestampTable} = properties;
+				if(state.timerActive !==  "true"){
 					dispatch('INSERT_TIMESTAMP', {
-						timestampTable: state.properties.timestampTable,
-						data: {
-							start_time: format(d, 'yyyy-MM-dd HH:mm:ss'),
-							// test_start_time: new Date(),
-						}
+						timestampTable,
+						data: { active: true }
 					})
+				}else{
+					// should we call this OPEN_ and CLOSE_TIMESTAMP?
+					console.log('timestamptable', timestampTable);
+					dispatch('UPDATE_TIMESTAMP', { timestampTable, 
+						sys_id: properties.sysId,
+						data: { active: false } 
+					});
 				}
-				updateState({timerActive: !state.timerActive});
-
-			// 	dispatch('INSERT_TIMESTAMP', {
-			// 	short_description: 'test'
-			// })
+				// updateState({timerActive: !state.timerActive});
 			}
 			}>{difference(currentTime, parseISO(test_start_time))}</button>
 		</Fragment>
@@ -95,6 +89,14 @@ createCustomElement('x-792462-timer-button', {
 				dispatch('FETCH_TIMER_STATUS', {sys_id: sysId, timestampTable});
 			}
 		}, // replace with REST
+		'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:timestampTable/:sys_id`, {
+			method: 'PUT',
+			pathParams: ['timestampTable', 'sys_id'],
+			successActionType: 'LOG_RESULT',
+			errorActionType: 'LOG_RESULT',
+			startActionType: 'LOG_RESULT',
+			dataParam: 'data',
+		}),
 		'FETCH_TIMER_STATUS': createHttpEffect(`api/now/table/:timestampTable`, {
 			method: 'GET',
 			pathParams: ['timestampTable'],
@@ -111,13 +113,6 @@ createCustomElement('x-792462-timer-button', {
 				test_start_time: action.payload.result[0].test_start_time
 			})
 		},
-		// 'NOW_BUTTON#CLICKED': ({action, dispatch, state}) => {
-		// 	console.log('clicked');
-		// 	dispatch('TIMER_BUTTON#CLICKED', state);
-		// 	dispatch('INSERT_TIMESTAMP', {short_description: 'test'});
-		// 	dispatch('TEST_GET');
-		// 	console.log('both actions dispatched');
-		// },
 		'TIMER_BUTTON#CLICKED': ({action}) => console.log(action.payload),
 		'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:timestampTable`, {
 			method: 'POST',
@@ -134,7 +129,8 @@ createCustomElement('x-792462-timer-button', {
 			updateProperties({sysId: action.payload.result.sys_id});
 			updateState({
 				startTime: action.payload.result.start_time,
-				test_start_time: action.payload.result.test_start_time
+				timerActive: action.payload.result.active,
+				// test_start_time: action.payload.result.test_start_time
 			});
 		},
 		'INSERT_ERROR': ({action}) => console.log(action.payload),
@@ -147,6 +143,6 @@ createCustomElement('x-792462-timer-button', {
 
 			}),
 		'TEST_START': () => console.log('test start'),
-		'LOG_RESULT': ({action}) => console.log(action.payload)
+		'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload)
 	}
 });
