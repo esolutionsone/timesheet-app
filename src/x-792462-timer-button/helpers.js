@@ -1,4 +1,5 @@
-import { differenceInMilliseconds, intervalToDuration } from 'date-fns';
+import { differenceInMilliseconds} from 'date-fns/esm/differenceInMilliseconds';
+import { intervalToDuration } from 'date-fns/esm/intervalToDuration';
 
 /**
  * Accepts two dates and returns the difference between them as a duration object.
