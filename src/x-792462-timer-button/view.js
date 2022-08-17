@@ -1,4 +1,5 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
+import '@servicenow/now-icon'
 import {
     difference,
     getUTCTime,
@@ -55,11 +56,14 @@ export const view = (state, { updateState, dispatch }) => {
                 <span className='display-rounded'>
                     {stringifyDuration(roundedDuration)}
                 </span>
-                <button
+                {/* <button
                     style={style}
-                    on-click={timerStart}></button>
+                    on-click={timerStart}></button> */}
+                <now-icon
+                    on-click={timerStart} 
+                    icon="circle-play-outline" 
+                    className={isActive ? 'display-active' : 'display-inactive'} size="lg"></now-icon>
             </div>
-			<button></button>
         </Fragment>
     );
 };
