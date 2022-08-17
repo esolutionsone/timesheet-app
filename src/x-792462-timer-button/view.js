@@ -52,6 +52,9 @@ export const view = (state, { updateState, dispatch }) => {
                 <span className={isActive ? 'display-active' : 'display-inactive'}>
                     {timerDisplayValue || 'Start'}
                 </span>
+                <span className='display-rounded'>
+                    {stringifyDuration(roundedDuration)}
+                </span>
                 <button
                     style={style}
                     on-click={timerStart}></button>
