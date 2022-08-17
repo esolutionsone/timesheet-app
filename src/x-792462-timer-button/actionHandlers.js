@@ -60,6 +60,7 @@ export default {
     'INSERT_ERROR': ({action}) => console.log(action.payload),
     'UPDATE_SUCCESS': ({action, updateProperties}) => {
         const {active} = action.payload.result;
+        console.log('update response: ', action.payload.result);
         updateProperties({active});
     },
     'TEST_GET': createHttpEffect(`api/now/table/:table_name`, {

@@ -3,12 +3,7 @@ import { difference, getUTCTime, stringifyDuration } from './helpers';
 
 export const view = (state, {updateState, dispatch }) => {
 	const {properties, currentTime} = state;
-	const { active, start } = properties;
-
-    const timerDuration = start ? difference(currentTime, getUTCTime(start)) 
-        : {hours: 0, minutes: 0, seconds: 0};
-    const timerDisplayValue = stringifyDuration(timerDuration);
-	
+	const { active, start } = properties; 
     const style = { color: active == "true" ? 'green' : 'red' };
 
 	// Update every second
@@ -22,6 +17,10 @@ export const view = (state, {updateState, dispatch }) => {
       clearInterval(interval);
     }
 
+    const timerDuration = start ? difference(currentTime, getUTCTime(start)) 
+        : {hours: 0, minutes: 0, seconds: 0};
+    const timerDisplayValue = stringifyDuration(timerDuration);
+	
 	return (
 		<Fragment>
 			<button 
