@@ -1,12 +1,15 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
-import { difference, getUTCTime } from './helpers';
+import { difference, getUTCTime, stringifyDuration } from './helpers';
 
 export const view = (state, {updateState, dispatch }) => {
-	const {properties, seconds, currentTime} = state;
+	const {properties, currentTime} = state;
 	const { active, start } = properties;
 
-    const timerDisplayValue = difference(currentTime, getUTCTime(start));
-	const style = { color: active == "true" ? 'green' : 'red' }
+    const timerDuration = start ? difference(currentTime, getUTCTime(start)) 
+        : {hours: 0, minutes: 0, seconds: 0};
+    const timerDisplayValue = stringifyDuration(timerDuration);
+	
+    const style = { color: active == "true" ? 'green' : 'red' };
 
 	// Update every second
 	let interval = null;
@@ -15,11 +18,9 @@ export const view = (state, {updateState, dispatch }) => {
         updateState({currentTime: new Date()});
 		clearInterval(interval);
       }, 1000);
-    } else if (active != "true" && seconds !== 0) {
+    } else if (active != "true") {
       clearInterval(interval);
     }
-
-    
 
 	return (
 		<Fragment>
@@ -34,14 +35,13 @@ export const view = (state, {updateState, dispatch }) => {
 					})
 				}else{
 					// should we call this OPEN_ and CLOSE_TIMESTAMP?
-					console.log('timestamptable', timestampTable);
 					dispatch('UPDATE_TIMESTAMP', { timestampTable, 
 						sys_id: properties.sysId,
 						data: { active: false } 
 					});
 				}
 			}
-			}>{timerDisplayValue}</button>
+			}>{timerDisplayValue || 'Start'}</button>
 		</Fragment>
 	);
 };

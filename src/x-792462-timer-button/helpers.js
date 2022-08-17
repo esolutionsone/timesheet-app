@@ -1,18 +1,23 @@
 import { differenceInMilliseconds, intervalToDuration } from 'date-fns';
 
-export const difference = (current, load) => {
-	if(!current || !load) return '00:00:00';
+/**
+ * Accepts two dates and returns the difference between them as a duration object.
+ * @param {Date} current Date object
+ * @param {Date} initial Date object (prior to first date object)
+ * @returns {{
+ * years: string, 
+ * hours: string, 
+ * days: string,
+ * minutes: string, 
+ * seconds: string
+ * }}
+ */
+export const difference = (current, initial) => {
 	let duration = intervalToDuration({
 		start: 0,
-		end: differenceInMilliseconds(current, load) || 0,
+		end: differenceInMilliseconds(current, initial) || 0,
 	});
-
-	// coerce to strings and pad to get hh:mm:ss format
-	for (let el in duration){
-		duration[el] = duration[el].toString().padStart(2, '0');
-	}
-
-	let {hours, minutes, seconds} = duration;
+    return duration;
 
 	// get rounded Hours and Minutes
 	let totalSeconds = hours * 3600 + minutes * 60 + Number(seconds);
@@ -20,7 +25,23 @@ export const difference = (current, load) => {
 	let roundedHours = Math.floor(totalMinutes / 60).toString().padStart(2, '0');
 	let roundedMinutes = ((totalMinutes % 60)).toString().padStart(2, '0');
 
-	return `${hours}:${minutes}:${seconds} - ${roundedHours}:${roundedMinutes}:00`;
+    // - ${roundedHours}:${roundedMinutes}:00
+}
+
+/**
+ * Accepts a duration object and returns a str
+ * @param {{hours: number, minutes: number, seconds: number}} duration 
+ * @returns string in hH:MM:SS format
+ */
+export const stringifyDuration = (duration) => {
+    let {hours, minutes, seconds} = duration;
+
+    // coerce to strings and pad to get hh:mm:ss format
+    const result = { hours, minutes, seconds };
+    for (let el in result){
+		result[el] = result[el].toString().padStart(2, '0');
+	}
+    return `${result.hours || '00'}:${result.minutes || '00'}:${result.seconds || '00'}`;
 }
 
 /**
@@ -34,7 +55,6 @@ export const getUTCTime = (dateString) => {
         console.error('Cannot transform datestring of type', typeof(dateString))
         return;
     } 
-
     const arr = dateString.split(/[\-\s:]/g);
     arr[1] = arr[1] - 1;
     return new Date(Date.UTC(...arr));
