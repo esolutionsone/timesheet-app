@@ -1,5 +1,5 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
-import '@servicenow/now-icon'
+import '@servicenow/now-icon';
 import {
     difference,
     getUTCTime,
