@@ -1,1 +1,1 @@
-import './x-esg-one-delivery-timer-button';
+import './x-esg-timer-button';
