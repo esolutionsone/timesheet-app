@@ -1,6 +1,6 @@
 {
 	"components": {
-	    "x-792462-timer-button": {
+	    "x-esg-timer-button": {
 	        "innerComponents": ["now-icon"],
 			"uiBuilder": {
 				"associatedTypes": ["global.core", "global.landing-page"],
@@ -22,9 +22,8 @@
 					"type": "string",
 					"default": ""
 				}
-
 			]
 	    }
 	},
-	"scopeName": "x_792462_timer_b_0"
+	"scopeName": "x_esg_one_delivery_timer_b_0"
 }

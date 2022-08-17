@@ -13,7 +13,7 @@ WebFont.load({
 	}
 })
 
-createCustomElement('x-792462-timer-button', {
+createCustomElement('x-esg-one-delivery-timer-button', {
 	renderer: {type: snabbdom},
 	view,
 	styles,
