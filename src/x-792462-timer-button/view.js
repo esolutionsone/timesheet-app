@@ -1,5 +1,10 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
-import { difference, getUTCTime, stringifyDuration } from './helpers';
+import { 
+    difference, 
+    getUTCTime, 
+    stringifyDuration, 
+    roundDuration 
+} from './helpers';
 
 export const view = (state, {updateState, dispatch }) => {
 	const {properties, currentTime} = state;
@@ -19,6 +24,7 @@ export const view = (state, {updateState, dispatch }) => {
 
     const timerDuration = start ? difference(currentTime, getUTCTime(start)) 
         : {hours: 0, minutes: 0, seconds: 0};
+    const roundedDuration = roundDuration(timerDuration);
     const timerDisplayValue = stringifyDuration(timerDuration);
 	
 	return (

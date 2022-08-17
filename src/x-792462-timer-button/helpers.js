@@ -19,13 +19,24 @@ export const difference = (current, initial) => {
 	});
     return duration;
 
-	// get rounded Hours and Minutes
+	
+}
+
+/**
+ * Accepts a duration object and returns an object rounded up to next 15 minutes.
+ * @param {duration} duration 
+ * @returns {duration} duration rounded to 15 minutes
+ */
+export const roundDuration = (duration) => {
+    const {hours, minutes, seconds} = duration;
+
+    // get rounded Hours and Minutes
 	let totalSeconds = hours * 3600 + minutes * 60 + Number(seconds);
 	let totalMinutes = Math.ceil(totalSeconds / 60 / 15) * 15;
-	let roundedHours = Math.floor(totalMinutes / 60).toString().padStart(2, '0');
-	let roundedMinutes = ((totalMinutes % 60)).toString().padStart(2, '0');
+	let roundedHours = Math.floor(totalMinutes / 60);
+	let roundedMinutes = ((totalMinutes % 60));
 
-    // - ${roundedHours}:${roundedMinutes}:00
+    return {hours: roundedHours, minutes: roundedMinutes, seconds: 0};
 }
 
 /**
