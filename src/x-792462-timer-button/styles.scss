@@ -7,12 +7,15 @@ $btn-dimensions: .7rem;
     border: 1px solid #D6D6D6;
     
     /* Shadow */
-    box-shadow: 4px 4px 15px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 2px 2px 7px 1px rgba(0, 0, 0, 0.05);
     border-radius: 12px;
 
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    font-family:'Montserrat', sans-serif;
+    height: 37px;
 }
 
 .display-active {
@@ -24,7 +27,8 @@ $btn-dimensions: .7rem;
 }
 
 .display-rounded {
-    color: gray;
+    color: lightgray;
+    font-size: .8rem;
 }
 
 button {
