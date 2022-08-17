@@ -35,11 +35,11 @@ props = {
 
 ## Issues
 
-- [ ] Rounding messed up beyond the one minute mark - possibly just formatting
+- [ ] Starting and stopping timers needs additional work and planning
 
 ## QOL
 - [ ] Add Loading/working states while waiting for REST
-- [ ] Pause Current Time when waiting for button end (or recording loading state) 
+- [ ] Pause Current Time when waiting for button API response (or recording loading state) 
 - [ ] Handle possible REST Errors
 
 ## Testing
