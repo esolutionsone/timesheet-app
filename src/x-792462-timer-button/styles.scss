@@ -11,11 +11,23 @@ $btn-dimensions: .7rem;
     border-radius: 12px;
 
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 
     font-family:'Montserrat', sans-serif;
     height: 37px;
+    padding: .5rem;
+}
+
+.timer-items-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 1rem;
+
+    * {
+        margin: auto 1rem;
+    }
 }
 
 .display-active {
