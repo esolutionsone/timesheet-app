@@ -22,6 +22,7 @@
 		"@servicenow/sass-kit": "quebec",
 		"@servicenow/sass-theme": "quebec",
 		"@servicenow/ui-core": "quebec",
+		"@servicenow/ui-effect-http": "^19.4.2",
 		"@servicenow/ui-renderer-snabbdom": "quebec",
 		"date-fns": "^2.29.1"
 	},
