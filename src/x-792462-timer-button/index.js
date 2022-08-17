@@ -9,7 +9,7 @@ import WebFont from 'webfontloader';
 // Load Custom Fonts
 WebFont.load({
 	google: {
-		families: ['Montserrat']
+		families: ['Montserrat:400,600']
 	}
 })
 

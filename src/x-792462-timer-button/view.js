@@ -50,11 +50,12 @@ export const view = (state, { updateState, dispatch }) => {
     return (
         <Fragment>
             <div className="timer-container">
+                <div className="pill">Project Name / Details</div>
                 <span className={isActive ? 'display-active' : 'display-inactive'}>
                     {timerDisplayValue || 'Start'}
                 </span>
                 <span className='display-rounded'>
-                    {stringifyDuration(roundedDuration)}
+                    {stringifyDuration(roundedDuration).slice(0, -3)}
                 </span>
                 {/* <button
                     style={style}
