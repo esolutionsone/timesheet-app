@@ -1,5 +1,7 @@
 @import '@servicenow/sass-kit/host';
 
+$btn-dimensions: .7rem;
+
 .timer-container {
     background: #FEFEFD;
     border: 1px solid #D6D6D6;
@@ -24,8 +26,6 @@
 .display-rounded {
     color: gray;
 }
-
-$btn-dimensions: .7rem;
 
 button {
     border-radius: 100%;
