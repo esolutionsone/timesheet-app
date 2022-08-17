@@ -1,1 +1,32 @@
 @import '@servicenow/sass-kit/host';
+
+.timer-container {
+    background: #FEFEFD;
+    border: 1px solid #D6D6D6;
+    
+    /* Shadow */
+    box-shadow: 4px 4px 15px 1px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.display-active {
+    color: green;
+}
+
+.display-inactive {
+    color: red;
+}
+
+$btn-dimensions: .7rem;
+
+button {
+    border-radius: 100%;
+    width: $btn-dimensions;
+    height: $btn-dimensions;
+    padding: 0;
+    border-width: .05rem;
+}
