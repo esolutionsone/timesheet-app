@@ -39,6 +39,7 @@ props = {
 
 ## QOL
 - [ ] Add Loading/working states while waiting for REST
+- [ ] Pause Current Time when waiting for button end (or recording loading state) 
 - [ ] Handle possible REST Errors
 
 ## Testing
