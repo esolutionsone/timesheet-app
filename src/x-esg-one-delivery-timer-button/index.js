@@ -23,7 +23,7 @@ createCustomElement('x-esg-one-delivery-timer-button', {
 		test_start_time: null,
 	},
 	properties: {
-		timestampTable: {default: "x_esg_one_delivery_timestamp"},
+		timestampTable: {default: "x_58872_needit_timestamp"},
 		sysId: { default: null },
 		active: { default: "false" },
 		start: { default: null }

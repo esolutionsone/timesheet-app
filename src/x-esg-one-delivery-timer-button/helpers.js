@@ -1,4 +1,6 @@
-import { differenceInMilliseconds, intervalToDuration} from 'date-fns';
+// import { differenceInMilliseconds, intervalToDuration} from 'date-fns';
+import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
+import intervalToDuration from 'date-fns/intervalToDuration';
 
 /**
  * Accepts two dates and returns the difference between them as a duration object.
