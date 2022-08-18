@@ -49,6 +49,7 @@ export const view = (state, { updateState, dispatch }) => {
 
     return (
         <Fragment>
+            
             <div className="timer-container">
        
                 <div className="pill">Project Name / Details</div>
@@ -61,6 +62,12 @@ export const view = (state, { updateState, dispatch }) => {
                     <span className='display-rounded'>
                         {stringifyDuration(roundedDuration).slice(0, -3)}
                     </span>
+                    <span className="btn-circle btn-active">
+                    <span className="material-symbols-outlined ">
+                    
+stop
+</span>
+</span>
                     <now-icon
                         on-click={timerStart} 
                         icon="circle-play-outline" 
