@@ -28,10 +28,6 @@ $btn-dimensions: 1.3rem;
     padding: .5rem;
 }
 
-.timer-counter {
-
-}
-
 .timer-items-right {
     display: flex;
     justify-content: space-between;
@@ -39,10 +35,6 @@ $btn-dimensions: 1.3rem;
     margin-right: 1rem;
     width: 300px;
 
-    * {
-        // width: 25%;
-        // margin: auto 1rem;
-    }
 }
 
 .timer-items-right > * {
