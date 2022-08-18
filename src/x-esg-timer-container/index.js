@@ -18,7 +18,7 @@ createCustomElement('x-esg-timer-container', {
 	view,
 	styles,
 	initialState: {
-		projects: { default: {}},
+		projects: [],
 	},
 	actionHandlers,
 });
