@@ -55,13 +55,18 @@ export const view = (state, { updateState, dispatch }) => {
                 <div className="pill">Project Name / Details</div>
                 
                 <div className="timer-items-right">
-                    <div className="pill">Today</div>
-                    <span className={isActive ? 'display-active' : 'display-inactive'}>
+                    <div>
+                        <div className="pill">Today</div>
+                    </div>
+                    
+                    <span className={'timer-counter ' + isActive ? 'display-active' : 'display-inactive'}>
                         {timerDisplayValue || 'Start'}
                     </span>
+                    
                     <span className='display-rounded'>
                         {stringifyDuration(roundedDuration).slice(0, -3)}
                     </span>
+                    
                     <span className={"btn-circle btn-active "  + (isActive && 'active')}>
                         <span className={"material-symbols-outlined"} on-click={timerStart}>
                             {isActive ? 'stop' : 'play_arrow'} 

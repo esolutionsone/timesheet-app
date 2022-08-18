@@ -28,15 +28,26 @@ $btn-dimensions: 1.3rem;
     padding: .5rem;
 }
 
+.timer-counter {
+
+}
+
 .timer-items-right {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-right: 1rem;
+    width: 300px;
 
     * {
-        margin: auto 1rem;
+        // width: 25%;
+        // margin: auto 1rem;
     }
+}
+
+.timer-items-right > * {
+    width: 25%;
+    text-align: center;
 }
 
 .display-active {
@@ -97,5 +108,6 @@ button {
     }
     *{
         margin:auto;
+        width: fit-content
     }
 }
