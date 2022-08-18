@@ -40,8 +40,10 @@ export default {
         errorActionType: 'LOG_ERROR'
     }),
     'SET_PROJECTS': ({action, updateState}) => {
-        console.log(action);
-        updateState({projects: action.payload.result})
+        // Store in Set to avoid duplicates
+        const projects = new Set();
+        action.payload.result.forEach(role => projects.add(role.project.value))
+        updateState({projects: [...projects]})
     },  
     'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
