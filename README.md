@@ -20,6 +20,7 @@ props = {
 - Client State Params: lookup list of user's projects => csp.projects
 - Data resource: get all TimeEntries filtered by today, user, csp.projects (alt: all that, return only most recent for each project)
 - Use Repeater to pass project data to **project cards**, then on to timer-buttons.
+    - Best implementation uses a container to do the logic - automaticallyl detect user, fetch project data, map over it to render and sort timers, handle timer sync (stopping other timers)
 
 ## Effects & logic
 - [x] REST - insert/update time entry on click
@@ -35,10 +36,11 @@ props = {
 
 ## Issues
 
-- [ ] Rounding messed up beyond the one minute mark - possibly just formatting
+- [ ] Starting and stopping timers needs additional work and planning
 
 ## QOL
 - [ ] Add Loading/working states while waiting for REST
+- [ ] Pause Current Time when waiting for button API response (or recording loading state) 
 - [ ] Handle possible REST Errors
 
 ## Testing

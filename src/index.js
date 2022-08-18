@@ -1,1 +1,1 @@
-import './x-792462-timer-button';
+import './x-esg-timer-button';

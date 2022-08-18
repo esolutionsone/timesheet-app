@@ -1,0 +1,62 @@
+@import '@servicenow/sass-kit/host';
+
+$btn-dimensions: .7rem;
+
+.timer-container {
+    background: #FEFEFD;
+    border: 1px solid #D6D6D6;
+    
+    /* Shadow */
+    box-shadow: 2px 2px 7px 1px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-family:'Montserrat', sans-serif;
+    height: 37px;
+    padding: .5rem;
+}
+
+.timer-items-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 1rem;
+
+    * {
+        margin: auto 1rem;
+    }
+}
+
+.display-active {
+    color: green;
+}
+
+.display-inactive {
+    color: red;
+}
+
+.display-rounded {
+    color: lightgray;
+    font-size: .8rem;
+}
+
+button {
+    border-radius: 100%;
+    width: $btn-dimensions;
+    height: $btn-dimensions;
+    padding: 0;
+    border-width: .05rem;
+}
+
+.pill {
+    border-radius: 50px;
+    background-color: #F4F4F5;
+    color: #9095A1;
+    font-size: .6rem;
+    padding: .3rem .5rem;
+    font-weight: 600;
+    text-align: center;
+}
