@@ -62,16 +62,15 @@ export const view = (state, { updateState, dispatch }) => {
                     <span className='display-rounded'>
                         {stringifyDuration(roundedDuration).slice(0, -3)}
                     </span>
-                    <span className="btn-circle btn-active">
-                    <span className="material-symbols-outlined ">
-                    
-stop
-</span>
-</span>
-                    <now-icon
+                    <span className={"btn-circle btn-active "  + (isActive && 'active')}>
+                        <span className={"material-symbols-outlined"} on-click={timerStart}>
+                            {isActive ? 'stop' : 'play_arrow'} 
+                        </span>
+                    </span>
+                    {/* <now-icon
                         on-click={timerStart} 
                         icon="circle-play-outline" 
-                        className={!isActive ? 'display-active' : 'display-inactive'} size="lg"></now-icon>
+                        className={!isActive ? 'display-active' : 'display-inactive'} size="lg"></now-icon> */}
                 </div>
             </div>
         </Fragment>
