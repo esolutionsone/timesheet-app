@@ -49,22 +49,33 @@ export const view = (state, { updateState, dispatch }) => {
 
     return (
         <Fragment>
+            
             <div className="timer-container">
        
                 <div className="pill">Project Name / Details</div>
                 
                 <div className="timer-items-right">
-                    <div className="pill">Today</div>
-                    <span className={isActive ? 'display-active' : 'display-inactive'}>
+                    <div>
+                        <div className="pill">Today</div>
+                    </div>
+                    
+                    <span className={'timer-counter ' + isActive ? 'display-active' : 'display-inactive'}>
                         {timerDisplayValue || 'Start'}
                     </span>
+                    
                     <span className='display-rounded'>
                         {stringifyDuration(roundedDuration).slice(0, -3)}
                     </span>
-                    <now-icon
+                    
+                    <span className={"btn-circle btn-active "  + (isActive && 'active')}>
+                        <span className={"material-symbols-outlined"} on-click={timerStart}>
+                            {isActive ? 'stop' : 'play_arrow'} 
+                        </span>
+                    </span>
+                    {/* <now-icon
                         on-click={timerStart} 
                         icon="circle-play-outline" 
-                        className={!isActive ? 'display-active' : 'display-inactive'} size="lg"></now-icon>
+                        className={!isActive ? 'display-active' : 'display-inactive'} size="lg"></now-icon> */}
                 </div>
             </div>
         </Fragment>
