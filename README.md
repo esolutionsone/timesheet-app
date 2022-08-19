@@ -43,6 +43,7 @@ props = {
 
 - [ ] Starting and stopping timers needs additional work and planning
 - [ ] Fonts Are loaded multiple times (not necessarily a huge issue for us, since they'll be cached)
+    - They work fine as long as they're loaded anywhere on the page - but must be loaded at least once.
 
 ## QOL
 - [ ] Add Loading/working states while waiting for REST

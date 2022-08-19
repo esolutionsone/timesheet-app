@@ -7,7 +7,10 @@ const {projects} = state
     return (
         <Fragment>
             {/* <pre>{JSON.stringify(projects, null, 2)}</pre> */}
-            {projects.map(proj => <x-esg-timer-button projectData={proj}/>)}
+            {projects.map(proj => <x-esg-timer-button 
+                projectData={proj}
+                loadFonts={false}
+                />)}
         </Fragment>
     );
 };
