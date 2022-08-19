@@ -1,6 +1,11 @@
-timer-button
-===============================================
-A button to insert time logs on a target table
+# timer-button
+
+## Description 
+*A button to insert time logs on a target table*
+
+## Dev Screenshots
+
+<img src="images/mapped-timers.png" />
 
 ## Inputs
 
@@ -37,6 +42,7 @@ props = {
 ## Issues
 
 - [ ] Starting and stopping timers needs additional work and planning
+- [ ] Fonts Are loaded multiple times (not necessarily a huge issue for us, since they'll be cached)
 
 ## QOL
 - [ ] Add Loading/working states while waiting for REST
