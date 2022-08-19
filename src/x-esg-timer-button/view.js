@@ -84,10 +84,6 @@ export const view = (state, { updateState, dispatch }) => {
                             {isActive ? 'stop' : 'play_arrow'} 
                         </span>
                     </span>
-                    {/* <now-icon
-                        on-click={timerStart} 
-                        icon="circle-play-outline" 
-                        className={!isActive ? 'display-active' : 'display-inactive'} size="lg"></now-icon> */}
                 </div>
             </div>
         </Fragment>
