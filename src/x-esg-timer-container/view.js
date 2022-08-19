@@ -2,17 +2,12 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 
-export const view = (state,{ updateState, dispatch }) => {
+export const view = (state) => {
 const {projects} = state
-
-    console.log('PROJECTS', state.projects);
-    console.log(state);
-
-    
     return (
         <Fragment>
             <pre>{JSON.stringify(projects, null, 2)}</pre>
-            <x-esg-timer-button projectData={projects[0]}></x-esg-timer-button>
+            {projects.map(proj => <x-esg-timer-button projectData={proj}/>)}
         </Fragment>
     );
 };
