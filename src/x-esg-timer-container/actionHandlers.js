@@ -45,11 +45,17 @@ export default {
         errorActionType: 'LOG_ERROR'
     }),
     'SET_PROJECTS': ({action, updateState}) => {
-        // Store in Set to avoid duplicates
-        const projects = new Set();
-        // action.payload.result.forEach(role => projects.add(role.project.value))
-        // updateState({projects: [...projects]}
-        updateState({projects: action.payload.result});
+        // Store in Map to avoid duplicates
+        // Also massage dot-walked addresses into a normal-looking object
+        const projects = new Map();
+
+        action.payload.result.forEach(role => {
+            projects.set(role["project.sys_id"], {
+            short_description: role["project.short_description"],
+            client: role["project.client.short_description"],
+            sys_id: role["project.sys_id"],
+        })})
+        updateState({projects: Array.from(projects.values())})
     },  
     'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),

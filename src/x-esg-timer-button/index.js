@@ -26,7 +26,8 @@ createCustomElement('x-esg-timer-button', {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
 		sysId: { default: null },
 		active: { default: "false" },
-		start: { default: null }
+		start: { default: null },
+		projectData: {default: {}},
 	},
 	actionHandlers,
 });
