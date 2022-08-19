@@ -13,21 +13,12 @@ WebFont.load({
 	}
 })
 
-createCustomElement('x-esg-timer-button', {
+createCustomElement('x-esg-timer-container', {
 	renderer: {type: snabbdom},
 	view,
 	styles,
 	initialState: {
-		currentTime: null,
-		startTime: null,
-		test_start_time: null,
-	},
-	properties: {
-		timestampTable: {default: "x_esg_one_delivery_timestamp"},
-		sysId: { default: null },
-		active: { default: "false" },
-		start: { default: null },
-		projectData: {default: {}},
+		projects: [],
 	},
 	actionHandlers,
 });

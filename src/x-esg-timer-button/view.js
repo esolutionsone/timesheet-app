@@ -9,7 +9,7 @@ import {
 
 export const view = (state, { updateState, dispatch }) => {
     const { properties, currentTime } = state;
-    const { active, start } = properties;
+    const { active, start, projectData } = properties;
     const style = { color: active == "true" ? 'green' : 'red' };
     const isActive = active === "true";
 
@@ -52,7 +52,9 @@ export const view = (state, { updateState, dispatch }) => {
             
             <div className="timer-container">
        
-                <div className="pill">Project Name / Details</div>
+                <div className="pill">
+                    {projectData.short_description || 'Project Name / Details'}
+                </div>
                 
                 <div className="timer-items-right">
                     <div>
