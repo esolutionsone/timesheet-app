@@ -45,7 +45,7 @@ export const view = (state, { updateState, dispatch }) => {
         if (!isActive) {
             dispatch('INSERT_TIMESTAMP', {
                 timestampTable,
-                data: { active: true }
+                data: { active: true, project: projectData.sys_id}
             })
         } else {
             // should we call this OPEN_ and CLOSE_TIMESTAMP?
@@ -56,6 +56,8 @@ export const view = (state, { updateState, dispatch }) => {
             });
         }
     }
+
+    console.log(projectData)
 
     return (
         <Fragment>
