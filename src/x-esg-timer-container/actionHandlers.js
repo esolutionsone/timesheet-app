@@ -28,13 +28,18 @@ export default {
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
                 sysparm_query: `consultant_assigned=${id}`,
+                sysparm_fields: `
+                    project.sys_id,
+                    project.short_description,
+                    project.client.short_description
+                `
             })
         }
     },
     'FETCH_PROJECTS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
-        queryParams: ['sysparm_query'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
         startActionType: 'TEST_START',
         successActionType: 'SET_PROJECTS',
         errorActionType: 'LOG_ERROR'
@@ -42,8 +47,9 @@ export default {
     'SET_PROJECTS': ({action, updateState}) => {
         // Store in Set to avoid duplicates
         const projects = new Set();
-        action.payload.result.forEach(role => projects.add(role.project.value))
-        updateState({projects: [...projects]})
+        // action.payload.result.forEach(role => projects.add(role.project.value))
+        // updateState({projects: [...projects]}
+        updateState({projects: action.payload.result});
     },  
     'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
