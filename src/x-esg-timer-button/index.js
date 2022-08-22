@@ -19,7 +19,7 @@ createCustomElement('x-esg-timer-button', {
 		active: { default: "false" },
 		start: { default: null },
 		projectData: {default: {}},
-		loadFonts: true,
+		loadFonts: {default: true},
 	},
 	actionHandlers,
 });

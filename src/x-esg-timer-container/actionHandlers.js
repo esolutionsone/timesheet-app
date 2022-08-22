@@ -20,6 +20,7 @@ export default {
     'HANDLE_CONSULTANT_ID': ({action, dispatch}) => {
         const id = action.payload.result[0].sys_id;
         if(!id || action.payload.result.length !== 1){
+            updateState({consultantId: id});
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
         }else{
             dispatch('FETCH_PROJECTS', {
@@ -37,7 +38,6 @@ export default {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
-        startActionType: 'TEST_START',
         successActionType: 'SET_PROJECTS',
         errorActionType: 'LOG_ERROR'
     }),
@@ -53,8 +53,15 @@ export default {
             sys_id: role["project.sys_id"],
         })})
         updateState({projects: Array.from(projects.values())})
-    },  
-    'TEST_START': () => console.log('test start'),
+    },
+    'NEW_ENTRY': createHttpEffect('api/now/table/:tableName', {
+        method: 'POST',
+        pathParams: ['tableName'],
+        dataParam: 'data',
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_RESULT',
+    }),
+    'SET_SELECTED_PROJECT': ({action, updateState}) => updateState({selectedProject: action.payload}),    'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,
