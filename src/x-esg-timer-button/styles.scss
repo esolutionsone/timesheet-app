@@ -42,6 +42,12 @@ $btn-dimensions: 1.3rem;
     text-align: center;
 }
 
+.timer-counter {
+    &.display-active {
+        
+    }
+}
+
 .display-active {
     color: green;
 }
