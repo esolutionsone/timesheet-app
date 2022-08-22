@@ -29,7 +29,8 @@ export default {
                 sysparm_fields: `
                     project.sys_id,
                     project.short_description,
-                    project.client.short_description
+                    project.client.short_description,
+                    project.client.sys_id
                 `
             })
         }
@@ -49,7 +50,10 @@ export default {
         action.payload.result.forEach(role => {
             projects.set(role["project.sys_id"], {
             short_description: role["project.short_description"],
-            client: role["project.client.short_description"],
+            client: {
+                short_description: role["project.client.short_description"],
+                sys_id: role["project.client.sys_id"],
+            },
             sys_id: role["project.sys_id"],
         })})
         updateState({projects: Array.from(projects.values())})

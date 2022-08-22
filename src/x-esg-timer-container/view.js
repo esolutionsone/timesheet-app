@@ -17,6 +17,16 @@ export const view = (state, {dispatch, updateState}) => {
         <Fragment>
             {/* <pre>{JSON.stringify(projects, null, 2)}</pre> */}
             <div>
+            <select on-change={(e)=>updateState({selectedProject: e.target.value})}>
+                <option disabled selected>Choose a Project</option>
+                {projects.map(proj => <option value={proj.sys_id}>
+                    {proj.short_description}
+                </option>)}
+            </select>
+            <textarea 
+                on-keyup={(e)=> updateState({entryNotes: e.target.value})}
+                maxlength='512'
+            ></textarea>
             <span 
                 className="material-symbols-outlined"
                 on-click={() => dispatch('NEW_ENTRY', {
@@ -30,17 +40,8 @@ export const view = (state, {dispatch, updateState}) => {
             >
                 add_circle_outline
             </span>
-            <select on-change={(e)=>updateState({selectedProject: e.target.value})}>
-                <option></option>
-                {projects.map(proj => <option value={proj.sys_id}>
-                    {proj.short_description}
-                </option>)}
-            </select>
-            <textarea 
-                on-keyup={(e)=> updateState({entryNotes: e.target.value})}
-                maxlength='512'
-            ></textarea>
             </div>
+            <hr></hr>
             {projects.map(proj => <x-esg-timer-button 
                 projectData={proj}
                 loadFonts={false}
