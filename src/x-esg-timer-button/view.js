@@ -81,8 +81,7 @@ export const view = (state, { updateState, dispatch }) => {
                     
                     <span className={"btn-circle btn-active "  + (isActive && 'active')}>
                         <span className={"material-symbols-outlined"} on-click={timerStart}>
-                            {/* {isActive ? 'stop' : 'play_arrow'}  */}
-                            play_arrow
+                            {isActive ? 'pause' : 'play_arrow'} 
                         </span>
                     </span>
                 </div>

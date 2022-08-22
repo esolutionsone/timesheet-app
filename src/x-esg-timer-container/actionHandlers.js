@@ -6,6 +6,10 @@ const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 export default {
     [COMPONENT_BOOTSTRAPPED]: ({dispatch}) => {
         console.log('component bootstrapped');
+        dispatch('FETCH_GENERIC_PROJECTS', {
+            sysparm_query: 'client=705bf1231b6c9950c9df43b8b04bcbec',
+            sysparm_fields: 'short_description,sys_id,client.short_description,client.sys_id'
+        })
         dispatch('GET_CONSULTANT_ID', {
             tableName: 'x_esg_one_core_consultant',
             sysparm_query: 'sys_user=javascript:gs.getUserID()'
@@ -42,7 +46,7 @@ export default {
         successActionType: 'SET_PROJECTS',
         errorActionType: 'LOG_ERROR'
     }),
-    'SET_PROJECTS': ({action, updateState}) => {
+    'SET_PROJECTS': ({action, updateState, state}) => {
         // Store in Map to avoid duplicates
         // Also massage dot-walked addresses into a normal-looking object
         const projects = new Map();
@@ -56,7 +60,30 @@ export default {
             },
             sys_id: role["project.sys_id"],
         })})
-        updateState({projects: Array.from(projects.values())})
+        updateState({
+            projects: Array.from(projects.values())
+        })
+    },
+    'FETCH_GENERIC_PROJECTS': createHttpEffect(
+        'api/now/table/x_esg_one_core_project',
+        {
+            method: 'GET',
+            queryParams: ['sysparm_query', 'sysparm_fields'],
+            startActionType: 'TEST_START',
+            successActionType: 'SET_GENERIC_PROJECTS',
+            errorActionType: 'LOG_ERROR'
+    }),
+    'SET_GENERIC_PROJECTS': ({action, updateState}) => {
+        const response = action.payload.result;
+        for(let proj of response){
+            proj["client"] = {
+                short_description: proj["client.short_description"],
+                sys_id: proj["client.sys_id"],
+            }
+            delete proj["client.short_description"];
+            delete proj["client.sys_id"];
+        }
+        updateState({genericProjects: response})
     },
     'NEW_ENTRY': createHttpEffect('api/now/table/:tableName', {
         method: 'POST',

@@ -10,16 +10,18 @@ export const view = (state, {dispatch, updateState}) => {
             families: ['Montserrat:400,600', 'Material+Symbols+Outlined']
         }
     })
-    const {projects, selectedProject, consultantId, entryNotes} = state;
-
+    const {projects, selectedProject, consultantId, entryNotes, genericProjects} = state;
+    const allProjects = [...genericProjects, ...projects];
     console.log('selectedProject', state.consultantId)
+    console.log('generic_projects', state.genericProjects)
+    console.log(allProjects)
     return (
         <Fragment>
             {/* <pre>{JSON.stringify(projects, null, 2)}</pre> */}
             <div>
             <select on-change={(e)=>updateState({selectedProject: e.target.value})}>
                 <option disabled selected>Choose a Project</option>
-                {projects.map(proj => <option value={proj.sys_id}>
+                {allProjects.map(proj => <option value={proj.sys_id}>
                     {proj.short_description}
                 </option>)}
             </select>
