@@ -17,12 +17,12 @@ export default {
         queryParams: ['sysparm_query'],
         successActionType: 'HANDLE_CONSULTANT_ID'
     }),
-    'HANDLE_CONSULTANT_ID': ({action, dispatch}) => {
+    'HANDLE_CONSULTANT_ID': ({action, dispatch, updateState}) => {
         const id = action.payload.result[0].sys_id;
         if(!id || action.payload.result.length !== 1){
-            updateState({consultantId: id});
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
         }else{
+            updateState({consultantId: id});
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
                 sysparm_query: `consultant_assigned=${id}`,
@@ -61,7 +61,7 @@ export default {
         successActionType: 'LOG_RESULT',
         errorActionType: 'LOG_RESULT',
     }),
-    'SET_SELECTED_PROJECT': ({action, updateState}) => updateState({selectedProject: action.payload}),    'TEST_START': () => console.log('test start'),
+    'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,

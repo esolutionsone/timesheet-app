@@ -21,6 +21,7 @@ createCustomElement('x-esg-timer-container', {
 		projects: [],
 		selectedProject: '',
 		consultantId: '',
+		entryNotes: '',
 	},
 	actionHandlers,
 });
