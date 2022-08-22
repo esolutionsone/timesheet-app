@@ -8,3 +8,62 @@
   'GRAD' 0,
   'opsz' 48
 }
+
+// New stuff
+
+$bg-primary: #FDFDFD;
+$border-primary: 1px solid #D6D6D6;
+$item-padding: 18px 38px;
+$color-secondary: rgba(160, 175, 196, 1);
+
+.today-container {
+    box-sizing: border-box;
+    width: 80%;
+    background: $bg-primary;
+    border: $border-primary;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    margin: auto;
+
+    .today-header {
+        padding: $item-padding;
+        font-size: 22px;
+        display: flex;
+        justify-content: space-between;
+    
+        .title {
+            font-weight: 700;
+            margin-right: 50px;
+        }
+    }
+
+    .project-item {
+        padding: $item-padding;
+        font-weight: 700;
+        border-bottom: $border-primary;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .client-name {
+            font-size: 16px;
+            color: $color-secondary;
+        }
+
+        .project-title {
+            font-size: 20px;
+        }
+
+        .project-notes {
+            font-weight: 500;
+            font-size: 16px;
+            color: $color-secondary;
+        }
+    }
+
+    .project-time {
+        font-weight: 700;
+    }
+}
+
