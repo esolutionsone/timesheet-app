@@ -10,9 +10,6 @@ export default {
             tableName: 'x_esg_one_core_consultant',
             sysparm_query: 'sys_user=javascript:gs.getUserID()'
         });
-        // dispatch('FETCH_PROJECTS', {
-        //     tableName: 'x_esg_one_core_project',
-        // });
     },
     'GET_CONSULTANT_ID': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -60,4 +57,16 @@ export default {
     'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
-}
+    'INSERT_TIMESTAMP': ({action, dispatch}) => {
+        console.log('caught insert action: ', action.payload)
+        const payload = action.payload;
+        payload.sysparm_query = `active=true^sys_id!=${payload.sys_id}`
+        dispatch('STOP_SIBLINGS', action.payload);
+    },
+    'STOP_SIBLINGS': createHttpEffect('api/now/table/:timestampTable', {
+        method: 'GET',
+        pathParams: 'timestampTable',
+        queryParams: ['sysparm_query'],
+        successActionType: 'LOG_RESULT'
+    })
+} 
