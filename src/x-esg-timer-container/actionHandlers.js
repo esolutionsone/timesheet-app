@@ -57,6 +57,7 @@ export default {
     'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
+    //Testing Timer stoppers,
     'INSERT_TIMESTAMP': ({action, dispatch}) => {
         console.log('caught insert action: ', action.payload)
         const payload = action.payload;
