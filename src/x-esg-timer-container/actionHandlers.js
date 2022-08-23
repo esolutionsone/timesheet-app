@@ -124,21 +124,23 @@ export default {
 
         const stampsByProject = new Map();
         
-        //package for easy 
+        //package for easy mapping, 
         for(let stamp of timestamps){
             const projectId = stamp.project.value;
             const active = stamp.active === 'true';
             if(stampsByProject.has(projectId)){
                 stampsByProject.set(projectId, {
                     active,
-                    timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps]
+                    timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps],
+                    totalRoundedTime: stampsByProject.get(projectId).totalTime + (Date.parse(stamp.rounded_duration) || 0),
                 });
             }else{
                 stampsByProject.set(projectId, {
                     active,
-                    timestamps: [stamp]
+                    timestamps: [stamp],
+                    totalRoundedTime: Date.parse(stamp.rounded_duration) || 0,
                 })
-            } 
+            }
         }
 
         updateState({projectMap: stampsByProject});
