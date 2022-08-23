@@ -31,7 +31,7 @@ export default {
             dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
                 tableName: 'x_esg_one_delivery_timestamp',
                 sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-                sysparm_fields: 'project_role.project.client, project_role.project.sys_id, project_role.project.short_description'
+                sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
             })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
@@ -109,8 +109,8 @@ export default {
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
-        queryParams: ['sysparm_query'],
-        successActionType: 'LOG_RESULT',
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        successActionType: 'SET_CONSULTANT_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
     }),
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
@@ -123,13 +123,16 @@ export default {
         // Subtracting the parsed ServiceNow zero duration time with 
         // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
         for(let stamp of timestamps){
-            const projectId = stamp.project.value;
+            const projectId = stamp['project.sys_id'];
             const active = stamp.active === 'true';
+            console.log(stamp);
             if(stampsByProject.has(projectId)){
                 stampsByProject.set(projectId, {
                     active,
                     sys_id: projectId,
-                    timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps],
+                    client: stamp['project.client.short_description'],
+                    short_description: stamp['project.short_description'],
+                    timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
                     totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
                         (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
                         || 0),
@@ -137,6 +140,9 @@ export default {
             } else{
                 stampsByProject.set(projectId, {
                     active,
+                    sys_id: projectId,
+                    client: stamp['project.client.short_description'],
+                    short_description: stamp['project.short_description'],
                     timestamps: [stamp],
                     totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
                 })

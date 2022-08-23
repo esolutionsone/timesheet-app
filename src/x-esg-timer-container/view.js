@@ -105,6 +105,7 @@ export const view = (state, {dispatch, updateState}) => {
                 <div>
                     {projects.map(proj => {
                         const {client, short_description, sys_id} = proj;
+                        console.log(projectMap.get(sys_id));
                         return <div className="project-item" key={sys_id}>
                                     <div className="client-name">{client.short_description}</div>
                                     <div className="project-title-container">
@@ -115,7 +116,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                 loadFonts={false}
                                             />}
                                         </div>
-                                        <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
+                                        {/* <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div> */}
                                     </div>
                                     <div className="project-notes">Example Notes</div>
                                 </div>;
