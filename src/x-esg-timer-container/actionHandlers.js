@@ -29,9 +29,7 @@ export default {
             updateState({consultantId: id});
             dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
                 tableName: 'x_esg_one_delivery_timestamp',
-                sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()`,
-                successActionType: 'LOG_RESULT',
-                errorActionType: 'LOG_ERROR',
+                sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
             })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
@@ -117,7 +115,32 @@ export default {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query'],
-        successActionType: 'LOG_RESULT',
+        successActionType: 'SET_CONSULTANT_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
-    })
+    }),
+    'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
+        const timestamps = action.payload.result;
+        console.log('timestamps', timestamps)
+
+        const stampsByProject = new Map();
+        
+        //package for easy 
+        for(let stamp of timestamps){
+            const projectId = stamp.project.value;
+            const active = stamp.active === 'true';
+            if(stampsByProject.has(projectId)){
+                stampsByProject.set(projectId, {
+                    active,
+                    timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps]
+                });
+            }else{
+                stampsByProject.set(projectId, {
+                    active,
+                    timestamps: [stamp]
+                })
+            } 
+        }
+
+        updateState({projectMap: stampsByProject});
+    }
 } 
