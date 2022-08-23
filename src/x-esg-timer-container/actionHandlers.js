@@ -19,9 +19,11 @@ export default {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query'],
+        errorActionType: 'LOG_ERROR',
         successActionType: 'HANDLE_CONSULTANT_ID'
     }),
     'HANDLE_CONSULTANT_ID': ({action, dispatch, updateState}) => {
+        console.log(action.payload);
         const id = action.payload.result[0].sys_id;
         if(!id || action.payload.result.length !== 1){
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
@@ -90,7 +92,7 @@ export default {
         pathParams: ['tableName'],
         dataParam: 'data',
         successActionType: 'LOG_RESULT',
-        errorActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
     }),
     'TEST_START': () => console.log('test start'),
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),

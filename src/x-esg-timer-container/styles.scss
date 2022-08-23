@@ -2,11 +2,20 @@
 
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 48
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
 }
 
 // New stuff
@@ -37,7 +46,7 @@ $button-color: #3178C6;
         height: 36px;
         margin-bottom: 23px;
         border-radius: 15px;
-        
+
         &:hover {
             cursor: pointer;
         }
@@ -105,6 +114,7 @@ $button-color: #3178C6;
             height: 53px;
             width: 35%;
             border-radius: 15px;
+            border: $border-primary;
         }
 
         .new-project-text-container {
@@ -118,6 +128,8 @@ $button-color: #3178C6;
                 height: 107px;
                 width: 60%;
                 border-radius: 15px;
+                border: $border-primary;
+                padding: 10px;
             }
 
             .new-project-save-button {
@@ -144,6 +156,10 @@ $button-color: #3178C6;
         font-weight: 700;
         border-bottom: $border-primary;
 
+        &:first-child {
+            border-top: $border-primary;
+        }
+
         &:last-child {
             border-bottom: none;
         }
@@ -153,9 +169,33 @@ $button-color: #3178C6;
             color: $color-secondary;
         }
 
-        .project-title {
-            font-size: 20px;
+        .project-title-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .project-title {
+                font-size: 20px;
+                padding-bottom: 8px;
+                padding-top: 8px;
+            }
+
+            .project-start-stop-container {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+
+                // .active {
+                //     color: green;
+                // }
+            }
+
+            
         }
+
+        
 
         .project-notes {
             font-weight: 500;
@@ -166,6 +206,8 @@ $button-color: #3178C6;
 
     .project-time {
         font-weight: 700;
+        font-size: 22px;
+        margin-left: 29px;
     }
 }
 
