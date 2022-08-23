@@ -15,6 +15,55 @@ $bg-primary: #FDFDFD;
 $border-primary: 1px solid #D6D6D6;
 $item-padding: 18px 38px;
 $color-secondary: rgba(160, 175, 196, 1);
+$button-color: #3178C6;
+
+.outer-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+
+    .add-project-button {
+        background-color: $button-color;
+        border-style: none;
+        outline-style: none;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        color: white;
+        width: 106px;
+        height: 36px;
+        margin-bottom: 23px;
+        border-radius: 15px;
+        
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .edit-button {
+        background-color: white;
+        border: 1px solid $border-primary;
+        outline-style: none;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        color: #A0AFC4;
+        width: 106px;
+        height: 36px;
+        margin-bottom: 23px;
+        border-radius: 15px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
 
 .today-container {
     box-sizing: border-box;
@@ -58,12 +107,36 @@ $color-secondary: rgba(160, 175, 196, 1);
             border-radius: 15px;
         }
 
-        .new-project-text {
-            margin-bottom: 18px;
-            height: 107px;
-            width: 60%;
-            border-radius: 15px;
+        .new-project-text-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+
+            .new-project-text {
+                height: 107px;
+                width: 60%;
+                border-radius: 15px;
+            }
+
+            .new-project-save-button {
+                background-color: $button-color;
+                border-style: none;
+                outline-style: none;
+                font-size: 16px;
+                color: white;
+                width: 106px;
+                height: 36px;
+                border-radius: 15px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
         }
+
     }
 
     .project-item {

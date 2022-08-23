@@ -17,6 +17,31 @@ export const view = (state, {dispatch, updateState}) => {
 
     return (
         <Fragment>
+            <div className="outer-buttons">
+                <button 
+                    className="add-project-button"
+                    on-click={() => dispatch('NEW_ENTRY', {
+                            data: {
+                                project: selectedProject,
+                                consultant: consultantId,
+                                note: entryNotes,
+                            },
+                            tableName: 'x_esg_one_delivery_time_entry',
+                        })}>
+                    <span className="material-symbols-outlined">
+                        add
+                    </span>
+                    Projects
+                </button>
+                
+
+                <button className="edit-button">
+                        <span className="material-symbols-outlined">
+                            edit_square
+                        </span>
+                        Edit
+                </button>
+            </div>
             <div className="today-container">
                 <div className="today-header">
                     <div>
@@ -40,27 +65,19 @@ export const view = (state, {dispatch, updateState}) => {
                                 {proj.short_description}
                             </option>)}
                     </select>
-                    <textarea 
-                        className="new-project-text"
-                        on-keyup={(e)=> updateState({entryNotes: e.target.value})}
-                        maxlength='512'
-                    ></textarea>
-                    <span 
-                        className="material-symbols-outlined"
-                        on-click={() => dispatch('NEW_ENTRY', {
-                            data: {
-                                project: selectedProject,
-                                consultant: consultantId,
-                                note: entryNotes,
-                            },
-                            tableName: 'x_esg_one_delivery_time_entry',
-                        })}    
-                    >
-                        add_circle_outline
-                    </span>
+                    <div className="new-project-text-container">
+                        <textarea 
+                            className="new-project-text"
+                            on-keyup={(e)=> updateState({entryNotes: e.target.value})}
+                            maxlength='512'
+                        ></textarea>
+
+                        <button
+                            className="new-project-save-button"
+                            >Save
+                        </button>
+                    </div>
                 </form>
-
-
                 <div>
                     {projects.map(proj => {
                         const {client, short_description, sys_id} = proj;
