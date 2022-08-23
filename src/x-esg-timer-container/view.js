@@ -15,6 +15,8 @@ export const view = (state, {dispatch, updateState}) => {
     const allProjects = [...genericProjects, ...projects];
     const d = new Date();
 
+    console.log('STATE', state);
+
     return (
         <Fragment>
             <div className="today-container">

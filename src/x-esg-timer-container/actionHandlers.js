@@ -27,6 +27,12 @@ export default {
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
         }else{
             updateState({consultantId: id});
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
+                tableName: 'x_esg_one_delivery_timestamp',
+                sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()`,
+                successActionType: 'LOG_RESULT',
+                errorActionType: 'LOG_ERROR',
+            })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
                 sysparm_query: `consultant_assigned=${id}`,
@@ -69,7 +75,6 @@ export default {
         {
             method: 'GET',
             queryParams: ['sysparm_query', 'sysparm_fields'],
-            startActionType: 'TEST_START',
             successActionType: 'SET_GENERIC_PROJECTS',
             errorActionType: 'LOG_ERROR'
     }),
@@ -107,5 +112,12 @@ export default {
         pathParams: 'timestampTable',
         queryParams: ['sysparm_query'],
         successActionType: 'LOG_RESULT'
+    }),
+    'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query'],
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
     })
 } 
