@@ -70,3 +70,10 @@ export const getUTCTime = (dateString) => {
     arr[1] = arr[1] - 1;
     return new Date(Date.UTC(...arr));
 }
+
+export const msToString = (ms) => {
+    let totalMinutes = ms / 1000 / 60;
+    let hours = Math.floor(totalMinutes / 60).toString().padStart(2, "0");
+    let minutes = Math.floor(totalMinutes % 60).toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+}

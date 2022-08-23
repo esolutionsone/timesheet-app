@@ -120,11 +120,12 @@ export default {
     }),
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
         const timestamps = action.payload.result;
-        console.log('timestamps', timestamps)
 
         const stampsByProject = new Map();
         
-        //package for easy mapping, 
+        //package for easy mapping
+        // Subtracting the parsed ServiceNow zero duration time with 
+        // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
         for(let stamp of timestamps){
             const projectId = stamp.project.value;
             const active = stamp.active === 'true';
@@ -132,13 +133,15 @@ export default {
                 stampsByProject.set(projectId, {
                     active,
                     timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps],
-                    totalRoundedTime: stampsByProject.get(projectId).totalTime + (Date.parse(stamp.rounded_duration) || 0),
+                    totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
+                        (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
+                        || 0),
                 });
             }else{
                 stampsByProject.set(projectId, {
                     active,
                     timestamps: [stamp],
-                    totalRoundedTime: Date.parse(stamp.rounded_duration) || 0,
+                    totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
                 })
             }
         }

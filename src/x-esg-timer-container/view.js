@@ -1,7 +1,8 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
-import {format} from 'date-fns';
+import {format, intervalToDuration} from 'date-fns';
+import { msToString } from '../x-esg-timer-button/helpers';
 import WebFont from 'webfontloader';
 
 export const view = (state, {dispatch, updateState}) => {
@@ -11,11 +12,15 @@ export const view = (state, {dispatch, updateState}) => {
             families: ['Montserrat:400,500,600,700', 'Material+Symbols+Outlined']
         }
     })
-    const {projects, selectedProject, consultantId, entryNotes, genericProjects} = state;
+    const {projects, selectedProject, consultantId, entryNotes, genericProjects, projectMap} = state;
     const allProjects = [...genericProjects, ...projects];
     const d = new Date();
 
     console.log('STATE', state);
+
+    let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
+    totalTime = msToString(totalTime);
+    
 
     return (
         <Fragment>
@@ -27,17 +32,19 @@ export const view = (state, {dispatch, updateState}) => {
                     </div>
                     <div>
                         <span>Total </span>
-                        <span className="project-time"> 8:47</span>
+                        <span className="project-time"> {totalTime}</span>
                     </div>
                 </div>
 
                 <div>
                     {projects.map(proj => {
                         const {client, short_description, sys_id} = proj;
+                        console.log('proj map entry', projectMap.get(sys_id));
                         return <div className="project-item" key={sys_id}>
                             <div className="client-name">{client.short_description}</div>
                             <div className="project-title">{short_description}</div>
                             <div className="project-notes">Example Notes</div>
+                            <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                         </div>;
                     })}
                 </div>
