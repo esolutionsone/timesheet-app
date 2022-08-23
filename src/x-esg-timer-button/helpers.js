@@ -71,6 +71,12 @@ export const getUTCTime = (dateString) => {
     return new Date(Date.UTC(...arr));
 }
 
+
+/**
+ * Accepts millisecond duration and outputs string in "HH:MM" format
+ * @param {number} ms 
+ * @returns 
+ */
 export const msToString = (ms) => {
     let totalMinutes = ms / 1000 / 60;
     let hours = Math.floor(totalMinutes / 60).toString().padStart(2, "0");
