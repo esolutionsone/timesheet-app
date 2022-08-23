@@ -23,12 +23,15 @@ export default {
         successActionType: 'HANDLE_CONSULTANT_ID'
     }),
     'HANDLE_CONSULTANT_ID': ({action, dispatch, updateState}) => {
-        console.log(action.payload);
         const id = action.payload.result[0].sys_id;
         if(!id || action.payload.result.length !== 1){
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
         }else{
             updateState({consultantId: id});
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
+                tableName: 'x_esg_one_delivery_timestamp',
+                sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
+            })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
                 sysparm_query: `consultant_assigned=${id}`,
@@ -71,7 +74,6 @@ export default {
         {
             method: 'GET',
             queryParams: ['sysparm_query', 'sysparm_fields'],
-            startActionType: 'TEST_START',
             successActionType: 'SET_GENERIC_PROJECTS',
             errorActionType: 'LOG_ERROR'
     }),
@@ -99,15 +101,45 @@ export default {
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,
     'INSERT_TIMESTAMP': ({action, dispatch}) => {
-        console.log('caught insert action: ', action.payload)
         const payload = action.payload;
         payload.sysparm_query = `active=true^sys_id!=${payload.sys_id}`
         dispatch('STOP_SIBLINGS', action.payload);
     },
-    'STOP_SIBLINGS': createHttpEffect('api/now/table/:timestampTable', {
+    'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
-        pathParams: 'timestampTable',
+        pathParams: ['tableName'],
         queryParams: ['sysparm_query'],
-        successActionType: 'LOG_RESULT'
-    })
+        successActionType: 'SET_CONSULTANT_TIMESTAMPS',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
+        const timestamps = action.payload.result;
+
+        const stampsByProject = new Map();
+        
+        // Massage for easy mapping
+        // Subtracting the parsed ServiceNow zero duration time with 
+        // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
+        for(let stamp of timestamps){
+            const projectId = stamp.project.value;
+            const active = stamp.active === 'true';
+            if(stampsByProject.has(projectId)){
+                stampsByProject.set(projectId, {
+                    active,
+                    timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps],
+                    totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
+                        (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
+                        || 0),
+                });
+            }else{
+                stampsByProject.set(projectId, {
+                    active,
+                    timestamps: [stamp],
+                    totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
+                })
+            }
+        }
+
+        updateState({projectMap: stampsByProject});
+    }
 } 

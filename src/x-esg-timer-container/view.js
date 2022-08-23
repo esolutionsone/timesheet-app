@@ -2,6 +2,7 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 import {format} from 'date-fns';
+import { msToString } from '../x-esg-timer-button/helpers';
 import WebFont from 'webfontloader';
 
 export const view = (state, {dispatch, updateState}) => {
@@ -11,13 +12,22 @@ export const view = (state, {dispatch, updateState}) => {
             families: ['Montserrat:400,500,600,700', 'Material+Symbols+Outlined', 'Material+Symbols+Rounded']
         }
     })
-    const {projects, selectedProject, consultantId, entryNotes, genericProjects, addProjectStatus} = state;
+
+    const {
+        projects, 
+        selectedProject, 
+        consultantId, 
+        entryNotes, 
+        genericProjects, 
+        projectMap,
+        addProjectStatus
+    } = state;
+    
     const allProjects = [...genericProjects, ...projects];
     const d = new Date();
 
     const handleSave = (e) => {
         e.preventDefault();
-        console.log('saved');
         dispatch('NEW_ENTRY', {
                 data: {
                     project: selectedProject,
@@ -27,17 +37,13 @@ export const view = (state, {dispatch, updateState}) => {
                 tableName: 'x_esg_one_delivery_time_entry',
             });
         updateState({addProjectStatus: !addProjectStatus});
-
     }
-    // on-click={() => dispatch('NEW_ENTRY', {
-    //     data: {
-    //         project: selectedProject,
-    //         consultant: consultantId,
-    //         note: entryNotes,
-    //     },
-    //     tableName: 'x_esg_one_delivery_time_entry',
-    // })}
-    console.log(state);
+
+    console.log('STATE', state);
+
+    let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
+    totalTime = msToString(totalTime);
+
     return (
         <Fragment>
             <div className="outer-buttons">
@@ -63,7 +69,7 @@ export const view = (state, {dispatch, updateState}) => {
                     </div>
                     <div>
                         <span>Total </span>
-                        <span className="project-time"> 8:47</span>
+                        <span className="project-time"> {totalTime}</span>
                     </div>
                 </div>
 
@@ -105,11 +111,8 @@ export const view = (state, {dispatch, updateState}) => {
                                         <div className="project-title">{short_description}</div>
                                         <div className="project-start-stop-container">
                                             {<x-esg-timer-button />}
-                                            {/* <span className="material-symbols-rounded active">
-                                                play_arrow
-                                            </span>
-                                            <span className="project-time"> 5:07</span> */}
                                         </div>
+                                        <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                                     </div>
                                     <div className="project-notes">Example Notes</div>
                                 </div>;
