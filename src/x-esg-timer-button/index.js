@@ -4,15 +4,6 @@ import {view} from './view';
 import actionHandlers from './actionHandlers';
 import styles from './styles.scss';
 
-import WebFont from 'webfontloader';
-
-// Load Custom Fonts
-WebFont.load({
-	google: {
-		families: ['Montserrat:400,600', 'Material+Symbols+Outlined']
-	}
-})
-
 createCustomElement('x-esg-timer-button', {
 	renderer: {type: snabbdom},
 	view,
@@ -28,6 +19,7 @@ createCustomElement('x-esg-timer-button', {
 		active: { default: "false" },
 		start: { default: null },
 		projectData: {default: {}},
+		loadFonts: {default: true},
 	},
 	actionHandlers,
 });

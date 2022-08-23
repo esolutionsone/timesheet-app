@@ -9,7 +9,7 @@ import WebFont from 'webfontloader';
 // Load Custom Fonts
 WebFont.load({
 	google: {
-		families: ['Montserrat:400,600', 'Material+Symbols+Outlined']
+		families: ['Montserrat:400,600', 'Material+Symbols+Outlined', 'Material+Symbols+Rounded']
 	}
 })
 
@@ -19,6 +19,11 @@ createCustomElement('x-esg-timer-container', {
 	styles,
 	initialState: {
 		projects: [],
+		selectedProject: '',
+		consultantId: '',
+		entryNotes: '',
+		genericProjects: [],
+		addProjectStatus: false,
 	},
 	actionHandlers,
 });

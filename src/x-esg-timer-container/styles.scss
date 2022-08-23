@@ -1,1 +1,206 @@
 @import '@servicenow/sass-kit/host';
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+// New stuff
+
+$bg-primary: #FDFDFD;
+$border-primary: 1px solid #D6D6D6;
+$item-padding: 18px 38px;
+$color-secondary: rgba(160, 175, 196, 1);
+$button-color: #3178C6;
+
+.outer-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+
+    .add-project-button {
+        background-color: $button-color;
+        border-style: none;
+        outline-style: none;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        color: white;
+        width: 106px;
+        height: 36px;
+        margin-bottom: 23px;
+        border-radius: 15px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .edit-button {
+        background-color: white;
+        border: 1px solid $border-primary;
+        outline-style: none;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        color: #A0AFC4;
+        width: 106px;
+        height: 36px;
+        margin-bottom: 23px;
+        border-radius: 15px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+
+.today-container {
+    box-sizing: border-box;
+    width: 80%;
+    background: $bg-primary;
+    border: $border-primary;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    margin: auto;
+
+    .today-header {
+        padding: $item-padding;
+        font-size: 22px;
+        display: flex;
+        justify-content: space-between;
+    
+        .title {
+            font-weight: 700;
+            margin-right: 50px;
+        }
+    }
+
+    .new-project-header {
+        padding: $item-padding;
+        color: $color-secondary;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .new-project-body {
+        padding: $item-padding;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .new-project-dropdown {
+            padding-left: 25px;
+            margin-bottom: 18px;
+            height: 53px;
+            width: 35%;
+            border-radius: 15px;
+            border: $border-primary;
+        }
+
+        .new-project-text-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+
+            .new-project-text {
+                height: 107px;
+                width: 60%;
+                border-radius: 15px;
+                border: $border-primary;
+                padding: 10px;
+            }
+
+            .new-project-save-button {
+                background-color: $button-color;
+                border-style: none;
+                outline-style: none;
+                font-size: 16px;
+                color: white;
+                width: 106px;
+                height: 36px;
+                border-radius: 15px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .project-item {
+        padding: $item-padding;
+        font-weight: 700;
+        border-bottom: $border-primary;
+
+        &:first-child {
+            border-top: $border-primary;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .client-name {
+            font-size: 16px;
+            color: $color-secondary;
+        }
+
+        .project-title-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .project-title {
+                font-size: 20px;
+                padding-bottom: 8px;
+                padding-top: 8px;
+            }
+
+            .project-start-stop-container {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                // .active {
+                //     color: green;
+                // }
+            }
+        }
+
+        .project-notes {
+            font-weight: 500;
+            font-size: 16px;
+            color: $color-secondary;
+        }
+    }
+
+    .project-time {
+        font-weight: 700;
+        font-size: 22px;
+        margin-left: 29px;
+    }
+}
+
