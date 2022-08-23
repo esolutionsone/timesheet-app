@@ -12,7 +12,6 @@ import WebFont from 'webfontloader';
 export const view = (state, { updateState, dispatch }) => {
     const { properties, currentTime } = state;
     const { active, start, projectData, loadFonts } = properties;
-    const style = { color: active == "true" ? 'green' : 'red' };
     const isActive = active === "true";
 
     // Load Custom Fonts
@@ -54,8 +53,6 @@ export const view = (state, { updateState, dispatch }) => {
             });
         }
     }
-
-    console.log(projectData)
 
     return (
         <Fragment>

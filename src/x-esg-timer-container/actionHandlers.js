@@ -23,7 +23,6 @@ export default {
         successActionType: 'HANDLE_CONSULTANT_ID'
     }),
     'HANDLE_CONSULTANT_ID': ({action, dispatch, updateState}) => {
-        console.log(action.payload);
         const id = action.payload.result[0].sys_id;
         if(!id || action.payload.result.length !== 1){
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
@@ -102,17 +101,10 @@ export default {
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,
     'INSERT_TIMESTAMP': ({action, dispatch}) => {
-        console.log('caught insert action: ', action.payload)
         const payload = action.payload;
         payload.sysparm_query = `active=true^sys_id!=${payload.sys_id}`
         dispatch('STOP_SIBLINGS', action.payload);
     },
-    'STOP_SIBLINGS': createHttpEffect('api/now/table/:timestampTable', {
-        method: 'GET',
-        pathParams: 'timestampTable',
-        queryParams: ['sysparm_query'],
-        successActionType: 'LOG_RESULT'
-    }),
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -125,7 +117,7 @@ export default {
 
         const stampsByProject = new Map();
         
-        //package for easy mapping
+        // Massage for easy mapping
         // Subtracting the parsed ServiceNow zero duration time with 
         // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
         for(let stamp of timestamps){

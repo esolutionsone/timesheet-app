@@ -28,7 +28,6 @@ export const view = (state, {dispatch, updateState}) => {
 
     const handleSave = (e) => {
         e.preventDefault();
-        console.log('saved');
         dispatch('NEW_ENTRY', {
                 data: {
                     project: selectedProject,
@@ -38,7 +37,6 @@ export const view = (state, {dispatch, updateState}) => {
                 tableName: 'x_esg_one_delivery_time_entry',
             });
         updateState({addProjectStatus: !addProjectStatus});
-
     }
 
     console.log('STATE', state);
@@ -113,10 +111,6 @@ export const view = (state, {dispatch, updateState}) => {
                                         <div className="project-title">{short_description}</div>
                                         <div className="project-start-stop-container">
                                             {<x-esg-timer-button />}
-                                            {/* <span className="material-symbols-rounded active">
-                                                play_arrow
-                                            </span>
-                                            <span className="project-time"> 5:07</span> */}
                                         </div>
                                         <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                                     </div>
