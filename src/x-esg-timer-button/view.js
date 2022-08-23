@@ -7,12 +7,20 @@ import {
     roundDuration
 } from './helpers';
 
+import WebFont from 'webfontloader';
+
 export const view = (state, { updateState, dispatch }) => {
     const { properties, currentTime } = state;
-    const { active, start, projectData } = properties;
+    const { active, start, projectData, loadFonts } = properties;
     const style = { color: active == "true" ? 'green' : 'red' };
     const isActive = active === "true";
 
+    // Load Custom Fonts
+    if(loadFonts) WebFont.load({
+        google: {
+            families: ['Montserrat:400,600', 'Material+Symbols+Outlined']
+        }
+    });
 
     // Update every second
     let interval = null;
@@ -35,7 +43,7 @@ export const view = (state, { updateState, dispatch }) => {
         if (!isActive) {
             dispatch('INSERT_TIMESTAMP', {
                 timestampTable,
-                data: { active: true }
+                data: { active: true, project: projectData.sys_id}
             })
         } else {
             // should we call this OPEN_ and CLOSE_TIMESTAMP?
@@ -46,6 +54,8 @@ export const view = (state, { updateState, dispatch }) => {
             });
         }
     }
+
+    console.log(projectData)
 
     return (
         <Fragment>
@@ -71,13 +81,9 @@ export const view = (state, { updateState, dispatch }) => {
                     
                     <span className={"btn-circle btn-active "  + (isActive && 'active')}>
                         <span className={"material-symbols-outlined"} on-click={timerStart}>
-                            {isActive ? 'stop' : 'play_arrow'} 
+                            {isActive ? 'pause' : 'play_arrow'} 
                         </span>
                     </span>
-                    {/* <now-icon
-                        on-click={timerStart} 
-                        icon="circle-play-outline" 
-                        className={!isActive ? 'display-active' : 'display-inactive'} size="lg"></now-icon> */}
                 </div>
             </div>
         </Fragment>

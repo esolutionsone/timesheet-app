@@ -25,13 +25,7 @@ export default {
         startActionType: 'LOG_RESULT',
         errorActionType: 'LOG_RESULT',
     }),
-    'SET_TIMER_STATUS': ({action, updateState, updateProperties}) => {
-        console.log('SET_TIMER_STATUS ', action.payload);
-        // console.log(action.payload.result[0].sys_created_on);
-        // updateState({
-        // 	startTime: action.payload.result[0].sys_created_on,
-        // 	test_start_time: action.payload.result[0].test_start_time
-        // })
+    'SET_TIMER_STATUS': ({action, updateProperties}) => {
         updateProperties({
             start: action.payload.result.start_time,
             active: action.payload.result.active
