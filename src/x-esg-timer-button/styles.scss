@@ -5,10 +5,18 @@ $btn-dimensions: 1.3rem;
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
     font-variation-settings:
-        'FILL'0,
+        'FILL'1,
         'wght'400,
         'GRAD'0,
         'opsz'48
+}
+
+.timer-button-container {
+    display: flex;
+    width: 200px;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .timer-container {

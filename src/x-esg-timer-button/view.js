@@ -59,8 +59,23 @@ export const view = (state, { updateState, dispatch }) => {
 
     return (
         <Fragment>
+            <div className="timer-button-container">
+                <span className={"btn-circle btn-active "  + (isActive && 'active')}>
+                    <span className={"material-symbols-outlined"} on-click={timerStart}>
+                        {isActive ? 'pause' : 'play_arrow'} 
+                    </span>
+                </span>
+
+                <span className={'timer-counter ' + isActive ? 'display-active' : 'display-inactive'}>
+                    {timerDisplayValue || 'Start'}
+                </span>
+                
+                <span className='display-rounded'>
+                    {stringifyDuration(roundedDuration).slice(0, -3)}
+                </span>
+            </div>
             
-            <div className="timer-container">
+            {/* <div className="timer-container">
        
                 <div className="pill">
                     {projectData.short_description || 'Project Name / Details'}
@@ -85,7 +100,7 @@ export const view = (state, { updateState, dispatch }) => {
                         </span>
                     </span>
                 </div>
-            </div>
+            </div> */}
         </Fragment>
     );
 };
