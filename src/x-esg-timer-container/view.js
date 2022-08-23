@@ -110,7 +110,10 @@ export const view = (state, {dispatch, updateState}) => {
                                     <div className="project-title-container">
                                         <div className="project-title">{short_description}</div>
                                         <div className="project-start-stop-container">
-                                            {<x-esg-timer-button />}
+                                            {<x-esg-timer-button 
+                                                projectData={proj}
+                                                loadFonts={false}
+                                            />}
                                         </div>
                                         <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                                     </div>

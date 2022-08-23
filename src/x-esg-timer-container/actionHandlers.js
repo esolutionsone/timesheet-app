@@ -31,6 +31,7 @@ export default {
             dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
                 tableName: 'x_esg_one_delivery_timestamp',
                 sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
+                sysparm_fields: 'project_role.project.client, project_role.project.sys_id, project_role.project.short_description'
             })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
@@ -109,12 +110,13 @@ export default {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query'],
-        successActionType: 'SET_CONSULTANT_TIMESTAMPS',
+        successActionType: 'LOG_RESULT',
         errorActionType: 'LOG_ERROR',
     }),
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
-        const timestamps = action.payload.result;
 
+        const timestamps = action.payload.result;
+        console.log(timestamps);
         const stampsByProject = new Map();
         
         // Massage for easy mapping
@@ -126,12 +128,13 @@ export default {
             if(stampsByProject.has(projectId)){
                 stampsByProject.set(projectId, {
                     active,
+                    sys_id: projectId,
                     timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps],
                     totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
                         (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
                         || 0),
                 });
-            }else{
+            } else{
                 stampsByProject.set(projectId, {
                     active,
                     timestamps: [stamp],
