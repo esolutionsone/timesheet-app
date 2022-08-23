@@ -37,6 +37,35 @@ $color-secondary: rgba(160, 175, 196, 1);
         }
     }
 
+    .new-project-header {
+        padding: $item-padding;
+        color: $color-secondary;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .new-project-body {
+        padding: $item-padding;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .new-project-dropdown {
+            padding-left: 25px;
+            margin-bottom: 18px;
+            height: 53px;
+            width: 35%;
+            border-radius: 15px;
+        }
+
+        .new-project-text {
+            margin-bottom: 18px;
+            height: 107px;
+            width: 60%;
+            border-radius: 15px;
+        }
+    }
+
     .project-item {
         padding: $item-padding;
         font-weight: 700;
