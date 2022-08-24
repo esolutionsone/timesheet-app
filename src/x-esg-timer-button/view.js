@@ -12,7 +12,7 @@ import WebFont from 'webfontloader';
 export const view = (state, { updateState, dispatch }) => {
     const { properties, currentTime } = state;
     const { active, start, projectData, loadFonts } = properties;
-    const isActive = active === "true";
+    const isActive = active === "true" || active === true;
 
     // Load Custom Fonts
     if(loadFonts) WebFont.load({
