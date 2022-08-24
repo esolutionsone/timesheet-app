@@ -71,33 +71,6 @@ export const view = (state, { updateState, dispatch }) => {
                     {stringifyDuration(roundedDuration).slice(0, -3)}
                 </span>
             </div>
-            
-            {/* <div className="timer-container">
-       
-                <div className="pill">
-                    {projectData.short_description || 'Project Name / Details'}
-                </div>
-                
-                <div className="timer-items-right">
-                    <div>
-                        <div className="pill">Today</div>
-                    </div>
-                    
-                    <span className={'timer-counter ' + isActive ? 'display-active' : 'display-inactive'}>
-                        {timerDisplayValue || 'Start'}
-                    </span>
-                    
-                    <span className='display-rounded'>
-                        {stringifyDuration(roundedDuration).slice(0, -3)}
-                    </span>
-                    
-                    <span className={"btn-circle btn-active "  + (isActive && 'active')}>
-                        <span className={"material-symbols-outlined"} on-click={timerStart}>
-                            {isActive ? 'pause' : 'play_arrow'} 
-                        </span>
-                    </span>
-                </div>
-            </div> */}
         </Fragment>
     );
 };

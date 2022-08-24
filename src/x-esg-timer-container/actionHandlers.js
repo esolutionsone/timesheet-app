@@ -179,10 +179,7 @@ export default {
         console.log("line 151, stampsByProject =", stampsByProject);
         updateState({projectMap: stampsByProject});
     },
-    'UPDATE_SUCCESS': ({dispatch, action, state}) => {
-        // const {active} = action.payload.result;
-        // console.log('update response: ', action.payload.result);
-        // updateProperties({active});
+    'UPDATE_SUCCESS': ({dispatch, state}) => {
         console.log('update success runs');
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
             tableName: 'x_esg_one_delivery_timestamp',
