@@ -24,7 +24,12 @@ export const view = (state, {dispatch, updateState}) => {
         editMode,
     } = state;
     
-    const allProjects = [...genericProjects, ...projects];
+    // Combine Generic projects and user-specific projects,
+    // Then filter out projects that are already being tracked today
+    const allProjects = [...genericProjects, ...projects].filter(proj => {
+        return !projectMap.has(proj.sys_id)
+    });
+
     const d = new Date();
 
     const handleSave = (e) => {
