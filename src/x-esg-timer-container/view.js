@@ -22,6 +22,7 @@ export const view = (state, {dispatch, updateState}) => {
         projectMap,
         addProjectStatus,
         editMode,
+        properties
     } = state;
     
     const allProjects = [...genericProjects, ...projects];
@@ -51,6 +52,22 @@ export const view = (state, {dispatch, updateState}) => {
         e.preventDefault();
         console.log('edit clicked');
         updateState({editMode: !editMode});
+    }
+
+    const handleDeleteProject = (e, projectToBeDeleted) => {
+        e.preventDefault();
+        console.log('delete project clicked');
+
+        console.log("Project to be deleted", projectToBeDeleted);
+
+        projectToBeDeleted.timestamps.forEach(timestamp => {
+            console.log(timestamp);
+        });
+
+        // dispatch('DELETE_PROJECT_TIMESTAMPS', {
+        //     tableName: properties.timestampTable,
+        //     id: projectToBeDeleted.sys_id,
+        // })
     }
 
     console.log('STATE', state);
@@ -144,7 +161,10 @@ export const view = (state, {dispatch, updateState}) => {
                                         {!editMode ? 
                                             '' 
                                             : 
-                                            <span className="material-symbols-rounded remove-project">
+                                            <span 
+                                                className="material-symbols-rounded remove-project"
+                                                on-click={(e) => handleDeleteProject(e, proj)}
+                                            >
                                                 delete_forever
                                             </span>
                                         }
@@ -155,7 +175,7 @@ export const view = (state, {dispatch, updateState}) => {
                                         note 
                                         :
                                         <textarea 
-                                            className="new-project-text"
+                                            className="edit-project-text"
                                             on-keyup={(e)=> updateState({entryNotes: e.target.value})}
                                             maxlength='512'
                                             value={note}>
