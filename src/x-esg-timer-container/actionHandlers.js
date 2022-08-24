@@ -31,7 +31,15 @@ export default {
             dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
                 tableName: 'x_esg_one_delivery_timestamp',
                 sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-                sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
+                sysparm_fields: `project.client.short_description, 
+                    project.sys_id, 
+                    project.short_description, 
+                    start_time, 
+                    end_time, 
+                    active, 
+                    duration, 
+                    rounded_duration,
+                    sys_id`
             })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
@@ -114,7 +122,16 @@ export default {
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
             tableName: 'x_esg_one_delivery_timestamp',
             sysparm_query: `user=${state.consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-            sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
+            sysparm_fields: `
+                project.client.short_description,
+                project.sys_id, project.short_description, 
+                start_time, 
+                end_time, 
+                active, 
+                duration, 
+                rounded_duration, 
+                sys_id
+            `
         })
     },
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
@@ -161,5 +178,24 @@ export default {
         }
         console.log("line 151, stampsByProject =", stampsByProject);
         updateState({projectMap: stampsByProject});
-    }
+    },
+    'UPDATE_SUCCESS': ({dispatch, action, state}) => {
+        // const {active} = action.payload.result;
+        // console.log('update response: ', action.payload.result);
+        // updateProperties({active});
+        console.log('update success runs');
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
+            tableName: 'x_esg_one_delivery_timestamp',
+            sysparm_query: `user=${state.consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
+            sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
+        })
+    },
+    'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
+        method: 'PUT',
+        pathParams: ['tableName', 'sys_id'],
+        successActionType: 'UPDATE_SUCCESS',
+        errorActionType: 'LOG_RESULT',
+        startActionType: 'LOG_RESULT',
+        dataParam: 'data',
+    }),
 } 

@@ -11,8 +11,11 @@ import WebFont from 'webfontloader';
 
 export const view = (state, { updateState, dispatch }) => {
     const { properties, currentTime } = state;
-    const { active, start, projectData, loadFonts } = properties;
+    const { active, start, projectData, loadFonts, sysId } = properties;
     const isActive = active === "true" || active === true;
+    console.log('timestamp sys_id', sysId);
+    console.log('properties', properties)
+    console.log('state', state);
 
     // Load Custom Fonts
     if(loadFonts) WebFont.load({
@@ -38,7 +41,7 @@ export const view = (state, { updateState, dispatch }) => {
     const timerDisplayValue = stringifyDuration(timerDuration);
 
     const timerStart = () => {
-        const { timestampTable } = properties;
+        const timestampTable = 'x_esg_one_delivery_timestamp';
         if (!isActive) {
             dispatch('INSERT_TIMESTAMP', {
                 tableName: timestampTable,
@@ -48,7 +51,7 @@ export const view = (state, { updateState, dispatch }) => {
             // should we call this OPEN_ and CLOSE_TIMESTAMP?
             dispatch('UPDATE_TIMESTAMP', {
                 tableName: timestampTable,
-                sys_id: properties.sysId,
+                sys_id: sysId,
                 data: { active: false }
             });
         }

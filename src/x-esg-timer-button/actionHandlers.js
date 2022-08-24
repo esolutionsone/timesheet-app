@@ -4,20 +4,13 @@ import { createHttpEffect } from '@servicenow/ui-effect-http';
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
 export default {
-    [COMPONENT_BOOTSTRAPPED]: ({state, dispatch, properties}) => {
-        const {sysId, timestampTable} = properties;
-        if(sysId){
-            dispatch('FETCH_TIMER_STATUS', {sys_id: sysId, timestampTable});
-        }
-    }, // replace with REST
-    'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
-        method: 'PUT',
-        pathParams: ['tableName', 'sys_id'],
-        successActionType: 'UPDATE_SUCCESS',
-        errorActionType: 'LOG_RESULT',
-        startActionType: 'LOG_RESULT',
-        dataParam: 'data',
-    }),
+    // [COMPONENT_BOOTSTRAPPED]: ({state, dispatch, properties}) => {
+    //     const {sysId, timestampTable} = properties;
+    //     if(sysId){
+    //         dispatch('FETCH_TIMER_STATUS', {sys_id: sysId, timestampTable});
+    //     }
+    // }, // replace with REST
+
     'FETCH_TIMER_STATUS': createHttpEffect(`api/now/table/:timestampTable/:sys_id`, {
         method: 'GET',
         pathParams: ['timestampTable', 'sys_id'],
@@ -52,11 +45,7 @@ export default {
         });
     },
     'INSERT_ERROR': ({action}) => console.log(action.payload),
-    'UPDATE_SUCCESS': ({action, updateProperties}) => {
-        const {active} = action.payload.result;
-        console.log('update response: ', action.payload.result);
-        updateProperties({active});
-    },
+
     'TEST_GET': createHttpEffect(`api/now/table/:table_name`, {
             pathParams: ['table_name'],
             method: 'GET',
