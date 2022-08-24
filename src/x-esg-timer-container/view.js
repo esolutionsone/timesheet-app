@@ -3,6 +3,7 @@ import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 import {format} from 'date-fns';
 import { msToString } from '../x-esg-timer-button/helpers';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
 
 export const view = (state, {dispatch, updateState}) => {
@@ -66,13 +67,16 @@ export const view = (state, {dispatch, updateState}) => {
         console.log("Project to be deleted", projectToBeDeleted);
 
         projectToBeDeleted.timestamps.forEach(timestamp => {
-            console.log(timestamp);
+            console.log(timestamp.sys_id + "has been deleted");
+
+            dispatch('DELETE_PROJECT_TIMESTAMPS', {
+                // tableName: properties.timestampTable,
+                id: timestamp.sys_id,
+            });
         });
 
-        // dispatch('DELETE_PROJECT_TIMESTAMPS', {
-        //     tableName: properties.timestampTable,
-        //     id: projectToBeDeleted.sys_id,
-        // })
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+
     }
 
     console.log('STATE', state);

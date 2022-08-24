@@ -142,12 +142,11 @@ export default {
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,
-    'DELETE_PROJECT_TIMESTAMPS': createHttpEffect(`api/now/table/:tableName/:id`, {
+    'DELETE_PROJECT_TIMESTAMPS': createHttpEffect(`api/now/table/x_esg_one_delivery_timestamp/:id`, {
         method: 'DELETE',
-        pathParams: ['tableName', 'id'],
-        queryParams: ['sysparm_query'],
+        pathParams: [ 'id'],
         startActionType: 'TEST_START',
-        successActionType: 'FETCH_CONSULTANT_TIMESTAMPS',
+        successActionType: 'LOG_RESULT',
         errorActionType: 'LOG_ERROR'
     }),
     'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
