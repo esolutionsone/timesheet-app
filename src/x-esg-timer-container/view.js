@@ -158,7 +158,7 @@ export const view = (state, {dispatch, updateState}) => {
                                             className="new-project-text"
                                             on-keyup={(e)=> updateState({entryNotes: e.target.value})}
                                             maxlength='512'
-                                            placeholder={note}>
+                                            value={note}>
                                         </textarea> 
                                     }
                                 </div>
