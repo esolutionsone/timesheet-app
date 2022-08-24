@@ -103,7 +103,7 @@ export const view = (state, {dispatch, updateState}) => {
 
                             <button
                                 className="new-project-save-button"
-                                on-click={()=>console.log("clicked")}>
+                            >
                                     Save
                             </button>
                         </div>

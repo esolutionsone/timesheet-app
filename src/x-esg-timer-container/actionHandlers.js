@@ -114,7 +114,6 @@ export default {
         pathParams: ['tableName'],
         dataParam: 'data',
         headers: {},
-        startActionType: 'TEST_START',
         successActionType: 'INSERT_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
