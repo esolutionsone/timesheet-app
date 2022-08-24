@@ -31,7 +31,7 @@ export default {
             dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
                 tableName: 'x_esg_one_delivery_timestamp',
                 sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-                sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
+                sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration, project.note'
             })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
@@ -114,7 +114,7 @@ export default {
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
             tableName: 'x_esg_one_delivery_timestamp',
             sysparm_query: `user=${state.consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-            sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
+            sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration, project.note'
         })
     },
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
@@ -127,7 +127,7 @@ export default {
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
 
         const timestamps = action.payload.result;
-        console.log("line 119, timestamps =", timestamps);
+        console.log("timestamps =", timestamps);
         const stampsByProject = new Map();
         
         // Massage for easy mapping
@@ -136,10 +136,11 @@ export default {
         for(let stamp of timestamps){
             const projectId = stamp['project.sys_id'];
             const active = stamp.active === 'true';
-            console.log("line 128, stamp =", stamp);
+            console.log(" stamp =", stamp);
             if(stampsByProject.has(projectId)){
                 stampsByProject.set(projectId, {
                     active,
+                    note: 'Example Notes Go Here',
                     sys_id: projectId,
                     client: stamp['project.client.short_description'],
                     short_description: stamp['project.short_description'],
@@ -151,6 +152,7 @@ export default {
             } else{
                 stampsByProject.set(projectId, {
                     active,
+                    note: 'Example Notes Go Here',
                     sys_id: projectId,
                     client: stamp['project.client.short_description'],
                     short_description: stamp['project.short_description'],
@@ -159,7 +161,7 @@ export default {
                 })
             }
         }
-        console.log("line 151, stampsByProject =", stampsByProject);
+        console.log("stampsByProject =", stampsByProject);
         updateState({projectMap: stampsByProject});
     }
 } 

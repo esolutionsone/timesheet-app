@@ -20,7 +20,8 @@ export const view = (state, {dispatch, updateState}) => {
         entryNotes, 
         genericProjects, 
         projectMap,
-        addProjectStatus
+        addProjectStatus,
+        editMode,
     } = state;
     
     const allProjects = [...genericProjects, ...projects];
@@ -46,6 +47,12 @@ export const view = (state, {dispatch, updateState}) => {
         updateState({addProjectStatus: !addProjectStatus});
     }
 
+    const handleEdit = (e) => {
+        e.preventDefault();
+        console.log('edit clicked');
+        updateState({editMode: !editMode});
+    }
+
     console.log('STATE', state);
 
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
@@ -61,7 +68,8 @@ export const view = (state, {dispatch, updateState}) => {
                     <span className="material-symbols-outlined">add</span>
                     Project
                 </button>
-                <button className="edit-button">
+                <button className="edit-button"
+                        on-click={handleEdit}>
                         <span className="material-symbols-outlined">
                             edit_square
                         </span>
@@ -99,6 +107,7 @@ export const view = (state, {dispatch, updateState}) => {
                                 className="new-project-text"
                                 on-keyup={(e)=> updateState({entryNotes: e.target.value})}
                                 maxlength='512'
+                                placeholder="Enter your notes here..."
                             ></textarea>
 
                             <button
@@ -111,27 +120,52 @@ export const view = (state, {dispatch, updateState}) => {
                 </div>}
                 <div>
                     {Array.from(projectMap.values()).map(proj => {
-                        const {client, short_description, sys_id} = proj;
-                        console.log("line 108 on view, projectMap =",projectMap);
-                        console.log(sys_id);
-                        return <div className="project-item" key={sys_id}>
-                                    <div className="client-name">{client.short_description}</div>
-                                    <div className="project-title-container">
-                                        <div className="project-title">{short_description}</div>
-                                        <div className="project-start-stop-container">
-                                            {<x-esg-timer-button 
-                                                projectData={proj}
-                                                loadFonts={false}
-                                            />}
+                        const {client, short_description, sys_id, note} = proj;
+                        return (
+                            <div className="project-item" key={sys_id}>
+                                <div className="client-name">{client}</div>
+                                <div className="project-title-container">
+                                    <div className="project-title">{short_description}</div>
+                                    <div className="project-start-stop-container">
+                                        {<x-esg-timer-button 
+                                            projectData={proj}
+                                            loadFonts={false}/>
+                                        }
+                                        <div>
+                                            {editMode ? 
+                                                <input 
+                                                    className="roundedTime-input-box" 
+                                                    value={msToString(projectMap.get(sys_id).totalRoundedTime)}
+                                                /> 
+                                                : 
+                                                msToString(projectMap.get(sys_id).totalRoundedTime)
+                                            }
                                         </div>
-                                        <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
+                                        {!editMode ? 
+                                            '' 
+                                            : 
+                                            <span className="material-symbols-rounded remove-project">
+                                                delete_forever
+                                            </span>
+                                        }
                                     </div>
-                                    <div className="project-notes">Example Notes</div>
-                                </div>;
-                        })
-                    }
+                                </div>
+                                <div className="project-notes">
+                                    {!editMode ? 
+                                        note 
+                                        :
+                                        <textarea 
+                                            className="new-project-text"
+                                            on-keyup={(e)=> updateState({entryNotes: e.target.value})}
+                                            maxlength='512'
+                                            value={note}>
+                                        </textarea> 
+                                    }
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
-                
             </div>
             <hr></hr>
             {projects.map(proj => <x-esg-timer-button 

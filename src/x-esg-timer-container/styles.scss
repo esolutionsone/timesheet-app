@@ -187,6 +187,17 @@ $button-color: #3178C6;
                 // .active {
                 //     color: green;
                 // }
+
+                .roundedTime-input-box{
+                    max-width: 50px;
+                }
+
+                .remove-project {
+                    position: fixed;
+                    right: 100px;
+                    color: red;
+                    font-size: x-large;
+                }
             }
         }
 

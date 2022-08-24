@@ -25,6 +25,7 @@ createCustomElement('x-esg-timer-container', {
 		genericProjects: [],
 		projectMap: new Map(),
 		addProjectStatus: false,
+		editMode: false,
 	},
 	actionHandlers,
 });
