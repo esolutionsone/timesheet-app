@@ -128,7 +128,8 @@ export const view = (state, {dispatch, updateState}) => {
                         const {client, short_description, sys_id, active, timestamps, note} = proj;
                         const latestActive = timestamps.find(stamp => stamp.active === "true");
                         return (<div className="project-item" key={sys_id}>
-                                    <div className="client-name">{client.short_description}</div>
+
+                                    <div className="client-name">{client}</div>
                                     <div className="project-title-container">
                                         <div className="project-title">{short_description}</div>
                                         <div className="project-start-stop-container">
@@ -175,11 +176,6 @@ export const view = (state, {dispatch, updateState}) => {
                     })}
                 </div>
             </div>
-            <hr></hr>
-            {projects.map(proj => <x-esg-timer-button 
-                projectData={proj}
-                loadFonts={false}
-                />)}
         </Fragment>
     );
 };
