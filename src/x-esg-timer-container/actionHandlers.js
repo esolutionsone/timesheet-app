@@ -155,7 +155,6 @@ export default {
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
         );
     },
-
     'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
         method: 'PUT',
         pathParams: ['tableName', 'sys_id'],
