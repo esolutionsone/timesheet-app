@@ -29,13 +29,20 @@ export const view = (state, {dispatch, updateState}) => {
     const handleSave = (e) => {
         e.preventDefault();
         dispatch('NEW_ENTRY', {
-                data: {
-                    project: selectedProject,
-                    consultant: consultantId,
-                    note: entryNotes,
-                },
-                tableName: 'x_esg_one_delivery_time_entry',
-            });
+            data: {
+                project: selectedProject,
+                consultant: consultantId,
+                note: entryNotes,
+            },
+            tableName: 'x_esg_one_delivery_time_entry',
+        });
+        dispatch('INSERT_TIMESTAMP', {
+            data: { 
+                active: true, 
+                project: selectedProject
+            },
+            tableName: 'x_esg_one_delivery_timestamp'
+        })
         updateState({addProjectStatus: !addProjectStatus});
     }
 
@@ -103,14 +110,19 @@ export const view = (state, {dispatch, updateState}) => {
                     </form>
                 </div>}
                 <div>
-                    {projects.map(proj => {
+                    {Array.from(projectMap.values()).map(proj => {
                         const {client, short_description, sys_id} = proj;
+                        console.log("line 108 on view, projectMap =",projectMap);
+                        console.log(sys_id);
                         return <div className="project-item" key={sys_id}>
                                     <div className="client-name">{client.short_description}</div>
                                     <div className="project-title-container">
                                         <div className="project-title">{short_description}</div>
                                         <div className="project-start-stop-container">
-                                            {<x-esg-timer-button />}
+                                            {<x-esg-timer-button 
+                                                projectData={proj}
+                                                loadFonts={false}
+                                            />}
                                         </div>
                                         <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                                     </div>

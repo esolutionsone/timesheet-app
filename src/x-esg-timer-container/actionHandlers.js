@@ -31,6 +31,7 @@ export default {
             dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
                 tableName: 'x_esg_one_delivery_timestamp',
                 sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
+                sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
             })
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
@@ -100,46 +101,65 @@ export default {
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,
-    'INSERT_TIMESTAMP': ({action, dispatch}) => {
-        const payload = action.payload;
-        payload.sysparm_query = `active=true^sys_id!=${payload.sys_id}`
-        dispatch('STOP_SIBLINGS', action.payload);
+    'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
+        method: 'POST',
+        pathParams: ['tableName'],
+        dataParam: 'data',
+        headers: {},
+        startActionType: 'TEST_START',
+        successActionType: 'INSERT_SUCCESS',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'INSERT_SUCCESS': ({dispatch, state}) => {
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
+            tableName: 'x_esg_one_delivery_timestamp',
+            sysparm_query: `user=${state.consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
+            sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
+        })
     },
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
-        queryParams: ['sysparm_query'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
         successActionType: 'SET_CONSULTANT_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
     }),
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
-        const timestamps = action.payload.result;
 
+        const timestamps = action.payload.result;
+        console.log("line 119, timestamps =", timestamps);
         const stampsByProject = new Map();
         
         // Massage for easy mapping
         // Subtracting the parsed ServiceNow zero duration time with 
         // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
         for(let stamp of timestamps){
-            const projectId = stamp.project.value;
+            const projectId = stamp['project.sys_id'];
             const active = stamp.active === 'true';
+            console.log("line 128, stamp =", stamp);
             if(stampsByProject.has(projectId)){
                 stampsByProject.set(projectId, {
                     active,
-                    timestamps: [stamp, ...stampsByProject.get(stamp.project.value).timestamps],
+                    sys_id: projectId,
+                    client: stamp['project.client.short_description'],
+                    short_description: stamp['project.short_description'],
+                    timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
                     totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
                         (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
                         || 0),
                 });
-            }else{
+            } else{
                 stampsByProject.set(projectId, {
                     active,
+                    sys_id: projectId,
+                    client: stamp['project.client.short_description'],
+                    short_description: stamp['project.short_description'],
                     timestamps: [stamp],
                     totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
                 })
             }
         }
-
+        console.log("line 151, stampsByProject =", stampsByProject);
         updateState({projectMap: stampsByProject});
     }
 } 

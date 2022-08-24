@@ -10,9 +10,9 @@ export default {
             dispatch('FETCH_TIMER_STATUS', {sys_id: sysId, timestampTable});
         }
     }, // replace with REST
-    'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:timestampTable/:sys_id`, {
+    'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
         method: 'PUT',
-        pathParams: ['timestampTable', 'sys_id'],
+        pathParams: ['tableName', 'sys_id'],
         successActionType: 'UPDATE_SUCCESS',
         errorActionType: 'LOG_RESULT',
         startActionType: 'LOG_RESULT',
@@ -33,15 +33,15 @@ export default {
 
     },
     'TIMER_BUTTON#CLICKED': ({action}) => console.log(action.payload),
-    'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:timestampTable`, {
-        method: 'POST',
-        pathParams: ['timestampTable'],
-        dataParam: 'data',
-        headers: {},
-        startActionType: 'INSERT_START',
-        successActionType: 'INSERT_SUCCESS',
-        errorActionType: 'INSERT_ERROR',
-    }),
+    // 'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
+    //     method: 'POST',
+    //     pathParams: ['tableName'],
+    //     dataParam: 'data',
+    //     headers: {},
+    //     startActionType: 'INSERT_START',
+    //     successActionType: 'INSERT_SUCCESS',
+    //     errorActionType: 'INSERT_ERROR',
+    // }),
     'INSERT_START': ({host}) => console.log('REST called', host),
     'INSERT_SUCCESS': ({action, updateProperties, updateState}) => {
         console.log('INSERT RESULT:', action.payload);
