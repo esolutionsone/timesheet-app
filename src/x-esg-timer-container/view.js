@@ -39,7 +39,7 @@ export const view = (state, {dispatch, updateState}) => {
         dispatch('INSERT_TIMESTAMP', {
             data: { 
                 active: true, 
-                project: projectData.sys_id
+                project: selectedProject
             },
             tableName: 'x_esg_one_delivery_timestamp'
         })
