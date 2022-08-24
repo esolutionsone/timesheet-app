@@ -193,8 +193,8 @@ $button-color: #3178C6;
                 }
 
                 .remove-project {
-                    position: fixed;
-                    right: 100px;
+                    position: relative;
+                    left: 100px;
                     color: red;
                     font-size: x-large;
                 }

@@ -63,8 +63,8 @@ export const stringifyDuration = (duration) => {
  */
 export const getUTCTime = (dateString) => {
     if(!dateString){
-        console.error('Cannot transform datestring of type', typeof(dateString))
-        return;
+        console.error('Cannot transform datestring of type', typeof(dateString), '\ndate: ', dateString);
+        return new Date();
     } 
     const arr = dateString.split(/[\-\s:]/g);
     arr[1] = arr[1] - 1;

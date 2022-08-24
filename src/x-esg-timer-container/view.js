@@ -112,7 +112,7 @@ export const view = (state, {dispatch, updateState}) => {
 
                             <button
                                 className="new-project-save-button"
-                                on-click={()=>console.log("clicked")}>
+                            >
                                     Save
                             </button>
                         </div>
@@ -120,17 +120,20 @@ export const view = (state, {dispatch, updateState}) => {
                 </div>}
                 <div>
                     {Array.from(projectMap.values()).map(proj => {
-                        const {client, short_description, sys_id, note} = proj;
-                        return (
-                            <div className="project-item" key={sys_id}>
-                                <div className="client-name">{client}</div>
-                                <div className="project-title-container">
-                                    <div className="project-title">{short_description}</div>
-                                    <div className="project-start-stop-container">
-                                        {<x-esg-timer-button 
-                                            projectData={proj}
-                                            loadFonts={false}/>
-                                        }
+                        const {client, short_description, sys_id, active, timestamps, note} = proj;
+                        const latestActive = timestamps.find(stamp => stamp.active === "true");
+                        return (<div className="project-item" key={sys_id}>
+                                    <div className="client-name">{client.short_description}</div>
+                                    <div className="project-title-container">
+                                        <div className="project-title">{short_description}</div>
+                                        <div className="project-start-stop-container">
+                                            {<x-esg-timer-button 
+                                                projectData={proj}
+                                                active={active}
+                                                start={latestActive ? latestActive.start_time : null}
+                                                loadFonts={false}
+                                                sysId={latestActive ? latestActive.sys_id : null}
+                                            />}
                                         <div>
                                             {editMode ? 
                                                 <input 
