@@ -3,6 +3,10 @@ import { createHttpEffect } from '@servicenow/ui-effect-http';
 
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
+const PAYLOADS = {
+    
+}
+
 export default {
     [COMPONENT_BOOTSTRAPPED]: ({dispatch}) => {
         console.log('component bootstrapped');
