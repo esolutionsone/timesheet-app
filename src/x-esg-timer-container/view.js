@@ -127,7 +127,6 @@ export const view = (state, {dispatch, updateState}) => {
                     {Array.from(projectMap.values()).map(proj => {
                         const {client, short_description, sys_id, active, timestamps, note} = proj;
                         const latestActive = timestamps.find(stamp => stamp.active === "true");
-                        console.log(client);
                         return (<div className="project-item" key={sys_id}>
 
                                     <div className="client-name">{client}</div>
