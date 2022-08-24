@@ -176,11 +176,6 @@ export const view = (state, {dispatch, updateState}) => {
                     })}
                 </div>
             </div>
-            <hr></hr>
-            {projects.map(proj => <x-esg-timer-button 
-                projectData={proj}
-                loadFonts={false}
-                />)}
         </Fragment>
     );
 };
