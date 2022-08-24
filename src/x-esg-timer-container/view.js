@@ -122,7 +122,7 @@ export const view = (state, {dispatch, updateState}) => {
                                             {<x-esg-timer-button 
                                                 projectData={proj}
                                                 active={active}
-                                                start={latestActive ? latestActive.start_time : ''}
+                                                start={latestActive ? latestActive.start_time : null}
                                                 loadFonts={false}
                                                 sysId={latestActive ? latestActive.sys_id : null}
                                             />}

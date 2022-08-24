@@ -15,6 +15,7 @@ import intervalToDuration from 'date-fns/intervalToDuration';
  * }}
  */
 export const difference = (current, initial) => {
+    console.log('current', current, 'initial', initial)
 	let duration = intervalToDuration({
 		start: 0,
 		end: differenceInMilliseconds(current, initial) || 0,
@@ -63,8 +64,8 @@ export const stringifyDuration = (duration) => {
  */
 export const getUTCTime = (dateString) => {
     if(!dateString){
-        console.error('Cannot transform datestring of type', typeof(dateString))
-        return;
+        console.error('Cannot transform datestring of type', typeof(dateString), '\ndate: ', dateString);
+        return new Date();
     } 
     const arr = dateString.split(/[\-\s:]/g);
     arr[1] = arr[1] - 1;

@@ -13,9 +13,6 @@ export const view = (state, { updateState, dispatch }) => {
     const { properties, currentTime } = state;
     const { active, start, projectData, loadFonts, sysId } = properties;
     const isActive = active === "true" || active === true;
-    console.log('timestamp sys_id', sysId);
-    console.log('properties', properties)
-    console.log('state', state);
 
     // Load Custom Fonts
     if(loadFonts) WebFont.load({
