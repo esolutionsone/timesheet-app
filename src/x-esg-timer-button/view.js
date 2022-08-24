@@ -41,13 +41,13 @@ export const view = (state, { updateState, dispatch }) => {
         const { timestampTable } = properties;
         if (!isActive) {
             dispatch('INSERT_TIMESTAMP', {
-                timestampTable,
+                tableName: timestampTable,
                 data: { active: true, project: projectData.sys_id}
             })
         } else {
             // should we call this OPEN_ and CLOSE_TIMESTAMP?
             dispatch('UPDATE_TIMESTAMP', {
-                timestampTable,
+                tableName: timestampTable,
                 sys_id: properties.sysId,
                 data: { active: false }
             });

@@ -29,13 +29,20 @@ export const view = (state, {dispatch, updateState}) => {
     const handleSave = (e) => {
         e.preventDefault();
         dispatch('NEW_ENTRY', {
-                data: {
-                    project: selectedProject,
-                    consultant: consultantId,
-                    note: entryNotes,
-                },
-                tableName: 'x_esg_one_delivery_time_entry',
-            });
+            data: {
+                project: selectedProject,
+                consultant: consultantId,
+                note: entryNotes,
+            },
+            tableName: 'x_esg_one_delivery_time_entry',
+        });
+        dispatch('INSERT_TIMESTAMP', {
+            data: { 
+                active: true, 
+                project: projectData.sys_id
+            },
+            tableName: 'x_esg_one_delivery_timestamp'
+        })
         updateState({addProjectStatus: !addProjectStatus});
     }
 
