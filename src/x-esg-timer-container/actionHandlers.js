@@ -43,6 +43,49 @@ export default {
             })
         }
     },
+    'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        successActionType: 'SET_CONSULTANT_TIMESTAMPS',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
+
+        const timestamps = action.payload.result;
+        const stampsByProject = new Map();
+        
+        // Massage for easy mapping
+        // Subtracting the parsed ServiceNow zero duration time with 
+        // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
+        for(let stamp of timestamps){
+            const projectId = stamp['project.sys_id'];
+            const active = stamp.active === 'true';
+
+            const sharedValues = {
+                active,
+                sys_id: projectId,
+                client: stamp['project.client.short_description'],
+                short_description: stamp['project.short_description'],
+            }
+            if(stampsByProject.has(projectId)){
+                stampsByProject.set(projectId, {
+                    ...sharedValues,
+                    timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
+                    totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
+                        (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
+                        || 0),
+                });
+            } else{
+                stampsByProject.set(projectId, {
+                    ...sharedValues,
+                    timestamps: [stamp],
+                    totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
+                })
+            }
+        }
+        updateState({projectMap: stampsByProject});
+    },
     'FETCH_PROJECTS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -112,60 +155,7 @@ export default {
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
         );
     },
-    'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
-        method: 'GET',
-        pathParams: ['tableName'],
-        queryParams: ['sysparm_query', 'sysparm_fields'],
-        successActionType: 'SET_CONSULTANT_TIMESTAMPS',
-        errorActionType: 'LOG_ERROR',
-    }),
-    'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
 
-        const timestamps = action.payload.result;
-        const stampsByProject = new Map();
-        
-        // Massage for easy mapping
-        // Subtracting the parsed ServiceNow zero duration time with 
-        // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
-        for(let stamp of timestamps){
-            const projectId = stamp['project.sys_id'];
-            const active = stamp.active === 'true';
-
-            const sharedValues = {
-                active,
-                sys_id: projectId,
-            }
-
-            if(stampsByProject.has(projectId)){
-                stampsByProject.set(projectId, {
-                    active,
-                    sys_id: projectId,
-                    client: stamp['project.client.short_description'],
-                    short_description: stamp['project.short_description'],
-                    timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
-                    totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
-                        (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
-                        || 0),
-                });
-            } else{
-                stampsByProject.set(projectId, {
-                    active,
-                    sys_id: projectId,
-                    client: stamp['project.client.short_description'],
-                    short_description: stamp['project.short_description'],
-                    timestamps: [stamp],
-                    totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
-                })
-            }
-        }
-        updateState({projectMap: stampsByProject});
-    },
-    'UPDATE_SUCCESS': ({dispatch, state}) => {
-        console.log('update success runs');
-        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
-            );
-    },
     'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
         method: 'PUT',
         pathParams: ['tableName', 'sys_id'],
@@ -174,4 +164,10 @@ export default {
         startActionType: 'LOG_RESULT',
         dataParam: 'data',
     }),
+    'UPDATE_SUCCESS': ({dispatch, state}) => {
+        console.log('update success runs');
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
+            );
+    },
 } 
