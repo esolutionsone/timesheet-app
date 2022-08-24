@@ -144,7 +144,6 @@ export default {
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
 
         const timestamps = action.payload.result;
-        console.log("line 119, timestamps =", timestamps);
         const stampsByProject = new Map();
         
         // Massage for easy mapping
@@ -153,7 +152,7 @@ export default {
         for(let stamp of timestamps){
             const projectId = stamp['project.sys_id'];
             const active = stamp.active === 'true';
-            console.log("line 128, stamp =", stamp);
+
             if(stampsByProject.has(projectId)){
                 stampsByProject.set(projectId, {
                     active,
@@ -176,7 +175,6 @@ export default {
                 })
             }
         }
-        console.log("line 151, stampsByProject =", stampsByProject);
         updateState({projectMap: stampsByProject});
     },
     'UPDATE_SUCCESS': ({dispatch, state}) => {
