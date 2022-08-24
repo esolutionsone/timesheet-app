@@ -15,7 +15,6 @@ import intervalToDuration from 'date-fns/intervalToDuration';
  * }}
  */
 export const difference = (current, initial) => {
-    console.log('current', current, 'initial', initial)
 	let duration = intervalToDuration({
 		start: 0,
 		end: differenceInMilliseconds(current, initial) || 0,
