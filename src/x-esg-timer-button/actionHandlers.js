@@ -33,15 +33,15 @@ export default {
 
     },
     'TIMER_BUTTON#CLICKED': ({action}) => console.log(action.payload),
-    'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
-        method: 'POST',
-        pathParams: ['tableName'],
-        dataParam: 'data',
-        headers: {},
-        startActionType: 'INSERT_START',
-        successActionType: 'INSERT_SUCCESS',
-        errorActionType: 'INSERT_ERROR',
-    }),
+    // 'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
+    //     method: 'POST',
+    //     pathParams: ['tableName'],
+    //     dataParam: 'data',
+    //     headers: {},
+    //     startActionType: 'INSERT_START',
+    //     successActionType: 'INSERT_SUCCESS',
+    //     errorActionType: 'INSERT_ERROR',
+    // }),
     'INSERT_START': ({host}) => console.log('REST called', host),
     'INSERT_SUCCESS': ({action, updateProperties, updateState}) => {
         console.log('INSERT RESULT:', action.payload);

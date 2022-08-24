@@ -101,10 +101,21 @@ export default {
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,
-    'INSERT_TIMESTAMP': ({action, dispatch}) => {
-        const payload = action.payload;
-        payload.sysparm_query = `active=true^sys_id!=${payload.sys_id}`
-        dispatch('STOP_SIBLINGS', action.payload);
+    'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
+        method: 'POST',
+        pathParams: ['tableName'],
+        dataParam: 'data',
+        headers: {},
+        startActionType: 'TEST_START',
+        successActionType: 'INSERT_SUCCESS',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'INSERT_SUCCESS': ({dispatch, state}) => {
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
+            tableName: 'x_esg_one_delivery_timestamp',
+            sysparm_query: `user=${state.consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
+            sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration'
+        })
     },
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
