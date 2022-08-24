@@ -142,6 +142,13 @@ export default {
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
     //Testing Timer stoppers,
+    'DELETE_PROJECT_TIMESTAMPS': createHttpEffect(`api/now/table/x_esg_one_delivery_timestamp/:id`, {
+        method: 'DELETE',
+        pathParams: [ 'id'],
+        startActionType: 'TEST_START',
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR'
+    }),
     'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
         method: 'POST',
         pathParams: ['tableName'],
