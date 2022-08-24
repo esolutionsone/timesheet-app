@@ -1,11 +1,9 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
-const PAYLOADS = {
-    
-}
 
 export default {
     [COMPONENT_BOOTSTRAPPED]: ({dispatch}) => {
@@ -32,19 +30,7 @@ export default {
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
         }else{
             updateState({consultantId: id});
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
-                tableName: 'x_esg_one_delivery_timestamp',
-                sysparm_query: `user=${id}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-                sysparm_fields: `project.client.short_description, 
-                    project.sys_id, 
-                    project.short_description, 
-                    start_time, 
-                    end_time, 
-                    active, 
-                    duration, 
-                    rounded_duration,
-                    sys_id`
-            })
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(id));
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
                 sysparm_query: `consultant_assigned=${id}`,
@@ -122,20 +108,9 @@ export default {
         errorActionType: 'LOG_ERROR',
     }),
     'INSERT_SUCCESS': ({dispatch, state}) => {
-        dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
-            tableName: 'x_esg_one_delivery_timestamp',
-            sysparm_query: `user=${state.consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-            sysparm_fields: `
-                project.client.short_description,
-                project.sys_id, project.short_description, 
-                start_time, 
-                end_time, 
-                active, 
-                duration, 
-                rounded_duration, 
-                sys_id
-            `
-        })
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
+        );
     },
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -155,6 +130,11 @@ export default {
         for(let stamp of timestamps){
             const projectId = stamp['project.sys_id'];
             const active = stamp.active === 'true';
+
+            const sharedValues = {
+                active,
+                sys_id: projectId,
+            }
 
             if(stampsByProject.has(projectId)){
                 stampsByProject.set(projectId, {
@@ -182,11 +162,9 @@ export default {
     },
     'UPDATE_SUCCESS': ({dispatch, state}) => {
         console.log('update success runs');
-        dispatch('FETCH_CONSULTANT_TIMESTAMPS', {
-            tableName: 'x_esg_one_delivery_timestamp',
-            sysparm_query: `user=${state.consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
-            sysparm_fields: 'project.client.short_description, project.sys_id, project.short_description, start_time, end_time, active, duration, rounded_duration, sys_id'
-        })
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
+            );
     },
     'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
         method: 'PUT',
