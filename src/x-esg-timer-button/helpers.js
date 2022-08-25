@@ -1,7 +1,7 @@
 // import { differenceInMilliseconds, intervalToDuration} from 'date-fns';
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
 import intervalToDuration from 'date-fns/intervalToDuration';
-
+import format from 'date-fns/format'
 /**
  * Accepts two dates and returns the difference between them as a duration object.
  * @param {Date} current Date object
@@ -82,4 +82,33 @@ export const msToString = (ms) => {
     let hours = Math.floor(totalMinutes / 60).toString().padStart(2, "0");
     let minutes = Math.floor(totalMinutes % 60).toString().padStart(2, "0");
     return `${hours}:${minutes}`;
+}
+
+/**
+ * Takes in a string in 'hh:mm' format and returns a 
+ * SN time representation of that time converted to UTC
+ * @param {string} hoursAndMinutes 
+ * @returns 
+ */
+export const hhmmToSnTime = (hoursAndMinutes) => {
+    // get correct UTC date
+    const today = new Date();
+    const [hours, minutes] = hoursAndMinutes.split(':');
+
+    const localDate = new Date(today.setHours(hours,minutes));
+
+
+    const obj = {
+        utcYear: localDate.getUTCFullYear(),
+        utcMonth: localDate.getUTCMonth() + 1,
+        utcDay:localDate.getUTCDate(),
+        utcHour:localDate.getUTCHours(),
+        utcMinutes:localDate.getUTCMinutes(),
+    }
+
+    for(let el in obj){
+        obj[el] = obj[el].toString().padStart(2,'0');
+    }
+    const {utcYear, utcMonth, utcDay, utcHour, utcMinutes} = obj;
+    return `${utcYear}-${utcMonth}-${utcDay} ${utcHour}:${utcMinutes}:00`;
 }

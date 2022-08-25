@@ -2,7 +2,7 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 import {format} from 'date-fns';
-import { msToString } from '../x-esg-timer-button/helpers';
+import { msToString, hhmmToSnTime } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
 
@@ -84,13 +84,13 @@ export const view = (state, {dispatch, updateState}) => {
 
     }
 
-    const handleUpdateTimestamp = (e, sys_id) => {
+    const handleUpdateTimestamp = (sys_id, data) => {
+        console.log('data', data);
+        
         dispatch('UPDATE_TIMESTAMP', {
             tableName: 'x_esg_one_delivery_timestamp',
             sys_id,
-            data: {
-                note: e.target.value,
-            },
+            data,
         })
         updateState({editableTimestamp: ''})
     }
@@ -202,7 +202,8 @@ export const view = (state, {dispatch, updateState}) => {
                                 <div className="project-notes">
                                     {timestamps.map(stamp => {
                                         const {note, start_time, end_time, active, sys_id} = stamp;
-                                        console.log(stamp);
+                                        
+                                        // console.log(stamp);
                                         return (
                                             <div className="timestamp-note">
                                                 {editableTimestamp == sys_id ? 
@@ -211,7 +212,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                             type="text"
                                                             placeholder="What are doing right now?"
                                                             value={note}
-                                                            on-change={(e)=>handleUpdateTimestamp(e, sys_id)}
+                                                            on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
                                                         >{note}</input>
                                                     </span> 
                                                     : 
@@ -220,7 +221,17 @@ export const view = (state, {dispatch, updateState}) => {
                                                     >{stamp.note}</span>
                                                     }
                                                 <span>{' => '}</span>
-                                                <span>{start_time.split(/\s|:\d*$/g)[1]} - {end_time.split(/\s|:\d*$/g)[1] || 'now'}</span>          
+                                                {editableTimestamp == sys_id ?
+                                                    <span><input type="time" 
+                                                        on-change={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
+                                                    />
+                                                    -
+                                                    {/* <input type="time" on-change={(e)=>handleUpdateTimestamp(sys_id, {end_time: Date(e.target.value)})}/> */}
+                                                    </span>
+                                                    :
+                                                    <span>{start_time.split(/\s|:\d*$/g)[1]} - {end_time.split(/\s|:\d*$/g)[1] || 'now'}</span>          
+                                                }
+                                                
                                             </div>
                                         );
                                     })}
