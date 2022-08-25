@@ -61,19 +61,13 @@ export const view = (state, {dispatch, updateState}) => {
 
     const handleEdit = (e) => {
         e.preventDefault();
-        console.log('edit clicked');
         updateState({editMode: !editMode});
     }
 
     const handleDeleteProject = (e, projectToBeDeleted) => {
         e.preventDefault();
-        console.log('delete project clicked');
-
-        console.log("Project to be deleted", projectToBeDeleted);
 
         projectToBeDeleted.timestamps.forEach(timestamp => {
-            console.log(timestamp.sys_id + "has been deleted");
-
             dispatch('DELETE_PROJECT_TIMESTAMPS', {
                 // tableName: properties.timestampTable,
                 id: timestamp.sys_id,
@@ -81,12 +75,9 @@ export const view = (state, {dispatch, updateState}) => {
         });
 
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
-
     }
 
     const handleUpdateTimestamp = (sys_id, data) => {
-        console.log('data', data);
-        
         dispatch('UPDATE_TIMESTAMP', {
             tableName: 'x_esg_one_delivery_timestamp',
             sys_id,
@@ -94,8 +85,6 @@ export const view = (state, {dispatch, updateState}) => {
         })
         updateState({editableTimestamp: ''})
     }
-
-    console.log('STATE', state);
 
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);

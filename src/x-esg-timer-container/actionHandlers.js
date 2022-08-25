@@ -172,7 +172,7 @@ export default {
         dataParam: 'data',
     }),
     'UPDATE_SUCCESS': ({dispatch, state}) => {
-        console.log('update success runs');
+        console.log('UPDATE RESPONSE:');
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
             );
