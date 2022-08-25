@@ -65,6 +65,7 @@ export default {
             const sharedValues = {
                 active,
                 sys_id: projectId,
+                note: stamp.note,
                 client: stamp['project.client.short_description'],
                 short_description: stamp['project.short_description'],
             }
