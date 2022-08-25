@@ -84,6 +84,17 @@ export const view = (state, {dispatch, updateState}) => {
 
     }
 
+    const handleUpdateTimestamp = (e, sys_id) => {
+        dispatch('UPDATE_TIMESTAMP', {
+            tableName: 'x_esg_one_delivery_timestamp',
+            sys_id,
+            data: {
+                note: e.target.value,
+            },
+        })
+        updateState({editableTimestamp: ''})
+    }
+
     console.log('STATE', state);
 
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
@@ -200,13 +211,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                             type="text"
                                                             placeholder="What are doing right now?"
                                                             value={note}
-                                                            on-change={(e) => dispatch('UPDATE_TIMESTAMP', {
-                                                                tableName: 'x_esg_one_delivery_timestamp',
-                                                                sys_id,
-                                                                data: {
-                                                                    note: e.target.value,
-                                                                },
-                                                            })}
+                                                            on-change={(e)=>handleUpdateTimestamp(e, sys_id)}
                                                         >{note}</input>
                                                     </span> 
                                                     : 
