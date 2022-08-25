@@ -201,18 +201,16 @@ export const view = (state, {dispatch, updateState}) => {
                                 </div>
                                 <div className="project-notes">
                                     {timestamps.map(stamp => {
-                                        const {note, start_time, end_time, active, sys_id} = stamp;
-                                        const localTime = getUTCTime(start_time);
-                                        const shortLocalTime = format(localTime, 'HH:mm');
-
+                                        const {note, start_time, end_time, active, sys_id} = stamp;                                        
                                         const localTimes = {
                                             start: format(getUTCTime(start_time), 'HH:mm'),
                                         }
                                         localTimes.end = end_time ? format(getUTCTime(end_time), 'HH:mm') : 'now';
-                                        
-                                        // console.log(stamp);
+                    
                                         return (
-                                            <div className="timestamp-note">
+                                            <div className="timestamp-note"
+                                                on-click={() => updateState({editableTimestamp: sys_id})}
+                                            >
                                                 {editableTimestamp == sys_id ? 
                                                     <span>
                                                         <input 
@@ -220,25 +218,30 @@ export const view = (state, {dispatch, updateState}) => {
                                                             placeholder="What are doing right now?"
                                                             value={note}
                                                             on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                            on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                            on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {note: e.target.value})}
                                                         >{note}</input>
                                                     </span> 
                                                     : 
                                                     <span
-                                                            on-click={() => updateState({editableTimestamp: sys_id})}
                                                     >{stamp.note}</span>
                                                     }
                                                 <span>{' => '}</span>
                                                 {editableTimestamp == sys_id ?
                                                     <span>
                                                         <input type="time" value={localTimes.start}
-                                                        on-change={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
+                                                        // on-change={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
+                                                        on-blur={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
+                                                        on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
                                                     />
                                                         {!end_time ? '' : <input type="time" value={localTimes.end}
-                                                            on-change={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
+                                                            // on-change={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
+                                                            on-blur={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
+                                                            on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
                                                         />}
                                                     </span>
                                                     :
-                                                    <span>{localTimes.start} - {localTimes.end || 'now'}</span>          
+                                                    <span>{localTimes.start} - {localTimes.end}</span>          
                                                 }
                                                 
                                             </div>

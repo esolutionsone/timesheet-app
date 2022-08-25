@@ -159,7 +159,6 @@ export default {
         errorActionType: 'LOG_ERROR',
     }),
     'INSERT_SUCCESS': ({action, dispatch, state, updateState}) => {
-        updateState({editableTimestamp: action.payload.result.sys_id})
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
         );
