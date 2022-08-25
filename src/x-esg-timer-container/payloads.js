@@ -10,5 +10,5 @@ export const FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD = (consultantId) => ({
         duration, 
         rounded_duration,
         sys_id,
-        project.note`
+        note`
 })
