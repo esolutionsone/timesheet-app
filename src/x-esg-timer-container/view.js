@@ -26,7 +26,8 @@ export const view = (state, {dispatch, updateState}) => {
         projectMap,
         addProjectStatus,
         editMode,
-        properties
+        properties,
+        editableTimestamp,
     } = state;
     
     // Combine Generic projects and user-specific projects,
@@ -193,7 +194,7 @@ export const view = (state, {dispatch, updateState}) => {
                                         console.log(stamp);
                                         return (
                                             <div className="timestamp-note">
-                                                {active == "true" ? 
+                                                {editableTimestamp == sys_id ? 
                                                     <span>
                                                         <input 
                                                             type="text"
@@ -209,10 +210,12 @@ export const view = (state, {dispatch, updateState}) => {
                                                         >{note}</input>
                                                     </span> 
                                                     : 
-                                                    <span>{stamp.note}</span>
+                                                    <span
+                                                            on-click={() => updateState({editableTimestamp: sys_id})}
+                                                    >{stamp.note}</span>
                                                     }
                                                 <span>{' => '}</span>
-                                                <span>{start_time.split(' ')[1]} - {end_time.split(' ')[1]}</span>          
+                                                <span>{start_time.split(/\s|:\d*$/g)[1]} - {end_time.split(/\s|:\d*$/g)[1] || 'now'}</span>          
                                             </div>
                                         );
                                     })}
