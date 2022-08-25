@@ -2,7 +2,7 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 import {format} from 'date-fns';
-import { msToString, hhmmToSnTime } from '../x-esg-timer-button/helpers';
+import { msToString, hhmmToSnTime, getUTCTime } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
 
@@ -202,6 +202,13 @@ export const view = (state, {dispatch, updateState}) => {
                                 <div className="project-notes">
                                     {timestamps.map(stamp => {
                                         const {note, start_time, end_time, active, sys_id} = stamp;
+                                        const localTime = getUTCTime(start_time);
+                                        const shortLocalTime = format(localTime, 'HH:mm');
+
+                                        const localTimes = {
+                                            start: format(getUTCTime(start_time), 'HH:mm'),
+                                        }
+                                        localTimes.end = end_time ? format(getUTCTime(end_time), 'HH:mm') : 'now';
                                         
                                         // console.log(stamp);
                                         return (
@@ -222,14 +229,16 @@ export const view = (state, {dispatch, updateState}) => {
                                                     }
                                                 <span>{' => '}</span>
                                                 {editableTimestamp == sys_id ?
-                                                    <span><input type="time" 
+                                                    <span>
+                                                        <input type="time" value={localTimes.start}
                                                         on-change={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
                                                     />
-                                                    -
-                                                    {/* <input type="time" on-change={(e)=>handleUpdateTimestamp(sys_id, {end_time: Date(e.target.value)})}/> */}
+                                                        {!end_time ? '' : <input type="time" value={localTimes.end}
+                                                            on-change={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
+                                                        />}
                                                     </span>
                                                     :
-                                                    <span>{start_time.split(/\s|:\d*$/g)[1]} - {end_time.split(/\s|:\d*$/g)[1] || 'now'}</span>          
+                                                    <span>{localTimes.start} - {localTimes.end || 'now'}</span>          
                                                 }
                                                 
                                             </div>
