@@ -42,16 +42,20 @@ export const view = (state, {dispatch, updateState}) => {
                 consultant: consultantId,
                 note: entryNotes,
             },
-            tableName: 'x_esg_one_delivery_time_entry',
+            // tableName: 'x_esg_one_delivery_time_entry',
+            tableName: properties.timestampTable,
+
         });
         dispatch('INSERT_TIMESTAMP', {
             data: { 
                 active: true, 
                 project: selectedProject
             },
-            tableName: 'x_esg_one_delivery_timestamp'
-        })
+            // tableName: 'x_esg_one_delivery_timestamp',
+            tableName: properties.timestampTable,
+        });
         updateState({addProjectStatus: !addProjectStatus});
+        
     }
 
     const handleEdit = (e) => {
@@ -89,7 +93,10 @@ export const view = (state, {dispatch, updateState}) => {
             <div className="outer-buttons">
                 <button 
                     className="add-project-button"
-                    on-click={()=>updateState({addProjectStatus: !addProjectStatus})}
+                    on-click={()=>updateState({
+                                    addProjectStatus: !addProjectStatus, 
+                                    editMode: false
+                                })}
                     >
                     <span className="material-symbols-outlined">add</span>
                     Project
