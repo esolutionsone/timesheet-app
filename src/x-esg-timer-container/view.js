@@ -10,7 +10,10 @@ export const view = (state, {dispatch, updateState}) => {
     // Load Custom Fonts
     WebFont.load({
         google: {
-            families: ['Montserrat:400,500,600,700', 'Material+Symbols+Outlined', 'Material+Symbols+Rounded']
+            families: [
+                'Montserrat:400,500,600,700', 
+                'Material+Symbols+Outlined', 
+                'Material+Symbols+Rounded']
         }
     })
 
@@ -47,7 +50,8 @@ export const view = (state, {dispatch, updateState}) => {
         dispatch('INSERT_TIMESTAMP', {
             data: { 
                 active: true, 
-                project: selectedProject
+                project: selectedProject,
+                note: entryNotes,
             },
             tableName: 'x_esg_one_delivery_timestamp'
         })
@@ -184,7 +188,35 @@ export const view = (state, {dispatch, updateState}) => {
                                     </div>
                                 </div>
                                 <div className="project-notes">
-                                    {!editMode ? 
+                                    {timestamps.map(stamp => {
+                                        const {note, start_time, end_time, active, sys_id} = stamp;
+                                        console.log(stamp);
+                                        return (
+                                            <div className="timestamp-note">
+                                                {active == "true" ? 
+                                                    <span>
+                                                        <input 
+                                                            type="text"
+                                                            placeholder="What are doing right now?"
+                                                            value={note}
+                                                            on-change={(e) => dispatch('UPDATE_TIMESTAMP', {
+                                                                tableName: 'x_esg_one_delivery_timestamp',
+                                                                sys_id,
+                                                                data: {
+                                                                    note: e.target.value,
+                                                                },
+                                                            })}
+                                                        >{note}</input>
+                                                    </span> 
+                                                    : 
+                                                    <span>{stamp.note}</span>
+                                                    }
+                                                <span>{' => '}</span>
+                                                <span>{start_time.split(' ')[1]} - {end_time.split(' ')[1]}</span>          
+                                            </div>
+                                        );
+                                    })}
+                                    {/* {!editMode ? 
                                         note 
                                         :
                                         <textarea 
@@ -193,7 +225,7 @@ export const view = (state, {dispatch, updateState}) => {
                                             maxlength='512'
                                             value={note}>
                                         </textarea> 
-                                    }
+                                    } */}
                                 </div>
                             </div>
                         );
