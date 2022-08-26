@@ -71,14 +71,16 @@ export const view = (state, {dispatch, updateState}) => {
     const handleDeleteProject = (e, projectToBeDeleted) => {
         e.preventDefault();
 
-        projectToBeDeleted.timestamps.forEach(timestamp => {
-            dispatch('DELETE_PROJECT_TIMESTAMPS', {
-                // tableName: properties.timestampTable,
-                id: timestamp.sys_id,
+        if (confirm("Click OK to remove this project") == true) {
+            projectToBeDeleted.timestamps.forEach(timestamp => {
+                dispatch('DELETE_PROJECT_TIMESTAMPS', {
+                    tableName: properties.timestampTable,
+                    id: timestamp.sys_id,
+                });
             });
-        });
 
-        dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+        } 
     }
 
     const handleUpdateTimestamp = (sys_id, data) => {
