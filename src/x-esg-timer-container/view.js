@@ -47,7 +47,7 @@ export const view = (state, {dispatch, updateState}) => {
                 note: entryNotes,
             },
             // tableName: 'x_esg_one_delivery_time_entry',
-            tableName: properties.timestampTable,
+            tableName: properties.timeEntryTable,
 
         });
         dispatch('INSERT_TIMESTAMP', {
