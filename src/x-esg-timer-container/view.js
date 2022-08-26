@@ -222,7 +222,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                     </span> 
                                                     : 
                                                     <span
-                                                    >{stamp.note}</span>
+                                                    >{note || '[Add note]'}</span>
                                                     }
                                                 <span>{' => '}</span>
                                                 {editableTimestamp == sys_id ?
