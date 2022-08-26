@@ -1,6 +1,6 @@
 @import '@servicenow/sass-kit/host';
 
-$btn-dimensions: 1.3rem;
+$btn-dimensions: 1.6rem;
 
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
@@ -50,21 +50,23 @@ $btn-dimensions: 1.3rem;
     text-align: center;
 }
 
-.timer-counter {
-    &.display-active {}
-}
+// .timer-counter {
+//     &.display-active {}
+// }
 
 .display-active {
     color: green;
+    font-size: larger;
 }
 
 .display-inactive {
     color: red;
+    font-size: larger;
 }
 
 .display-rounded {
     color: lightgray;
-    font-size: .8rem;
+    font-size: 1rem;
 }
 
 button {
