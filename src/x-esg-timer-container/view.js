@@ -1,7 +1,7 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
-import {format} from 'date-fns';
+import {format, min} from 'date-fns';
 import { msToString, hhmmToSnTime, getUTCTime } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
@@ -200,7 +200,7 @@ export const view = (state, {dispatch, updateState}) => {
                                 </div>
                                 <div className="project-notes">
                                     {timestamps.map(stamp => {
-                                        const {note, start_time, end_time, active, sys_id} = stamp;                                        
+                                        const {note, start_time, end_time, active, sys_id} = stamp;                                     
                                         const localTimes = {
                                             start: format(getUTCTime(start_time), 'HH:mm'),
                                         }
@@ -233,12 +233,17 @@ export const view = (state, {dispatch, updateState}) => {
                                                         on-blur={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
                                                         on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
                                                     />
-                                                        {!end_time ? '' : <input type="time" value={localTimes.end}
+                                                    {end_time && <span> - </span>}
+                                                        {!end_time ? '' : 
+                                                            <input type="time" value={localTimes.end}
+                                                            min={localTimes.start}
                                                             // on-change={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
                                                             on-blur={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
                                                             on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
                                                         />}
+                            
                                                     </span>
+                                                    
                                                     :
                                                     <span>{localTimes.start} - {localTimes.end}</span>          
                                                 }
