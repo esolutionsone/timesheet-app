@@ -28,7 +28,7 @@
 			"innerComponents": ["x-esg-timer-button"],
 			"uiBuilder": {
 				"associatedTypes": ["global.core", "global.landing-page"],
-				"label": "Timer Header",
+				"label": "Time Tracker",
 				"icon": "document-outline",
 				"description": "A description of my component",
 				"category": "primitives"
