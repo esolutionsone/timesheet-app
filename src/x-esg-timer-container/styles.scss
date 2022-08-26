@@ -25,6 +25,8 @@ $border-primary: 1px solid #D6D6D6;
 $item-padding: 18px 38px;
 $color-secondary: rgba(160, 175, 196, 1);
 $button-color: #3178C6;
+$input-padding: 3px;
+$input-border-radius: 8px;
 
 .outer-buttons {
     display: flex;
@@ -189,9 +191,9 @@ $button-color: #3178C6;
 
                 .roundedTime-input-box{
                     max-width: 50px;
-                    border-radius: 15px;
+                    border-radius: $input-border-radius;
                     border: $border-primary;
-                    padding-left: 7px;
+                    padding-left: $input-padding;
                     font-family: 'Montserrat', sans-serif;
                 }
 
@@ -212,6 +214,7 @@ $button-color: #3178C6;
             font-weight: 500;
             font-size: 16px;
             color: $color-secondary;
+            // height: 1.5rem;
 
             .edit-project-text {
                 height: 107px;
@@ -224,10 +227,23 @@ $button-color: #3178C6;
 
             .timestamp-note {
                 display: grid;
-                grid-template-columns: 4fr 1fr 4fr 4fr;
+                grid-template-columns: 4fr 1fr 4fr 2fr;
 
                 input {
                     width: 90%;
+                    border: $border-primary;
+                    padding: $input-padding;
+                    border-radius: $input-border-radius;
+                    font-family: 'Montserrat', sans-serif;
+                }
+
+                input[type="time"] {
+                    width: 7rem;
+                    font-family: 'Montserrat', sans-serif;
+                    margin: auto .5rem;
+                    border-radius: $input-border-radius;
+                    border: $border-primary;
+                    padding: $input-padding
                 }
 
             }
