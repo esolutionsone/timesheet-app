@@ -162,6 +162,11 @@ export default {
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
         );
+        updateState({
+            addProjectStatus: false,
+            selectedProject: '',
+            entryNotes: '',
+        })
     },
     'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
         method: 'PUT',

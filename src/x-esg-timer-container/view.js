@@ -40,27 +40,28 @@ export const view = (state, {dispatch, updateState}) => {
 
     const handleSave = (e) => {
         e.preventDefault();
-        dispatch('NEW_ENTRY', {
-            data: {
-                project: selectedProject,
-                consultant: consultantId,
-                note: entryNotes,
-            },
-            // tableName: 'x_esg_one_delivery_time_entry',
-            tableName: properties.timeEntryTable,
-
-        });
-        dispatch('INSERT_TIMESTAMP', {
-            data: { 
-                active: true, 
-                project: selectedProject,
-                note: entryNotes,
-            },
-            // tableName: 'x_esg_one_delivery_timestamp',
-            tableName: properties.timestampTable,
-        });
-        updateState({addProjectStatus: !addProjectStatus});
-        
+        if (selectedProject == '') {
+            alert('Please select a project before continuing.')
+        } else {
+            dispatch('NEW_ENTRY', {
+                data: {
+                    project: selectedProject,
+                    consultant: consultantId,
+                    note: entryNotes,
+                },
+                // tableName: 'x_esg_one_delivery_time_entry',
+                tableName: properties.timeEntryTable,
+            });
+            dispatch('INSERT_TIMESTAMP', {
+                data: { 
+                    active: true, 
+                    project: selectedProject,
+                    note: entryNotes,
+                },
+                // tableName: 'x_esg_one_delivery_timestamp',
+                tableName: properties.timestampTable,
+            });
+        }
     }
 
     const handleEdit = (e) => {
@@ -94,6 +95,8 @@ export const view = (state, {dispatch, updateState}) => {
 
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
+
+    console.log('CURRENT STATE -', state);
 
     return (
         <Fragment>
@@ -150,10 +153,8 @@ export const view = (state, {dispatch, updateState}) => {
                                 placeholder="Enter your notes here..."
                             ></textarea>
 
-                            <button
-                                className="new-project-save-button"
-                            >
-                                    Save
+                            <button className="new-project-save-button">
+                                Save
                             </button>
                         </div>
                     </form>
