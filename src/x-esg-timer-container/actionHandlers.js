@@ -65,6 +65,7 @@ export default {
             const sharedValues = {
                 active,
                 sys_id: projectId,
+                note: stamp.note,
                 client: stamp['project.client.short_description'],
                 short_description: stamp['project.short_description'],
             }
@@ -157,7 +158,7 @@ export default {
         successActionType: 'INSERT_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
-    'INSERT_SUCCESS': ({dispatch, state}) => {
+    'INSERT_SUCCESS': ({action, dispatch, state, updateState}) => {
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
         );
@@ -171,7 +172,7 @@ export default {
         dataParam: 'data',
     }),
     'UPDATE_SUCCESS': ({dispatch, state}) => {
-        console.log('update success runs');
+        console.log('UPDATE RESPONSE:');
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
             );

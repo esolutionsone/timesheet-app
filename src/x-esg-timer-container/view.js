@@ -2,7 +2,7 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 import {format} from 'date-fns';
-import { msToString } from '../x-esg-timer-button/helpers';
+import { msToString, hhmmToSnTime, getUTCTime } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
 
@@ -10,7 +10,10 @@ export const view = (state, {dispatch, updateState}) => {
     // Load Custom Fonts
     WebFont.load({
         google: {
-            families: ['Montserrat:400,500,600,700', 'Material+Symbols+Outlined', 'Material+Symbols+Rounded']
+            families: [
+                'Montserrat:400,500,600,700', 
+                'Material+Symbols+Outlined', 
+                'Material+Symbols+Rounded']
         }
     })
 
@@ -23,7 +26,8 @@ export const view = (state, {dispatch, updateState}) => {
         projectMap,
         addProjectStatus,
         editMode,
-        properties
+        properties,
+        editableTimestamp,
     } = state;
     
     // Combine Generic projects and user-specific projects,
@@ -49,7 +53,8 @@ export const view = (state, {dispatch, updateState}) => {
         dispatch('INSERT_TIMESTAMP', {
             data: { 
                 active: true, 
-                project: selectedProject
+                project: selectedProject,
+                note: entryNotes,
             },
             // tableName: 'x_esg_one_delivery_timestamp',
             tableName: properties.timestampTable,
@@ -60,19 +65,13 @@ export const view = (state, {dispatch, updateState}) => {
 
     const handleEdit = (e) => {
         e.preventDefault();
-        console.log('edit clicked');
         updateState({editMode: !editMode});
     }
 
     const handleDeleteProject = (e, projectToBeDeleted) => {
         e.preventDefault();
-        console.log('delete project clicked');
-
-        console.log("Project to be deleted", projectToBeDeleted);
 
         projectToBeDeleted.timestamps.forEach(timestamp => {
-            console.log(timestamp.sys_id + "has been deleted");
-
             dispatch('DELETE_PROJECT_TIMESTAMPS', {
                 // tableName: properties.timestampTable,
                 id: timestamp.sys_id,
@@ -80,10 +79,16 @@ export const view = (state, {dispatch, updateState}) => {
         });
 
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
-
     }
 
-    console.log('STATE', state);
+    const handleUpdateTimestamp = (sys_id, data) => {
+        dispatch('UPDATE_TIMESTAMP', {
+            tableName: 'x_esg_one_delivery_timestamp',
+            sys_id,
+            data,
+        })
+        updateState({editableTimestamp: ''})
+    }
 
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
@@ -191,7 +196,54 @@ export const view = (state, {dispatch, updateState}) => {
                                     </div>
                                 </div>
                                 <div className="project-notes">
-                                    {!editMode ? 
+                                    {timestamps.map(stamp => {
+                                        const {note, start_time, end_time, active, sys_id} = stamp;                                        
+                                        const localTimes = {
+                                            start: format(getUTCTime(start_time), 'HH:mm'),
+                                        }
+                                        localTimes.end = end_time ? format(getUTCTime(end_time), 'HH:mm') : 'now';
+                    
+                                        return (
+                                            <div className="timestamp-note"
+                                                on-click={() => updateState({editableTimestamp: sys_id})}
+                                            >
+                                                {editableTimestamp == sys_id ? 
+                                                    <span>
+                                                        <input 
+                                                            type="text"
+                                                            placeholder="What are doing right now?"
+                                                            value={note}
+                                                            on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                            on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                            on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                        >{note}</input>
+                                                    </span> 
+                                                    : 
+                                                    <span
+                                                    >{stamp.note}</span>
+                                                    }
+                                                <span>{' => '}</span>
+                                                {editableTimestamp == sys_id ?
+                                                    <span>
+                                                        <input type="time" value={localTimes.start}
+                                                        // on-change={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
+                                                        on-blur={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
+                                                        on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)})}
+                                                    />
+                                                        {!end_time ? '' : <input type="time" value={localTimes.end}
+                                                            // on-change={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
+                                                            on-blur={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
+                                                            on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)})}
+                                                        />}
+                                                    </span>
+                                                    :
+                                                    <span>{localTimes.start} - {localTimes.end}</span>          
+                                                }
+                                                
+                                            </div>
+                                        );
+                                    })}
+                                    {/* {!editMode ? 
                                         note 
                                         :
                                         <textarea 
@@ -200,7 +252,7 @@ export const view = (state, {dispatch, updateState}) => {
                                             maxlength='512'
                                             value={note}>
                                         </textarea> 
-                                    }
+                                    } */}
                                 </div>
                             </div>
                         );
