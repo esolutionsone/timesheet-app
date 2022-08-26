@@ -74,3 +74,12 @@ props = {
     - [ ] Updates Button Appearance to Red
     - [ ] Stops Counter (on API response)
     - [ ] Updates Record with end time
+
+### Feedback
+
+- Loading
+    - [ ] Timestamp insert ('starting timer')
+    - [ ] Timestamp update ('saving time')
+- Errors / validation
+    - [ ] when Time is after 
+    - [ ] Missing ConsultantId

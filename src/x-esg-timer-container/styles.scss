@@ -115,6 +115,7 @@ $button-color: #3178C6;
             width: 35%;
             border-radius: 15px;
             border: $border-primary;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .new-project-text-container {
@@ -129,6 +130,7 @@ $button-color: #3178C6;
                 width: 60%;
                 border-radius: 15px;
                 border: $border-primary;
+                font-family: 'Montserrat', sans-serif;
                 padding: 10px;
             }
 
@@ -184,9 +186,25 @@ $button-color: #3178C6;
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
-                // .active {
-                //     color: green;
-                // }
+
+                .roundedTime-input-box{
+                    max-width: 50px;
+                    border-radius: 15px;
+                    border: $border-primary;
+                    padding-left: 7px;
+                    font-family: 'Montserrat', sans-serif;
+                }
+
+                .remove-project {
+                    position: relative;
+                    left: 100px;
+                    color: red;
+                    font-size: x-large;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
             }
         }
 
@@ -194,6 +212,25 @@ $button-color: #3178C6;
             font-weight: 500;
             font-size: 16px;
             color: $color-secondary;
+
+            .edit-project-text {
+                height: 107px;
+                width: 60%;
+                border-radius: 15px;
+                border: $border-primary;
+                font-family: 'Montserrat', sans-serif;
+                padding: 10px;
+            }
+
+            .timestamp-note {
+                display: grid;
+                grid-template-columns: 4fr 1fr 4fr 4fr;
+
+                input {
+                    width: 90%;
+                }
+
+            }
         }
     }
 

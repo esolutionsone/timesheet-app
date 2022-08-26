@@ -25,6 +25,12 @@ createCustomElement('x-esg-timer-container', {
 		genericProjects: [],
 		projectMap: new Map(),
 		addProjectStatus: false,
+		editMode: false,
+		editableTimestamp: '',
+	},
+	properties: {
+		timestampTable: {default: "x_esg_one_delivery_timestamp"},
+		timeEntryTable: {default: "x_esg_one_delivery_time_entry"},
 	},
 	actionHandlers,
 });
