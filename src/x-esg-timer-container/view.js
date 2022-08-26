@@ -176,16 +176,9 @@ export const view = (state, {dispatch, updateState}) => {
                                                 loadFonts={false}
                                                 sysId={latestActive ? latestActive.sys_id : null}
                                             />}
-                                        <div>
-                                            {editMode ? 
-                                                <input 
-                                                    className="roundedTime-input-box" 
-                                                    value={msToString(projectMap.get(sys_id).totalRoundedTime)}
-                                                /> 
-                                                : 
-                                                msToString(projectMap.get(sys_id).totalRoundedTime)
-                                            }
-                                        </div>
+
+                                        <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
+                                        
                                         {!editMode ? 
                                             '' 
                                             : 
