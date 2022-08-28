@@ -84,7 +84,7 @@ export const view = (state, {dispatch, updateState}) => {
         } 
     }
 
-    const handleUpdateTimestamp = (sys_id, timeToCheck, data) => {
+    const handleUpdateTimestamp = (sys_id, data, timeToCheck) => {
         if (data.end_time && (data.end_time < timeToCheck)) {
             updateState({editableTimestamp: ''})
             alert('End time cannot be earlier than start time.');
@@ -241,7 +241,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                             id="edit-time-start"
                                                             type="time" 
                                                             value={localTimes.start}
-                                                            on-blur={(e)=>handleUpdateTimestamp(sys_id, end_time, {start_time: hhmmToSnTime(e.target.value)})}
+                                                            on-blur={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)}, end_time)}
                                                             on-keydown={(e)=> e.key === 'Enter' && e.target.blur()}
                                                     />
                                                     {end_time && <span> - </span>}
@@ -251,7 +251,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                                 type="time" 
                                                                 value={localTimes.end}
                                                                 min={localTimes.start}
-                                                                on-blur={(e)=>handleUpdateTimestamp(sys_id, start_time, {end_time: hhmmToSnTime(e.target.value)})}
+                                                                on-blur={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)}, start_time)}
                                                                 on-keydown={(e)=> e.key === 'Enter' && e.target.blur()}
                                                         />}
                                                     </span>
