@@ -95,6 +95,16 @@ $input-border-radius: 8px;
             font-weight: 700;
             margin-right: 50px;
         }
+
+        .date-chevron {
+            transition: .4s all;
+            &:hover {
+                cursor: pointer;
+                filter: drop-shadow(0 0 .1rem rgb(95, 95, 95));
+            }
+        }
+        
+        
     }
 
     .new-project-header {
