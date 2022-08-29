@@ -96,15 +96,21 @@ $input-border-radius: 8px;
             margin-right: 50px;
         }
 
-        .date-chevron {
-            transition: .4s all;
-            &:hover {
-                cursor: pointer;
-                filter: drop-shadow(0 0 .1rem rgb(95, 95, 95));
+        .header-date {
+            display: inline-flex;
+            width: 500px;
+            justify-content: space-evenly;
+            // grid-template: 1fr 10fr 1fr;
+            // width: 50%;
+
+            .date-chevron {
+                transition: .4s all;
+                &:hover {
+                    cursor: pointer;
+                    filter: drop-shadow(0 0 .1rem rgb(95, 95, 95));
+                }
             }
-        }
-        
-        
+        }  
     }
 
     .new-project-header {

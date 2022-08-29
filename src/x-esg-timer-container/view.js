@@ -136,17 +136,16 @@ export const view = (state, {dispatch, updateState}) => {
                     <div>
                         <span className="title">Today</span>
                         <span className="header-date">
-
-                        </span>
-                        <span className="material-symbols-outlined date-chevron"
-                            on-click={() => incrementDate(false)}>
-                            chevron_left
-                        </span>
-                        <span>{format(selectedDay, 'E MMM d, Y')}</span>
-                        <span className="material-symbols-outlined date-chevron"
-                            on-click={() => incrementDate(true)}
-                        >
-                            chevron_right
+                            <span className="material-symbols-outlined date-chevron"
+                                on-click={() => incrementDate(false)}>
+                                chevron_left
+                            </span>
+                            <span>{format(selectedDay, 'E MMM d, Y')}</span>
+                            <span className="material-symbols-outlined date-chevron"
+                                on-click={() => incrementDate(true)}
+                            >
+                                chevron_right
+                            </span>
                         </span>
                     </div>
                     <div>
