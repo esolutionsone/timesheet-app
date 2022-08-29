@@ -27,9 +27,6 @@ createCustomElement('x-esg-timer-container', {
 		addProjectStatus: false,
 		editMode: false,
 		editableTimestamp: '',
-		loadingStates: {
-			
-		}
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
