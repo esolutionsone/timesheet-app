@@ -116,11 +116,11 @@ $input-border-radius: 8px;
 
                 &.disabled {
                     color: #D6D6D6;
-                    cursor: initial;
+                    cursor: default;
 
                     &:hover {
                         filter: none;
-                        cursor: initial;
+                        cursor: default;
                     }
                 }
             }
