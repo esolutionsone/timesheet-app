@@ -123,7 +123,13 @@ export const view = (state, {dispatch, updateState}) => {
                 <div className="today-header">
                     <div>
                         <span className="title">Today</span>
+                        <span className="material-symbols-outlined">
+                            chevron_left
+                        </span>
                         <span>{format(d, 'E MMM d, Y')}</span>
+                        <span className="material-symbols-outlined">
+                            chevron_right
+                        </span>
                     </div>
                     <div>
                         <span>Total </span>
