@@ -14,9 +14,6 @@ WebFont.load({
 	}
 })
 
-// const startTime = toSnTime(new Date(new Date().setHours(0,0,0,0)));
-// const endTime = toSnTime(new Date(new Date().setHours(24,0,0,0)));
-
 createCustomElement('x-esg-timer-container', {
 	renderer: {type: snabbdom},
 	view,
@@ -32,7 +29,6 @@ createCustomElement('x-esg-timer-container', {
 		editMode: false,
 		editableTimestamp: '',
 		selectedDay: new Date(),
-		// dateRange: [startTime, endTime],
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},

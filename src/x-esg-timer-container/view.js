@@ -94,10 +94,22 @@ export const view = (state, {dispatch, updateState}) => {
         updateState({editableTimestamp: ''})
     }
 
+    const incrementDate = (forward) => {
+        console.log('running increment date')
+        let increment = 24 * 60 * 60 * 1000 * (forward ? 1: -1);
+        console.log(increment);
+        let d = new Date(selectedDay.getTime() + increment)
+        console.log(d);
+        updateState({selectedDay: d});
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(d)
+            )
+        );
+    }
+
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
 
-    console.log('STATE = ', state);
     return (
         <Fragment>
             <div className="outer-buttons">
@@ -123,11 +135,14 @@ export const view = (state, {dispatch, updateState}) => {
                 <div className="today-header">
                     <div>
                         <span className="title">Today</span>
-                        <span className="material-symbols-outlined">
+                        <span className="material-symbols-outlined"
+                            on-click={() => incrementDate(false)}>
                             chevron_left
                         </span>
-                        <span>{format(d, 'E MMM d, Y')}</span>
-                        <span className="material-symbols-outlined">
+                        <span>{format(selectedDay, 'E MMM d, Y')}</span>
+                        <span className="material-symbols-outlined"
+                            on-click={() => incrementDate(true)}
+                        >
                             chevron_right
                         </span>
                     </div>
