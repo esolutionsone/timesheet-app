@@ -113,6 +113,16 @@ $input-border-radius: 8px;
                     cursor: pointer;
                     filter: drop-shadow(0 0 .1rem rgb(95, 95, 95));
                 }
+
+                &.disabled {
+                    color: #D6D6D6;
+                    cursor: initial;
+
+                    &:hover {
+                        filter: none;
+                        cursor: initial;
+                    }
+                }
             }
         }  
 

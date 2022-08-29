@@ -149,8 +149,11 @@ export const view = (state, {dispatch, updateState}) => {
                                 chevron_left
                             </span>
                             <span>{format(selectedDay, 'E MMM d, Y')}</span>
-                            <span className="material-symbols-outlined date-chevron"
-                                on-click={() => incrementDate(true)}
+                            <span className={`material-symbols-outlined 
+                                    date-chevron 
+                                    ${howLongAgo == "Today" && 'disabled'}`
+                                }
+                                on-click={() => howLongAgo !== "Today" && incrementDate(true)}
                             >
                                 chevron_right
                             </span>
