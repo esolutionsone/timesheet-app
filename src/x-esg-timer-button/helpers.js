@@ -94,21 +94,29 @@ export const hhmmToSnTime = (hoursAndMinutes) => {
     // get correct UTC date
     const today = new Date();
     const [hours, minutes] = hoursAndMinutes.split(':');
-
     const localDate = new Date(today.setHours(hours,minutes));
 
+    return toSnTime(localDate);
+}
 
+/**
+ * Convert Javascript Date to ServiceNow Datetime
+ * @param {Date} date Javascript Date object
+ * @returns ServiceNow DateTime
+ */
+export const toSnTime = (date) => {
     const obj = {
-        utcYear: localDate.getUTCFullYear(),
-        utcMonth: localDate.getUTCMonth() + 1,
-        utcDay:localDate.getUTCDate(),
-        utcHour:localDate.getUTCHours(),
-        utcMinutes:localDate.getUTCMinutes(),
+        utcYear: date.getUTCFullYear(),
+        utcMonth: date.getUTCMonth() + 1,
+        utcDay:date.getUTCDate(),
+        utcHour:date.getUTCHours(),
+        utcMinutes:date.getUTCMinutes(),
     }
 
     for(let el in obj){
         obj[el] = obj[el].toString().padStart(2,'0');
     }
+
     const {utcYear, utcMonth, utcDay, utcHour, utcMinutes} = obj;
     return `${utcYear}-${utcMonth}-${utcDay} ${utcHour}:${utcMinutes}:00`;
 }

@@ -2,7 +2,7 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 import {format, min} from 'date-fns';
-import { msToString, hhmmToSnTime, getUTCTime } from '../x-esg-timer-button/helpers';
+import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
 
@@ -97,6 +97,7 @@ export const view = (state, {dispatch, updateState}) => {
     totalTime = msToString(totalTime);
 
     console.log('CURRENT STATE -', state);
+    console.log(toSnTime(new Date()))
 
     return (
         <Fragment>
