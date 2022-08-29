@@ -88,8 +88,11 @@ $input-border-radius: 8px;
     .today-header {
         padding: $item-padding;
         font-size: 22px;
-        display: flex;
-        justify-content: space-between;
+        // display: flex;
+        // justify-content: space-between;
+        width: 100%;
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr;
     
         .title {
             font-weight: 700;
@@ -97,11 +100,12 @@ $input-border-radius: 8px;
         }
 
         .header-date {
-            display: inline-flex;
-            width: 500px;
-            justify-content: space-evenly;
-            // grid-template: 1fr 10fr 1fr;
-            // width: 50%;
+            display: inline-grid;
+            width: 400px;
+            grid-template-columns: 1fr 3fr 1fr;
+            text-align: center;
+            
+            // justify-content: space-evenly;
 
             .date-chevron {
                 transition: .4s all;
@@ -111,6 +115,10 @@ $input-border-radius: 8px;
                 }
             }
         }  
+
+        .today-total {
+            text-align: right;
+        }
     }
 
     .new-project-header {

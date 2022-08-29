@@ -1,7 +1,7 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
-import {format, min} from 'date-fns';
+import {format, formatDistanceToNow, min} from 'date-fns';
 import { msToString, hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
@@ -110,6 +110,15 @@ export const view = (state, {dispatch, updateState}) => {
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
 
+    let howLongAgo;
+    const dayStart = new Date().setHours(0,0,0,0);
+    if(selectedDay < dayStart){
+        howLongAgo = formatDistanceToNow(selectedDay) + ' ago';
+    }else{
+        howLongAgo = "Today";
+    }
+    console.log('howlongago:', howLongAgo)
+
     return (
         <Fragment>
             <div className="outer-buttons">
@@ -133,8 +142,7 @@ export const view = (state, {dispatch, updateState}) => {
             </div>
             <div className="today-container">
                 <div className="today-header">
-                    <div>
-                        <span className="title">Today</span>
+                        <span className="title">{howLongAgo}</span>
                         <span className="header-date">
                             <span className="material-symbols-outlined date-chevron"
                                 on-click={() => incrementDate(false)}>
@@ -147,8 +155,7 @@ export const view = (state, {dispatch, updateState}) => {
                                 chevron_right
                             </span>
                         </span>
-                    </div>
-                    <div>
+                    <div className="today-total">
                         <span>Total </span>
                         <span className="project-time"> {totalTime}</span>
                     </div>
