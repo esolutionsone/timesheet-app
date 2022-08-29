@@ -1,5 +1,6 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
+import { toSnTime } from '../x-esg-timer-button/helpers';
 
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
@@ -24,13 +25,14 @@ export default {
         errorActionType: 'LOG_ERROR',
         successActionType: 'HANDLE_CONSULTANT_ID'
     }),
-    'HANDLE_CONSULTANT_ID': ({action, dispatch, updateState}) => {
+    'HANDLE_CONSULTANT_ID': ({action, dispatch, updateState, state}) => {
         const id = action.payload.result[0].sys_id;
         if(!id || action.payload.result.length !== 1){
             dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
         }else{
             updateState({consultantId: id});
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(id));
+            const {dateRange} = state;
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(id, ...dateRange));
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
                 sysparm_query: `consultant_assigned=${id}`,
@@ -160,7 +162,7 @@ export default {
     }),
     'INSERT_SUCCESS': ({action, dispatch, state, updateState}) => {
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId, ...state.dateRange)
         );
         updateState({
             addProjectStatus: false,

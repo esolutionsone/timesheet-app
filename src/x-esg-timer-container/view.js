@@ -28,6 +28,7 @@ export const view = (state, {dispatch, updateState}) => {
         editMode,
         properties,
         editableTimestamp,
+        dateRange,
     } = state;
     
     // Combine Generic projects and user-specific projects,
@@ -80,7 +81,7 @@ export const view = (state, {dispatch, updateState}) => {
                 });
             });
 
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, dateRange));
         } 
     }
 

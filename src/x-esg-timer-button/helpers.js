@@ -102,9 +102,10 @@ export const hhmmToSnTime = (hoursAndMinutes) => {
 /**
  * Convert Javascript Date to ServiceNow Datetime
  * @param {Date} date Javascript Date object
- * @returns ServiceNow DateTime
+ * @returns ServiceNow DateTime in UTC
  */
 export const toSnTime = (date) => {
+    console.log('toSnTime', date);
     const obj = {
         utcYear: date.getUTCFullYear(),
         utcMonth: date.getUTCMonth() + 1,

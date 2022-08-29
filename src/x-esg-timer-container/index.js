@@ -1,6 +1,7 @@
 import {createCustomElement} from '@servicenow/ui-core';
 import {snabbdom} from '@servicenow/ui-renderer-snabbdom';
 import {view} from './view';
+import { toSnTime } from '../x-esg-timer-button/helpers';
 import actionHandlers from './actionHandlers';
 import styles from './styles.scss';
 
@@ -12,6 +13,9 @@ WebFont.load({
 		families: ['Montserrat:400,600', 'Material+Symbols+Outlined', 'Material+Symbols+Rounded']
 	}
 })
+
+const startTime = toSnTime(new Date(new Date().setHours(0,0,0,0)));
+const endTime = toSnTime(new Date(new Date().setHours(24,0,0,0)));
 
 createCustomElement('x-esg-timer-container', {
 	renderer: {type: snabbdom},
@@ -27,6 +31,7 @@ createCustomElement('x-esg-timer-container', {
 		addProjectStatus: false,
 		editMode: false,
 		editableTimestamp: '',
+		dateRange: [startTime, endTime],
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
