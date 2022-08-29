@@ -30,7 +30,7 @@ $input-border-radius: 8px;
 
 .outer-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 80%;
     margin: auto;
 
@@ -47,6 +47,7 @@ $input-border-radius: 8px;
         width: 106px;
         height: 36px;
         margin-bottom: 23px;
+        margin-right: 20px;
         border-radius: 15px;
 
         &:hover {
@@ -101,8 +102,8 @@ $input-border-radius: 8px;
 
         .header-date {
             display: inline-grid;
-            width: 400px;
-            grid-template-columns: 1fr 3fr 1fr;
+            width: 300px;
+            grid-template-columns: 1fr 6fr 1fr;
             text-align: center;
             
             // justify-content: space-evenly;
@@ -259,9 +260,29 @@ $input-border-radius: 8px;
                 padding: 10px;
             }
 
+            .remove-timestamp {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .remove-timestamp-icon {
+                    color: red;
+                }
+            }
+
             .timestamp-note {
+                margin-top: 5px;
+                margin-bottom: 5px;
+                margin-right: 5px;
+                border-bottom: 1px solid $border-primary;
+                padding-bottom: 5px;
+                width: 60%;
                 display: grid;
-                grid-template-columns: 4fr 1fr 4fr 2fr;
+                grid-template-columns: 4fr 4fr;
+
+                .timestamp-times {
+                    text-align: end;
+                }
 
                 input {
                     width: 90%;
@@ -274,12 +295,11 @@ $input-border-radius: 8px;
                 input[type="time"] {
                     width: 7rem;
                     font-family: 'Montserrat', sans-serif;
-                    margin: auto .5rem;
+                    margin: auto;
                     border-radius: $input-border-radius;
                     border: $border-primary;
                     padding: $input-padding
                 }
-
             }
         }
     }

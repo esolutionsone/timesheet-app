@@ -84,13 +84,42 @@ export const msToString = (ms) => {
     return `${hours}:${minutes}`;
 }
 
+// /**
+//  * Takes in a string in 'hh:mm' format and returns a 
+//  * SN time representation of that time converted to UTC
+//  * @param {string} hoursAndMinutes 
+//  * @returns 
+//  */
+// export const hhmmToSnTime = (hoursAndMinutes) => {
+//     // get correct UTC date
+//     const today = new Date();
+//     const [hours, minutes] = hoursAndMinutes.split(':');
+
+//     const localDate = new Date(today.setHours(hours,minutes));
+
+
+//     const obj = {
+//         utcYear: localDate.getUTCFullYear(),
+//         utcMonth: localDate.getUTCMonth() + 1,
+//         utcDay:localDate.getUTCDate(),
+//         utcHour:localDate.getUTCHours(),
+//         utcMinutes:localDate.getUTCMinutes(),
+//     }
+
+//     for(let el in obj){
+//         obj[el] = obj[el].toString().padStart(2,'0');
+//     }
+//     const {utcYear, utcMonth, utcDay, utcHour, utcMinutes} = obj;
+//     return `${utcYear}-${utcMonth}-${utcDay} ${utcHour}:${utcMinutes}:00`;
+// }
+
 /**
  * Takes in a string in 'hh:mm' format and returns a 
  * SN time representation of that time converted to UTC
  * @param {string} hoursAndMinutes 
  * @returns 
  */
-export const hhmmToSnTime = (hoursAndMinutes) => {
+ export const hhmmToSnTime = (hoursAndMinutes) => {
     // get correct UTC date
     const today = new Date();
     const [hours, minutes] = hoursAndMinutes.split(':');
@@ -105,7 +134,6 @@ export const hhmmToSnTime = (hoursAndMinutes) => {
  * @returns ServiceNow DateTime in UTC
  */
 export const toSnTime = (date) => {
-    console.log('toSnTime', date);
     const obj = {
         utcYear: date.getUTCFullYear(),
         utcMonth: date.getUTCMonth() + 1,

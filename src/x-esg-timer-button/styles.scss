@@ -56,11 +56,13 @@ $btn-dimensions: 1.6rem;
 
 .display-active {
     color: green;
+    font-weight: 400;
     font-size: larger;
 }
 
 .display-inactive {
-    color: red;
+    // color: red;
+    font-weight: 400;
     font-size: larger;
 }
 
