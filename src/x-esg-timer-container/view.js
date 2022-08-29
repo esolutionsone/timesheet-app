@@ -135,6 +135,9 @@ export const view = (state, {dispatch, updateState}) => {
                 <div className="today-header">
                     <div>
                         <span className="title">Today</span>
+                        <span className="header-date">
+
+                        </span>
                         <span className="material-symbols-outlined date-chevron"
                             on-click={() => incrementDate(false)}>
                             chevron_left
@@ -228,7 +231,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                     <span>
                                                         <input 
                                                             type="text"
-                                                            placeholder="What are doing right now?"
+                                                            placeholder="What are you doing right now?"
                                                             value={note}
                                                             on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
                                                             on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
