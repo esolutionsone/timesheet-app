@@ -174,14 +174,14 @@ export default {
         method: 'PUT',
         pathParams: ['tableName', 'sys_id'],
         successActionType: 'UPDATE_SUCCESS',
-        errorActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
         startActionType: 'LOG_RESULT',
         dataParam: 'data',
     }),
     'UPDATE_SUCCESS': ({dispatch, state}) => {
         console.log('UPDATE RESPONSE:');
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId, ...state.dateRange)
             );
     },
 } 

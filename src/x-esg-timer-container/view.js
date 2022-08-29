@@ -97,9 +97,6 @@ export const view = (state, {dispatch, updateState}) => {
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
 
-    console.log('CURRENT STATE -', state);
-    console.log(toSnTime(new Date()))
-
     return (
         <Fragment>
             <div className="outer-buttons">
