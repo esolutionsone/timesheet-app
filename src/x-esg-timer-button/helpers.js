@@ -121,3 +121,19 @@ export const toSnTime = (date) => {
     const {utcYear, utcMonth, utcDay, utcHour, utcMinutes} = obj;
     return `${utcYear}-${utcMonth}-${utcDay} ${utcHour}:${utcMinutes}:00`;
 }
+
+/**
+ * Accepts javascript date object and returns two SN datetime strings,
+ * representing the start and end bounds of the date.
+ * @param {Date} date 
+ * @returns {Array} Array in format [startDate, endDate] in SN Date format (UTC)
+ */
+export const getSnDayBounds = (date) => {
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    const startTime = toSnTime(new Date(startDate.setHours(0,0,0,0)));
+    const endTime = toSnTime(new Date(endDate.setHours(24,0,0,0)));
+    console.log([startTime, endTime]);
+
+    return [startTime, endTime];
+}

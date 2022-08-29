@@ -1,9 +1,8 @@
 export const FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD = (consultantId, start_time, end_time) => ({
     tableName: 'x_esg_one_delivery_timestamp',
     sysparm_query: (start_time && end_time) ?
-        `user=${consultantId}
-        ^NQstart_time>${start_time}^end_time<${end_time}
-        ^NQstart_time>${start_time}^end_timeISEMPTY
+        `user=${consultantId}^start_time>${start_time}^end_time<${end_time}
+        ^NQuser=${consultantId}^start_time>${start_time}^end_timeISEMPTY
         ^ORDERBYstart_time`
         :
         `user=${consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,

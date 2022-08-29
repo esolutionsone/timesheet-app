@@ -2,7 +2,7 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
 import {format, min} from 'date-fns';
-import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../x-esg-timer-button/helpers';
+import { msToString, hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
 
@@ -28,7 +28,7 @@ export const view = (state, {dispatch, updateState}) => {
         editMode,
         properties,
         editableTimestamp,
-        dateRange,
+        selectedDay,
     } = state;
     
     // Combine Generic projects and user-specific projects,
@@ -81,7 +81,7 @@ export const view = (state, {dispatch, updateState}) => {
                 });
             });
 
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, dateRange));
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(selectedDay)));
         } 
     }
 
@@ -97,6 +97,7 @@ export const view = (state, {dispatch, updateState}) => {
     let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
 
+    console.log('STATE = ', state);
     return (
         <Fragment>
             <div className="outer-buttons">
