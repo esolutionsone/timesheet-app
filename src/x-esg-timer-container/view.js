@@ -1,8 +1,8 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
-import {format, formatDistanceToNow, min} from 'date-fns';
-import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../x-esg-timer-button/helpers';
+import {format, formatDistanceToNow, isToday} from 'date-fns';
+import { msToString, hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
 
@@ -29,6 +29,7 @@ export const view = (state, {dispatch, updateState}) => {
         editMode,
         properties,
         editableTimestamp,
+        selectedDay,
     } = state;
     
     // Combine Generic projects and user-specific projects,
@@ -36,8 +37,6 @@ export const view = (state, {dispatch, updateState}) => {
     const allProjects = [...genericProjects, ...projects].filter(proj => {
         return !projectMap.has(proj.sys_id)
     });
-
-    const d = new Date();
 
     const handleSave = (e) => {
         e.preventDefault();
@@ -80,7 +79,7 @@ export const view = (state, {dispatch, updateState}) => {
                 });
             });
 
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(selectedDay)));
         } 
     }
 
@@ -123,10 +122,33 @@ export const view = (state, {dispatch, updateState}) => {
         updateState({editableTimestamp: ''});
     }
 
-    let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
+    /**
+     * Increments state.selectedDay 1 day forward or backward
+     * @param {bool} forward 
+     */
+    const incrementDate = (forward) => {
+        // Calculate 1 day forward/backward
+        let increment = 24 * 60 * 60 * 1000 * (forward ? 1: -1);
+
+        let d = new Date(selectedDay.getTime() + increment)
+        updateState({selectedDay: d});
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(d)
+            )
+        );
+    }
+
+    // Calculate the total rounded time from the timestamps in projectMap
+    let totalTime = Array.from(projectMap.values())
+        .reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
 
-    console.log('CURRENT STATE -', state);
+    // Determine message for today-header
+    let howLongAgo = "Today";
+    const dayStart = new Date().setHours(0,0,0,0);
+    if(selectedDay < dayStart){
+        howLongAgo = formatDistanceToNow(selectedDay) + ' ago';
+    }
 
     return (
         <Fragment>
@@ -152,11 +174,23 @@ export const view = (state, {dispatch, updateState}) => {
             </div>
             <div className="today-container">
                 <div className="today-header">
-                    <div>
-                        <span className="title">Today</span>
-                        <span>{format(d, 'E MMM d, Y')}</span>
-                    </div>
-                    <div>
+                        <span className="title">{howLongAgo}</span>
+                        <span className="header-date">
+                            <span className="material-symbols-outlined date-chevron"
+                                on-click={() => incrementDate(false)}>
+                                chevron_left
+                            </span>
+                            <span>{format(selectedDay, 'E MMM d, Y')}</span>
+                            <span className={`material-symbols-outlined 
+                                    date-chevron 
+                                    ${isToday(selectedDay) && 'disabled'}`
+                                }
+                                on-click={() => !isToday(selectedDay) && incrementDate(true)}
+                            >
+                                chevron_right
+                            </span>
+                        </span>
+                    <div className="today-total">
                         <span>Total </span>
                         <span className="project-time"> {totalTime}</span>
                     </div>
@@ -207,13 +241,13 @@ export const view = (state, {dispatch, updateState}) => {
                                 <div className="project-title-container">
                                     <div className="project-title">{short_description}</div>
                                     <div className="project-start-stop-container">
-                                        {<x-esg-timer-button 
+                                        {isToday(selectedDay) ? <x-esg-timer-button 
                                             projectData={proj}
                                             active={active}
                                             start={latestActive ? latestActive.start_time : null}
                                             loadFonts={false}
                                             sysId={latestActive ? latestActive.sys_id : null}
-                                        />}
+                                        /> : ''}
 
                                     <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                                         {!editMode ? 
@@ -245,7 +279,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                         <span>
                                                             <input 
                                                                 type="text"
-                                                                placeholder="What are doing right now?"
+                                                                placeholder="What are you doing right now?"
                                                                 value={note}
                                                                 on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
                                                                 on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
