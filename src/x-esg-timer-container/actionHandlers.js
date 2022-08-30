@@ -1,6 +1,6 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
-import { getSnDayBounds, toSnTime } from '../x-esg-timer-button/helpers';
+import { getSnDayBounds} from '../x-esg-timer-button/helpers';
 
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;

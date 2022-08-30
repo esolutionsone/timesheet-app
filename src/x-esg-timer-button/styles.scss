@@ -13,11 +13,9 @@ $btn-dimensions: 1.6rem;
 }
 
 .timer-button-container {
-    display: flex;
+    @include flex-even-center;
     width: 200px;
     flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
 }
 
 .timer-container {

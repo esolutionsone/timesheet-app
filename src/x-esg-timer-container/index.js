@@ -1,7 +1,6 @@
 import {createCustomElement} from '@servicenow/ui-core';
 import {snabbdom} from '@servicenow/ui-renderer-snabbdom';
 import {view} from './view';
-import { toSnTime } from '../x-esg-timer-button/helpers';
 import actionHandlers from './actionHandlers';
 import styles from './styles/styles.scss';
 

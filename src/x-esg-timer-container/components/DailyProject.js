@@ -1,8 +1,7 @@
-import { Fragment } from '@servicenow/ui-renderer-snabbdom';
-import '../../x-esg-timer-button';
-import {format, formatDistanceToNow, isToday} from 'date-fns';
-import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../../x-esg-timer-button/helpers';
+import { msToString, hhmmToSnTime } from '../../x-esg-timer-button/helpers';
 import { Timestamp } from './Timestamp';
+import { isToday } from 'date-fns';
+import '../../x-esg-timer-button';
 
 export const DailyProject = ({
                                 proj,
