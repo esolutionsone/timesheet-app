@@ -4,8 +4,8 @@ import '@servicenow/now-icon';
 import {format, formatDistanceToNow, isToday} from 'date-fns';
 import { msToString, hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
-import { ProjectItem } from './components/DailyProject';
-import { Timestamp } from './components/Timestamp';
+import { DailyProject } from './components/DailyProject';
+import { AddProject } from './components/AddProject';
 import WebFont from 'webfontloader';
 
 export const view = (state, {dispatch, updateState}) => {
@@ -34,94 +34,9 @@ export const view = (state, {dispatch, updateState}) => {
         selectedDay,
     } = state;
     
-    // Combine Generic projects and user-specific projects,
-    // Then filter out projects that are already being tracked today
-    const allProjects = [...genericProjects, ...projects].filter(proj => {
-        return !projectMap.has(proj.sys_id)
-    });
-
-    const handleSave = (e) => {
-        e.preventDefault();
-        if (selectedProject == '') {
-            alert('Please select a project before continuing.')
-        } else {
-            dispatch('NEW_ENTRY', {
-                data: {
-                    project: selectedProject,
-                    consultant: consultantId,
-                    note: entryNotes,
-                },
-                // tableName: 'x_esg_one_delivery_time_entry',
-                tableName: properties.timeEntryTable,
-            });
-            dispatch('INSERT_TIMESTAMP', {
-                data: { 
-                    active: true, 
-                    project: selectedProject,
-                    note: entryNotes,
-                },
-                // tableName: 'x_esg_one_delivery_timestamp',
-                tableName: properties.timestampTable,
-            });
-        }
-    }
-
     const handleEdit = (e) => {
         e.preventDefault();
         updateState({editMode: !editMode});
-    }
-
-    const handleDeleteProject = (e, projectToBeDeleted) => {
-        e.preventDefault();
-        if (confirm("Click OK to remove this project") == true) {
-            projectToBeDeleted.timestamps.forEach(timestamp => {
-                dispatch('DELETE_PROJECT_TIMESTAMPS', {
-                    tableName: properties.timestampTable,
-                    id: timestamp.sys_id,
-                });
-            });
-
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(selectedDay)));
-        } 
-    }
-
-    const handleDeleteTimestamp = (e, sys_id) => {
-        e.preventDefault();
-        console.log('Timestamp to be deleted', sys_id);
-        if (confirm("Click OK to remove this timestamp") == true) {
-            dispatch('DELETE_PROJECT_TIMESTAMPS', {
-                tableName: properties.timestampTable,
-                id: sys_id,
-            });
-
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
-        } 
-    }
-
-    const handleUpdateTimestamp = (sys_id, data, timeToCheck) => {
-        let timeNow = new Date();
-
-        if (data.end_time && (data.end_time < timeToCheck)) {
-            updateState({editableTimestamp: ''})
-            alert('End time cannot be earlier than start time.');
-            return 
-        } else if (data.start_time && timeToCheck && (data.start_time > timeToCheck)) {
-            updateState({editableTimestamp: ''})
-            alert('Start time cannot be later than end time.');
-            return
-        } 
-        else if (data.start_time && (data.start_time > toSnTime(timeNow))) {
-            updateState({editableTimestamp: ''})
-            alert('Start time cannot be later than current time.');
-            return
-        }
-
-        dispatch('UPDATE_TIMESTAMP', {
-            tableName: 'x_esg_one_delivery_timestamp',
-            sys_id,
-            data,
-        })
-        updateState({editableTimestamp: ''});
     }
 
     /**
@@ -197,141 +112,29 @@ export const view = (state, {dispatch, updateState}) => {
                         <span className="project-time"> {totalTime}</span>
                     </div>
                 </div>
-
-                {!addProjectStatus ? 
-                <div></div> 
-                : 
-                <div>
-                    <span className="new-project-header">Project / Task</span>
-                    <form className="new-project-body" on-submit={handleSave}>
-                        <select
-                            className="new-project-dropdown"
-                            on-change={(e)=>updateState({selectedProject: e.target.value})}>
-                                <option disabled selected>Choose a Project</option>
-                                {allProjects.map(proj => <option value={proj.sys_id}>
-                                    {proj.short_description}
-                                </option>)}
-                        </select>
-                        <div className="new-project-text-container">
-                            <textarea 
-                                className="new-project-text"
-                                on-keyup={(e)=> updateState({entryNotes: e.target.value})}
-                                maxlength='512'
-                                placeholder="Enter your notes here..."
-                            ></textarea>
-
-                            <button className="new-project-save-button">
-                                Save
-                            </button>
-                        </div>
-                    </form>
-                </div>}
+                <AddProject 
+                    addProjectStatus={addProjectStatus}
+                    projects={projects}
+                    selectedProject={selectedProject}
+                    entryNotes={entryNotes}
+                    genericProjects={genericProjects}
+                    properties={properties}
+                    projectMap={projectMap}
+                    dispatch={dispatch}
+                    updateState={updateState}
+                />
                 <div>
                     {Array.from(projectMap.values()).map(proj => {
-                        const {
-                                client, 
-                                short_description, 
-                                sys_id, 
-                                active, 
-                                timestamps, 
-                                note
-                            } = proj;
-                        const latestActive = timestamps.find(stamp => stamp.active === "true");
                         return (
-                            <div className="project-item" key={sys_id}>
-                                <div className="client-name">{client}</div>
-                                <div className="project-title-container">
-                                    <div className="project-title">{short_description}</div>
-                                    <div className="project-start-stop-container">
-                                        {isToday(selectedDay) ? <x-esg-timer-button 
-                                            projectData={proj}
-                                            active={active}
-                                            start={latestActive ? latestActive.start_time : null}
-                                            loadFonts={false}
-                                            sysId={latestActive ? latestActive.sys_id : null}
-                                        /> : ''}
-
-                                    <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
-                                        {!editMode ? 
-                                            '' 
-                                            : 
-                                            <span 
-                                                className="material-symbols-rounded remove-project"
-                                                on-click={(e) => handleDeleteProject(e, proj)}
-                                            >
-                                                delete_forever
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
-                                <div className="project-notes">
-                                    {timestamps.map(stamp => {
-                                        const {note, start_time, end_time, active, sys_id} = stamp;                                     
-                                        const localTimes = {start: format(getUTCTime(start_time), 'HH:mm')}
-
-                                        localTimes.end = end_time ? format(getUTCTime(end_time), 'HH:mm') : 'now';
-                    
-                                        return (
-                                            <div className="remove-timestamp">
-                                                <div 
-                                                    className="timestamp-note"
-                                                    on-click={() => updateState({editableTimestamp: sys_id})}
-                                                >
-                                                    {editableTimestamp == sys_id ? 
-                                                        <span>
-                                                            <input 
-                                                                type="text"
-                                                                placeholder="What are you doing right now?"
-                                                                value={note}
-                                                                on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
-                                                                on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
-                                                                on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {note: e.target.value})}
-                                                            >{note}</input>
-                                                        </span> 
-                                                        : 
-                                                        <span>{note || '[Add note]'}</span>
-                                                    }
-
-                                                    {editableTimestamp == sys_id ?
-                                                        <span className="timestamp-times">
-                                                            <input 
-                                                                id="edit-time-start"
-                                                                type="time" 
-                                                                value={localTimes.start}
-                                                                on-blur={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)}, end_time)}
-                                                                on-keydown={(e)=> e.key === 'Enter' && e.target.blur()}
-                                                        />
-                                                        {end_time && <span> - </span>}
-                                                            {!end_time ? '' : 
-                                                                <input 
-                                                                    id="edit-time-end"
-                                                                    type="time" 
-                                                                    value={localTimes.end}
-                                                                    min={localTimes.start}
-                                                                    on-blur={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)}, start_time)}
-                                                                    on-keydown={(e)=> e.key === 'Enter' && e.target.blur()}
-                                                            />}
-                                                        </span>
-                                                        :
-                                                        <span className="timestamp-times">{localTimes.start} - {localTimes.end}</span>          
-                                                    }
-                                                    
-                                                </div>
-                                                {!editMode ? 
-                                                    ''
-                                                    :
-                                                    <span 
-                                                        className="remove-timestamp-icon material-symbols-outlined"
-                                                        on-click={(e)=> handleDeleteTimestamp(e, sys_id)}>
-                                                        disabled_by_default
-                                                    </span>
-                                                }
-                                                
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
+                            <DailyProject 
+                                proj={proj}
+                                editableTimestamp={editableTimestamp}
+                                editMode={editMode}
+                                selectedDay={selectedDay}
+                                projectMap={projectMap}
+                                dispatch={dispatch}
+                                updateState={updateState}
+                            />
                         );
                     })}
                 </div>

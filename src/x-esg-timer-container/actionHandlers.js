@@ -18,6 +18,7 @@ export default {
             sysparm_query: 'sys_user=javascript:gs.getUserID()'
         });
     },
+    'TIMER_CONTAINER#UPDATE_STATE': ({action, updateState}) =>  updateState(action.payload),
     'GET_CONSULTANT_ID': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],

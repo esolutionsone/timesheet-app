@@ -7,20 +7,18 @@
     margin: auto;
 
     .add-project-button {
+        @include flex-even-center;
         background-color: $button-color;
         border-style: none;
         outline-style: none;
         font-size: 16px;
-        display: flex;
         flex-direction: row;
-        align-items: center;
-        justify-content: space-evenly;
         color: white;
         width: 106px;
         height: 36px;
         margin-bottom: 23px;
         margin-right: 20px;
-        border-radius: 15px;
+        border-radius: $border-radius-default;
 
         &:hover {
             cursor: pointer;
@@ -28,19 +26,16 @@
     }
 
     .edit-button {
+        @include flex-even-center;
+        @include default-border;
         background-color: white;
-        border: 1px solid $border-primary;
         outline-style: none;
         font-size: 16px;
-        display: flex;
         flex-direction: row;
-        align-items: center;
-        justify-content: space-evenly;
         color: #A0AFC4;
         width: 106px;
         height: 36px;
         margin-bottom: 23px;
-        border-radius: 15px;
 
         &:hover {
             cursor: pointer;

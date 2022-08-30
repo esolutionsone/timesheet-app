@@ -1,27 +1,13 @@
 @import '@servicenow/sass-kit/host';
 @import '../../styles/variables.scss';
 
+// font classes
+@import './materialSymbols.scss';
+
 // Component/subcomponent modules;
 @import './outerButtons.scss';
 @import './todayContainer.scss';
-
-.material-symbols-outlined {
-    font-family: 'Material Symbols Outlined';
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 48
-}
-
-.material-symbols-rounded {
-    font-family: 'Material Symbols Rounded';
-    font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 48
-}
+@import './projectItem.scss';
 
 
 

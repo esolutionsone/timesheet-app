@@ -2,17 +2,45 @@
 $bg-primary: #FDFDFD; // Primary Background Color
 $border-primary: 1px solid #D6D6D6; // Primary Border config
 $color-secondary: rgba(160, 175, 196, 1);
-$button-color: #3178C6;
-$font-primary: 'Montserrat', sans-serif; // Primary Font
 $container-padding: .5rem;
 $item-padding: 18px 38px; // Standard Padding
+$border-radius-default: 15px; 
+
+// Fonts
+$font-primary: 'Montserrat', sans-serif; // Primary Font
+$font-size-large: 22px;
+$font-size-medium: 16px;
+$font-weight-bold: 700;
+$font-weight-regular: 400;
+
 //Inputs
 $input-padding: 3px;
 $input-border-radius: 8px;
+
+//Buttons
+$button-color: #3178C6;
 
 // Common Mixins
 @mixin flex-between-center {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+@mixin flex-even-center {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+@mixin default-border {
+    border-radius: $border-radius-default;
+    border: $border-primary;
+}
+
+@mixin input {
+    border-radius: $input-border-radius;
+    border: $border-primary;
+    font-family: $font-primary;
+    padding: $input-padding;
 }

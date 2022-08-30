@@ -1,11 +1,57 @@
 import {format, formatDistanceToNow, min} from 'date-fns';
 import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../../x-esg-timer-button/helpers';
 
-export const Timestamp = ({stamp}) => {
-    const {note, start_time, end_time, active, sys_id} = stamp;                                     
+export const Timestamp = ({ 
+                            stamp, 
+                            editableTimestamp, 
+                            editMode, 
+                            dispatch, 
+                            updateState }) => {
+
+    const {note, start_time, end_time, sys_id} = stamp;                                     
     const localTimes = {start: format(getUTCTime(start_time), 'HH:mm')}
 
     localTimes.end = end_time ? format(getUTCTime(end_time), 'HH:mm') : 'now';
+
+    const handleDeleteTimestamp = (e, sys_id) => {
+        e.preventDefault();
+        console.log('Timestamp to be deleted', sys_id);
+        if (confirm("Click OK to remove this timestamp") == true) {
+            dispatch('DELETE_PROJECT_TIMESTAMPS', {
+                tableName: properties.timestampTable,
+                id: sys_id,
+            });
+
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+        } 
+    }
+
+    const handleUpdateTimestamp = (sys_id, data, timeToCheck) => {
+        let timeNow = new Date();
+
+        if (data.end_time && (data.end_time < timeToCheck)) {
+            updateState({editableTimestamp: ''})
+            alert('End time cannot be earlier than start time.');
+            return 
+        } else if (data.start_time && timeToCheck && (data.start_time > timeToCheck)) {
+            updateState({editableTimestamp: ''})
+            alert('Start time cannot be later than end time.');
+            return
+        } 
+        else if (data.start_time && (data.start_time > toSnTime(timeNow))) {
+            updateState({editableTimestamp: ''})
+            alert('Start time cannot be later than current time.');
+            return
+        }
+
+        dispatch('UPDATE_TIMESTAMP', {
+            tableName: 'x_esg_one_delivery_timestamp',
+            sys_id,
+            data,
+        })
+        updateState({editableTimestamp: ''});
+    }
+
     return (
         <div className="remove-timestamp">
             <div 
@@ -16,7 +62,7 @@ export const Timestamp = ({stamp}) => {
                     <span>
                         <input 
                             type="text"
-                            placeholder="What are doing right now?"
+                            placeholder="What are you doing right now?"
                             value={note}
                             on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
                             on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
@@ -61,7 +107,6 @@ export const Timestamp = ({stamp}) => {
                     disabled_by_default
                 </span>
             }
-            
         </div>
     );
 }
