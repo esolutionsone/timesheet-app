@@ -4,7 +4,8 @@ import '@servicenow/now-icon';
 import {format, formatDistanceToNow, min} from 'date-fns';
 import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
-import { ProjectItem } from './components/Project';
+import { ProjectItem } from './components/DailyProject';
+import { Timestamp } from './components/Timestamp';
 import WebFont from 'webfontloader';
 
 export const view = (state, {dispatch, updateState}) => {
@@ -191,10 +192,55 @@ export const view = (state, {dispatch, updateState}) => {
                         </div>
                     </form>
                 </div>}
-                <ProjectItem 
-                    projectList={Array.from(projectMap.values())}
-                    state={state}
-                />
+                <div>
+                    {Array.from(projectMap.values()).map(proj => {
+                        const {
+                                client, 
+                                short_description, 
+                                sys_id, 
+                                active, 
+                                timestamps, 
+                                note
+                            } = proj;
+                        const latestActive = timestamps.find(stamp => stamp.active === "true");
+                        return (
+                            <div className="project-item" key={sys_id}>
+                                <div className="client-name">{client}</div>
+                                <div className="project-title-container">
+                                    <div className="project-title">{short_description}</div>
+                                    <div className="project-start-stop-container">
+                                        {<x-esg-timer-button 
+                                            projectData={proj}
+                                            active={active}
+                                            start={latestActive ? latestActive.start_time : null}
+                                            loadFonts={false}
+                                            sysId={latestActive ? latestActive.sys_id : null}
+                                        />}
+
+                                    <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
+                                        {!editMode ? 
+                                            '' 
+                                            : 
+                                            <span 
+                                                className="material-symbols-rounded remove-project"
+                                                on-click={(e) => handleDeleteProject(e, proj)}
+                                            >
+                                                delete_forever
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="project-notes">
+                                    {timestamps.map(stamp => {
+                                        <Timestamp
+                                            stamp={stamp} 
+                                        />
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         </Fragment>
     );

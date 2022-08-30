@@ -1,0 +1,201 @@
+@import '../../styles/variables.scss';
+
+.today-container {
+    box-sizing: border-box;
+    width: 80%;
+    background: $bg-primary;
+    border: $border-primary;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    margin: auto;
+
+    .today-header {
+        padding: $item-padding;
+        font-size: 22px;
+        display: flex;
+        justify-content: space-between;
+    
+        .title {
+            font-weight: 700;
+            margin-right: 50px;
+        }
+    }
+
+    .new-project-header {
+        padding: $item-padding;
+        color: $color-secondary;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .new-project-body {
+        padding: $item-padding;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .new-project-dropdown {
+            padding-left: 25px;
+            margin-bottom: 18px;
+            height: 53px;
+            width: 35%;
+            border-radius: 15px;
+            border: $border-primary;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .new-project-text-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+
+            .new-project-text {
+                height: 107px;
+                width: 60%;
+                border-radius: 15px;
+                border: $border-primary;
+                font-family: 'Montserrat', sans-serif;
+                padding: 10px;
+            }
+
+            .new-project-save-button {
+                background-color: $button-color;
+                border-style: none;
+                outline-style: none;
+                font-size: 16px;
+                color: white;
+                width: 106px;
+                height: 36px;
+                border-radius: 15px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .project-item {
+        padding: $item-padding;
+        font-weight: 700;
+        border-bottom: $border-primary;
+
+        &:first-child {
+            border-top: $border-primary;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .client-name {
+            font-size: 16px;
+            color: $color-secondary;
+        }
+
+        .project-title-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .project-title {
+                font-size: 20px;
+                padding-bottom: 8px;
+                padding-top: 8px;
+            }
+
+            .project-start-stop-container {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+
+                .roundedTime-input-box{
+                    max-width: 50px;
+                    border-radius: $input-border-radius;
+                    border: $border-primary;
+                    padding-left: $input-padding;
+                    font-family: 'Montserrat', sans-serif;
+                }
+
+                .remove-project {
+                    position: relative;
+                    left: 100px;
+                    color: red;
+                    font-size: x-large;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .project-notes {
+            font-weight: 500;
+            font-size: 16px;
+            color: $color-secondary;
+            // height: 1.5rem;
+
+            .edit-project-text {
+                height: 107px;
+                width: 60%;
+                border-radius: 15px;
+                border: $border-primary;
+                font-family: 'Montserrat', sans-serif;
+                padding: 10px;
+            }
+
+            .remove-timestamp {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .remove-timestamp-icon {
+                    color: red;
+                }
+            }
+
+            .timestamp-note {
+                margin-top: 5px;
+                margin-bottom: 5px;
+                margin-right: 5px;
+                border-bottom: 1px solid $border-primary;
+                padding-bottom: 5px;
+                width: 60%;
+                display: grid;
+                grid-template-columns: 4fr 4fr;
+
+                .timestamp-times {
+                    text-align: end;
+                }
+
+                input {
+                    width: 90%;
+                    border: $border-primary;
+                    padding: $input-padding;
+                    border-radius: $input-border-radius;
+                    font-family: 'Montserrat', sans-serif;
+                }
+
+                input[type="time"] {
+                    width: 7rem;
+                    font-family: 'Montserrat', sans-serif;
+                    margin: auto;
+                    border-radius: $input-border-radius;
+                    border: $border-primary;
+                    padding: $input-padding
+                }
+            }
+        }
+    }
+
+    .project-time {
+        font-weight: 700;
+        font-size: 22px;
+        margin-left: 29px;
+    }
+}
