@@ -1,0 +1,18 @@
+// General Styles
+$bg-primary: #FDFDFD; // Primary Background Color
+$border-primary: 1px solid #D6D6D6; // Primary Border config
+$color-secondary: rgba(160, 175, 196, 1);
+$button-color: #3178C6;
+$font-primary: 'Montserrat', sans-serif; // Primary Font
+$container-padding: .5rem;
+$item-padding: 18px 38px; // Standard Padding
+//Inputs
+$input-padding: 3px;
+$input-border-radius: 8px;
+
+// Common Mixins
+@mixin flex-between-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

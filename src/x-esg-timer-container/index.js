@@ -2,7 +2,7 @@ import {createCustomElement} from '@servicenow/ui-core';
 import {snabbdom} from '@servicenow/ui-renderer-snabbdom';
 import {view} from './view';
 import actionHandlers from './actionHandlers';
-import styles from './styles.scss';
+import styles from './styles/styles.scss';
 
 import WebFont from 'webfontloader';
 
