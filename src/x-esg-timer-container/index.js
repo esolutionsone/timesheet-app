@@ -1,6 +1,7 @@
 import {createCustomElement} from '@servicenow/ui-core';
 import {snabbdom} from '@servicenow/ui-renderer-snabbdom';
 import {view} from './view';
+import { toSnTime } from '../x-esg-timer-button/helpers';
 import actionHandlers from './actionHandlers';
 import styles from './styles/styles.scss';
 
@@ -27,6 +28,7 @@ createCustomElement('x-esg-timer-container', {
 		addProjectStatus: false,
 		editMode: false,
 		editableTimestamp: '',
+		selectedDay: new Date(),
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},

@@ -39,6 +39,10 @@ props = {
 ## Stuff we learned
 - When setting dates in business rules, use .getDisplayValue() instead of .getValue(). On the server side, SN will adjust any times sent or received to a user who has a specified time zone, so when inputting dates, .getDisplayValue() will correspond to the correct UTC time.
 
+## Errors
+- Cannot create property 'elm' on boolean 'false' at createElm
+    - While we can use short circuits in jsx, we can't use them to wipe out an entire element. Instead, use a ternary (I guess so there's something to replace it with on the VDOM, even if it's just a string?)
+
 ## Issues
 
 - [ ] Starting and stopping timers needs additional work and planning

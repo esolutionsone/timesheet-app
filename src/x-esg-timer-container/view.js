@@ -1,8 +1,8 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
-import {format, formatDistanceToNow, min} from 'date-fns';
-import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../x-esg-timer-button/helpers';
+import {format, formatDistanceToNow, isToday} from 'date-fns';
+import { msToString, hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import { ProjectItem } from './components/DailyProject';
 import { Timestamp } from './components/Timestamp';
@@ -31,6 +31,7 @@ export const view = (state, {dispatch, updateState}) => {
         editMode,
         properties,
         editableTimestamp,
+        selectedDay,
     } = state;
     
     // Combine Generic projects and user-specific projects,
@@ -38,8 +39,6 @@ export const view = (state, {dispatch, updateState}) => {
     const allProjects = [...genericProjects, ...projects].filter(proj => {
         return !projectMap.has(proj.sys_id)
     });
-
-    const d = new Date();
 
     const handleSave = (e) => {
         e.preventDefault();
@@ -82,7 +81,7 @@ export const view = (state, {dispatch, updateState}) => {
                 });
             });
 
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(selectedDay)));
         } 
     }
 
@@ -125,10 +124,33 @@ export const view = (state, {dispatch, updateState}) => {
         updateState({editableTimestamp: ''});
     }
 
-    let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
+    /**
+     * Increments state.selectedDay 1 day forward or backward
+     * @param {bool} forward 
+     */
+    const incrementDate = (forward) => {
+        // Calculate 1 day forward/backward
+        let increment = 24 * 60 * 60 * 1000 * (forward ? 1: -1);
+
+        let d = new Date(selectedDay.getTime() + increment)
+        updateState({selectedDay: d});
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(d)
+            )
+        );
+    }
+
+    // Calculate the total rounded time from the timestamps in projectMap
+    let totalTime = Array.from(projectMap.values())
+        .reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
 
-    console.log('CURRENT STATE -', state);
+    // Determine message for today-header
+    let howLongAgo = "Today";
+    const dayStart = new Date().setHours(0,0,0,0);
+    if(selectedDay < dayStart){
+        howLongAgo = formatDistanceToNow(selectedDay) + ' ago';
+    }
 
     return (
         <Fragment>
@@ -154,11 +176,23 @@ export const view = (state, {dispatch, updateState}) => {
             </div>
             <div className="today-container">
                 <div className="today-header">
-                    <div>
-                        <span className="title">Today</span>
-                        <span>{format(d, 'E MMM d, Y')}</span>
-                    </div>
-                    <div>
+                        <span className="title">{howLongAgo}</span>
+                        <span className="header-date">
+                            <span className="material-symbols-outlined date-chevron"
+                                on-click={() => incrementDate(false)}>
+                                chevron_left
+                            </span>
+                            <span>{format(selectedDay, 'E MMM d, Y')}</span>
+                            <span className={`material-symbols-outlined 
+                                    date-chevron 
+                                    ${isToday(selectedDay) && 'disabled'}`
+                                }
+                                on-click={() => !isToday(selectedDay) && incrementDate(true)}
+                            >
+                                chevron_right
+                            </span>
+                        </span>
+                    <div className="today-total">
                         <span>Total </span>
                         <span className="project-time"> {totalTime}</span>
                     </div>
@@ -209,13 +243,13 @@ export const view = (state, {dispatch, updateState}) => {
                                 <div className="project-title-container">
                                     <div className="project-title">{short_description}</div>
                                     <div className="project-start-stop-container">
-                                        {<x-esg-timer-button 
+                                        {isToday(selectedDay) ? <x-esg-timer-button 
                                             projectData={proj}
                                             active={active}
                                             start={latestActive ? latestActive.start_time : null}
                                             loadFonts={false}
                                             sysId={latestActive ? latestActive.sys_id : null}
-                                        />}
+                                        /> : ''}
 
                                     <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                                         {!editMode ? 
@@ -232,9 +266,69 @@ export const view = (state, {dispatch, updateState}) => {
                                 </div>
                                 <div className="project-notes">
                                     {timestamps.map(stamp => {
-                                        <Timestamp
-                                            stamp={stamp} 
-                                        />
+                                        const {note, start_time, end_time, active, sys_id} = stamp;                                     
+                                        const localTimes = {start: format(getUTCTime(start_time), 'HH:mm')}
+
+                                        localTimes.end = end_time ? format(getUTCTime(end_time), 'HH:mm') : 'now';
+                    
+                                        return (
+                                            <div className="remove-timestamp">
+                                                <div 
+                                                    className="timestamp-note"
+                                                    on-click={() => updateState({editableTimestamp: sys_id})}
+                                                >
+                                                    {editableTimestamp == sys_id ? 
+                                                        <span>
+                                                            <input 
+                                                                type="text"
+                                                                placeholder="What are you doing right now?"
+                                                                value={note}
+                                                                on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                                on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                                on-keydown={(e)=> e.key === 'Enter' && handleUpdateTimestamp(sys_id, {note: e.target.value})}
+                                                            >{note}</input>
+                                                        </span> 
+                                                        : 
+                                                        <span>{note || '[Add note]'}</span>
+                                                    }
+
+                                                    {editableTimestamp == sys_id ?
+                                                        <span className="timestamp-times">
+                                                            <input 
+                                                                id="edit-time-start"
+                                                                type="time" 
+                                                                value={localTimes.start}
+                                                                on-blur={(e)=>handleUpdateTimestamp(sys_id, {start_time: hhmmToSnTime(e.target.value)}, end_time)}
+                                                                on-keydown={(e)=> e.key === 'Enter' && e.target.blur()}
+                                                        />
+                                                        {end_time && <span> - </span>}
+                                                            {!end_time ? '' : 
+                                                                <input 
+                                                                    id="edit-time-end"
+                                                                    type="time" 
+                                                                    value={localTimes.end}
+                                                                    min={localTimes.start}
+                                                                    on-blur={(e)=>handleUpdateTimestamp(sys_id, {end_time: hhmmToSnTime(e.target.value)}, start_time)}
+                                                                    on-keydown={(e)=> e.key === 'Enter' && e.target.blur()}
+                                                            />}
+                                                        </span>
+                                                        :
+                                                        <span className="timestamp-times">{localTimes.start} - {localTimes.end}</span>          
+                                                    }
+                                                    
+                                                </div>
+                                                {!editMode ? 
+                                                    ''
+                                                    :
+                                                    <span 
+                                                        className="remove-timestamp-icon material-symbols-outlined"
+                                                        on-click={(e)=> handleDeleteTimestamp(e, sys_id)}>
+                                                        disabled_by_default
+                                                    </span>
+                                                }
+                                                
+                                            </div>
+                                        );
                                     })}
                                 </div>
                             </div>
