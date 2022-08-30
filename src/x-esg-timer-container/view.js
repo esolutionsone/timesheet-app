@@ -4,7 +4,7 @@ import '@servicenow/now-icon';
 import {format, formatDistanceToNow, min} from 'date-fns';
 import { msToString, hhmmToSnTime, getUTCTime, toSnTime } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
-import { ProjectItem } from './components/ProjectItem';
+import { ProjectItem } from './components/Project';
 import WebFont from 'webfontloader';
 
 export const view = (state, {dispatch, updateState}) => {
