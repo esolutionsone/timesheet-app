@@ -147,12 +147,10 @@ export const view = (state, {dispatch, updateState}) => {
     totalTime = msToString(totalTime);
 
     // Determine message for today-header
-    let howLongAgo;
+    let howLongAgo = "Today";
     const dayStart = new Date().setHours(0,0,0,0);
     if(selectedDay < dayStart){
         howLongAgo = formatDistanceToNow(selectedDay) + ' ago';
-    }else{
-        howLongAgo = "Today";
     }
 
     return (
