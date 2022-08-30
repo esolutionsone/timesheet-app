@@ -1,7 +1,7 @@
 import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-button';
 import '@servicenow/now-icon';
-import {format, formatDistanceToNow, min} from 'date-fns';
+import {format, formatDistanceToNow, isToday} from 'date-fns';
 import { msToString, hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../x-esg-timer-button/helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
 import WebFont from 'webfontloader';
@@ -37,8 +37,6 @@ export const view = (state, {dispatch, updateState}) => {
     const allProjects = [...genericProjects, ...projects].filter(proj => {
         return !projectMap.has(proj.sys_id)
     });
-
-    const d = new Date();
 
     const handleSave = (e) => {
         e.preventDefault();
@@ -129,11 +127,10 @@ export const view = (state, {dispatch, updateState}) => {
      * @param {bool} forward 
      */
     const incrementDate = (forward) => {
-        console.log('running increment date')
+        // Calculate 1 day forward/backward
         let increment = 24 * 60 * 60 * 1000 * (forward ? 1: -1);
-        console.log(increment);
+
         let d = new Date(selectedDay.getTime() + increment)
-        console.log(d);
         updateState({selectedDay: d});
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(d)
@@ -186,9 +183,9 @@ export const view = (state, {dispatch, updateState}) => {
                             <span>{format(selectedDay, 'E MMM d, Y')}</span>
                             <span className={`material-symbols-outlined 
                                     date-chevron 
-                                    ${howLongAgo == "Today" && 'disabled'}`
+                                    ${isToday(selectedDay) && 'disabled'}`
                                 }
-                                on-click={() => howLongAgo !== "Today" && incrementDate(true)}
+                                on-click={() => !isToday(selectedDay) && incrementDate(true)}
                             >
                                 chevron_right
                             </span>
@@ -244,13 +241,13 @@ export const view = (state, {dispatch, updateState}) => {
                                 <div className="project-title-container">
                                     <div className="project-title">{short_description}</div>
                                     <div className="project-start-stop-container">
-                                        {<x-esg-timer-button 
+                                        {isToday(selectedDay) ? <x-esg-timer-button 
                                             projectData={proj}
                                             active={active}
                                             start={latestActive ? latestActive.start_time : null}
                                             loadFonts={false}
                                             sysId={latestActive ? latestActive.sys_id : null}
-                                        />}
+                                        /> : ''}
 
                                     <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                                         {!editMode ? 
@@ -282,7 +279,7 @@ export const view = (state, {dispatch, updateState}) => {
                                                         <span>
                                                             <input 
                                                                 type="text"
-                                                                placeholder="What are doing right now?"
+                                                                placeholder="What are you doing right now?"
                                                                 value={note}
                                                                 on-change={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
                                                                 on-blur={(e)=>handleUpdateTimestamp(sys_id, {note: e.target.value})}
