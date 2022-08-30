@@ -124,6 +124,10 @@ export const view = (state, {dispatch, updateState}) => {
         updateState({editableTimestamp: ''});
     }
 
+    /**
+     * Increments state.selectedDay 1 day forward or backward
+     * @param {bool} forward 
+     */
     const incrementDate = (forward) => {
         console.log('running increment date')
         let increment = 24 * 60 * 60 * 1000 * (forward ? 1: -1);
@@ -137,9 +141,12 @@ export const view = (state, {dispatch, updateState}) => {
         );
     }
 
-    let totalTime = Array.from(projectMap.values()).reduce((sum, val) => sum += val.totalRoundedTime, 0);
+    // Calculate the total rounded time from the timestamps in projectMap
+    let totalTime = Array.from(projectMap.values())
+        .reduce((sum, val) => sum += val.totalRoundedTime, 0);
     totalTime = msToString(totalTime);
 
+    // Determine message for today-header
     let howLongAgo;
     const dayStart = new Date().setHours(0,0,0,0);
     if(selectedDay < dayStart){
@@ -147,7 +154,6 @@ export const view = (state, {dispatch, updateState}) => {
     }else{
         howLongAgo = "Today";
     }
-    console.log('howlongago:', howLongAgo)
 
     return (
         <Fragment>
