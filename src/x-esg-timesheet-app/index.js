@@ -3,6 +3,7 @@ import {snabbdom} from '@servicenow/ui-renderer-snabbdom';
 import '../x-esg-timer-container';
 import WebFont from 'webfontloader';
 import actionHandlers from './actionHandlers';
+import '../x-esg-week-view';
 
 const view = (state) => {
 	const {consultantId} = state;
@@ -22,14 +23,22 @@ const view = (state) => {
 		return <div>Loading...</div>
 	}
 
-	console.log('consultantId exists')
-	return <div>
-		<x-esg-timer-container
-			timestampTable={timestampTable}
-			timeEntryTable={timeEntryTable}
-			consultantId={consultantId}
-		></x-esg-timer-container>
-	</div>
+	switch(state.location){
+		case 'day':
+			return <x-esg-timer-container
+				timestampTable={timestampTable}
+					timeEntryTable={timeEntryTable}
+					consultantId={consultantId}
+				></x-esg-timer-container>;
+		case 'week':
+			return <x-esg-week-view 
+					timestampTable={timestampTable}
+					timeEntryTable={timeEntryTable}
+					consultantId={consultantId}
+				></x-esg-week-view>
+	}
+
+	return <div>Error in router</div>
 }
 
 createCustomElement('x-esg-timesheet-app', {
@@ -37,6 +46,7 @@ createCustomElement('x-esg-timesheet-app', {
 	view,
 	initialState: {
 		consultantId: '',
+		location: 'day',
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
