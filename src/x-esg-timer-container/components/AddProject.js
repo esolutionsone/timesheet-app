@@ -4,9 +4,11 @@ export const AddProject = ({
                                 selectedProject, 
                                 entryNotes, 
                                 genericProjects, 
-                                properties, 
                                 projectMap,
                                 updateState,
+                                consultantId,
+                                timeEntryTable,
+                                timestampTable,
                                 dispatch }) => {
 
      // Combine Generic projects and user-specific projects,
@@ -26,8 +28,7 @@ export const AddProject = ({
                     consultant: consultantId,
                     note: entryNotes,
                 },
-                // tableName: 'x_esg_one_delivery_time_entry',
-                tableName: properties.timeEntryTable,
+                tableName: timeEntryTable,
             });
             dispatch('INSERT_TIMESTAMP', {
                 data: { 
@@ -35,8 +36,7 @@ export const AddProject = ({
                     project: selectedProject,
                     note: entryNotes,
                 },
-                // tableName: 'x_esg_one_delivery_timestamp',
-                tableName: properties.timestampTable,
+                tableName: timestampTable,
             });
         }
     }

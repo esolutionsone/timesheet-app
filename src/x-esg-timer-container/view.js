@@ -31,6 +31,7 @@ export const view = (state, {dispatch, updateState}) => {
         editableTimestamp,
         selectedDay,
     } = state;
+    const {timeEntryTable, timestampTable } = properties;
 
     return (
         <Fragment>
@@ -66,7 +67,9 @@ export const view = (state, {dispatch, updateState}) => {
                     selectedProject={selectedProject}
                     entryNotes={entryNotes}
                     genericProjects={genericProjects}
-                    properties={properties}
+                    timeEntryTable={timeEntryTable}
+                    timestampTable={timestampTable}
+                    consultantId={consultantId}
                     projectMap={projectMap}
                     dispatch={dispatch}
                     updateState={updateState}
