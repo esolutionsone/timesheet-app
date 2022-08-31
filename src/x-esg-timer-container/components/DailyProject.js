@@ -1,7 +1,7 @@
 import { msToString, hhmmToSnTime } from '../../x-esg-timer-button/helpers';
-import { Timestamp } from './Timestamp';
 import { isToday } from 'date-fns';
 import '../../x-esg-timer-button';
+// import '../../Project';
 
 export const DailyProject = ({
                                 proj,
@@ -10,7 +10,8 @@ export const DailyProject = ({
                                 selectedDay, 
                                 projectMap, 
                                 dispatch, 
-                                updateState }) => {
+                                timestampTable,
+                                consultantId }) => {
     const {
         client, 
         short_description, 
@@ -25,7 +26,7 @@ export const DailyProject = ({
         if (confirm("Click OK to remove this project") == true) {
             projectToBeDeleted.timestamps.forEach(timestamp => {
                 dispatch('DELETE_PROJECT_TIMESTAMPS', {
-                    tableName: properties.timestampTable,
+                    tableName: timestampTable,
                     id: timestamp.sys_id,
                 });
             });
@@ -61,19 +62,13 @@ export const DailyProject = ({
                     }
                 </div>
             </div>
-            <div className="project-notes">
-                {timestamps.map(stamp => {
-                    return (
-                        <Timestamp 
-                            stamp={stamp}
-                            editableTimestamp={editableTimestamp}
-                            editMode={editMode}
-                            dispatch={dispatch}
-                            updateState={updateState}
-                        />
-                    );
-                })}
-            </div>
+            <timestamp-list 
+                editableTimestamp={editableTimestamp}
+                editMode={editMode}
+                timestamps={timestamps}
+                timestampTable={timestampTable}
+                consultantId={consultantId}
+            />
         </div>
     );
 }

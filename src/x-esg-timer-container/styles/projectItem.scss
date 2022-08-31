@@ -49,57 +49,6 @@
             }
         }
     }
-
-    .project-notes {
-        font-weight: 500;
-        font-size: $font-size-medium;
-        color: $color-secondary;
-        // height: 1.5rem;
-
-        .edit-project-text {
-            @include default-border;
-            height: 107px;
-            width: 60%;
-            font-family: $font-primary;
-            padding: 10px;
-        }
-
-        .remove-timestamp {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-
-            .remove-timestamp-icon {
-                color: red;
-            }
-        }
-
-        .timestamp-note {
-            margin-top: 5px;
-            margin-bottom: 5px;
-            margin-right: 5px;
-            border-bottom: $border-primary;
-            padding-bottom: 5px;
-            width: 60%;
-            display: grid;
-            grid-template-columns: 4fr 4fr;
-
-            .timestamp-times {
-                text-align: end;
-            }
-
-            input {
-                @include input;
-                width: 90%;
-            }
-
-            input[type="time"] {
-                @include input;
-                width: 7rem;
-                margin: auto;
-            }
-        }
-    }
 }
 
 .project-time {
