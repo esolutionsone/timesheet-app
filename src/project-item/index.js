@@ -21,25 +21,25 @@ const view = (state, { dispatch, updateState}) => {
         }
     })
 
-	const { properties } = state;
+	const { properties, showDetail } = state;
 	const {
-		editMode,
-		timestampTable,
-		consultantId,
-		editableTimestamp,
-		proj,
-		projectMap,
-		selectedDay,
+            editMode,
+            timestampTable,
+            consultantId,
+            editableTimestamp,
+            proj,
+            projectMap,
+            selectedDay,
 
-	} = properties;
+        } = properties;
 
 	const {
-        client, 
-        short_description, 
-        sys_id, 
-        active, 
-        timestamps
-    } = proj;
+            client, 
+            short_description, 
+            sys_id, 
+            active, 
+            timestamps
+        } = proj;
 
 	const latestActive = timestamps.find(stamp => stamp.active === "true");
 
@@ -63,16 +63,34 @@ const view = (state, { dispatch, updateState}) => {
 		<div className="project-item" key={sys_id}>
             <div className="client-name">{client}</div>
             <div className="project-title-container">
-                <div className="project-title">{short_description}</div>
+                <div className="project-title">{short_description} 
+                    {showDetail ? 
+                        <span 
+                            className="material-symbols-outlined details-icon" 
+                            on-click={() => {updateState({showDetail: !showDetail})}}
+                        >
+                                expand_less
+                        </span>
+                        :
+                        <span 
+                            className="material-symbols-outlined details-icon" 
+                            on-click={() => {updateState({showDetail: !showDetail})}}
+                        >
+                                expand_more
+                        </span>}
+                </div>
                 <div className="project-start-stop-container">
-                    {isToday(selectedDay) ? <x-esg-timer-button 
-                        projectData={proj}
-                        active={active}
-                        start={latestActive ? latestActive.start_time : null}
-                        loadFonts={false}
-                        sysId={latestActive ? latestActive.sys_id : null}
-                    /> : ''}
-
+                    {isToday(selectedDay) ? 
+                        <x-esg-timer-button 
+                            projectData={proj}
+                            active={active}
+                            start={latestActive ? latestActive.start_time : null}
+                            loadFonts={false}
+                            sysId={latestActive ? latestActive.sys_id : null}
+                        /> 
+                        : 
+                        ''
+                    }
                 <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
                     {!editMode ? 
                         '' 
@@ -86,23 +104,24 @@ const view = (state, { dispatch, updateState}) => {
                     }
                 </div>
             </div>
-
-			<div className="project-notes">
-				{timestamps.map(stamp => {
-					return (
-						<Timestamp 
-							stamp={stamp}
-							editableTimestamp={editableTimestamp}
-							editMode={editMode}
-							dispatch={dispatch}
-							updateState={updateState}
-							timestampTable={timestampTable}
-							consultantId={consultantId}
+            <div className="project-notes">
+                {timestamps.map((stamp, i) => {
+                    if (!showDetail && active && (i > 0)) return
+                    if (!showDetail && !active) return
+                    return (
+                        <Timestamp 
+                            stamp={stamp}
+                            editableTimestamp={editableTimestamp}
+                            editMode={editMode}
+                            dispatch={dispatch}
+                            updateState={updateState}
+                            timestampTable={timestampTable}
+                            consultantId={consultantId}
                             selectedDay={selectedDay}
-						/>
-					);
-				})}
-			</div>
+                        />
+                    );
+                })}
+            </div> 
 		</div>
 	);
 }
