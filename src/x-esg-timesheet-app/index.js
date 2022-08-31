@@ -4,9 +4,14 @@ import '../x-esg-timer-container';
 import WebFont from 'webfontloader';
 import actionHandlers from './actionHandlers';
 import '../x-esg-week-view';
+import styles from './styles.scss';
 
-const view = (state) => {
-	const {consultantId} = state;
+const view = (state, {updateState}) => {
+	const {
+		consultantId, 
+		addProjectStatus,
+		editMode
+	} = state;
 	const {timestampTable, timeEntryTable} = state.properties;
 	// Load Custom Fonts
 	WebFont.load({
@@ -23,30 +28,66 @@ const view = (state) => {
 		return <div>Loading...</div>
 	}
 
+	// Router
+	let jsx;
 	switch(state.location){
 		case 'day':
-			return <x-esg-timer-container
-				timestampTable={timestampTable}
-					timeEntryTable={timeEntryTable}
-					consultantId={consultantId}
-				></x-esg-timer-container>;
-		case 'week':
-			return <x-esg-week-view 
+			jsx = <x-esg-timer-container
 					timestampTable={timestampTable}
 					timeEntryTable={timeEntryTable}
 					consultantId={consultantId}
+					addProjectStatus={addProjectStatus}
+					editMode={editMode}
+				></x-esg-timer-container>;
+			break;
+		case 'week':
+			jsx = <x-esg-week-view 
+					timestampTable={timestampTable}
+					timeEntryTable={timeEntryTable}
+					consultantId={consultantId}
+					addProjectStatus={addProjectStatus}
+					editMode={editMode}
 				></x-esg-week-view>
+			break;
+		default:
+			jsx = <div>Error: route not found</div>
 	}
 
-	return <div>Error in router</div>
+	return (
+		<div>
+			    <div className="outer-buttons">
+                <button 
+                    className="add-project-button"
+                    on-click={()=>updateState({
+                                    addProjectStatus: !addProjectStatus, 
+                                    editMode: false
+                                })
+                            }>
+                        <span className="material-symbols-outlined">add</span>
+                        Project
+                </button>
+                <button 
+                    className="edit-button"
+                    on-click={()=>updateState({editMode: !editMode})}>
+                        <span className="material-symbols-outlined">edit_square</span>
+                        Edit
+                </button>
+            </div>
+			{jsx}
+		</div>
+		
+	)
 }
 
 createCustomElement('x-esg-timesheet-app', {
 	renderer: {type: snabbdom},
 	view,
+	styles,
 	initialState: {
 		consultantId: '',
-		location: 'day',
+		location: 'week',
+		addProjectStatus: false,
+		editMode: false,
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},

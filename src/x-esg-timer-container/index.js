@@ -25,6 +25,8 @@ createCustomElement('x-esg-timer-container', {
 		consultantId: {default: ''},
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
 		timeEntryTable: {default: "x_esg_one_delivery_time_entry"},
+		addProjectStatus: {default: false},
+		editMode: {default: false}
 	},
 	actionHandlers,
 });
