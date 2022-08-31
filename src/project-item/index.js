@@ -96,10 +96,10 @@ const view = (state, { dispatch, updateState}) => {
                     }
                 </div>
             </div>
-            <div className="project-notes">
+            <div className={`project-notes ${!showDetail && "close-notes"}`}>
                 {timestamps.map((stamp, i) => {
                     if (!showDetail && active && (i > 0)) return
-                    if (!showDetail && !active) return
+                    // if (!showDetail && !active) return
                     return (
                         <Timestamp 
                             stamp={stamp}

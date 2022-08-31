@@ -24,7 +24,7 @@
         }
         
         .details-icon{
-            transition: .3s transform ease-in-out;
+            transition: .2s transform ease-in-out;
 
             &:hover{
                 cursor: pointer;
@@ -70,7 +70,14 @@
         font-weight: 500;
         font-size: $font-size-medium;
         color: $color-secondary;
+        max-height: 1000px;
+        transition: .3s max-height;
+        overflow: hidden;
         // height: 1.5rem;
+
+        &.close-notes {
+            max-height: 0px;
+        }
     
         .edit-project-text {
             @include default-border;

@@ -27,6 +27,7 @@ export default {
             })
         }
     },
+    'TIMER_CONTAINER#UPDATE_STATE': ({action, updateState}) => {updateState(action.payload)},
     'NEW_ENTRY': createHttpEffect('api/now/table/:tableName', {
         method: 'POST',
         pathParams: ['tableName'],
