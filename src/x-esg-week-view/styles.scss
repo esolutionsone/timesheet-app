@@ -1,0 +1,11 @@
+@import '../styles/variables.scss';
+@import '../styles/materialSymbols.scss';
+
+.week-container {
+    @include default-border;
+    box-sizing: border-box;
+    width: 80%;
+    background: $bg-primary;
+    font-family: $font-primary;
+    margin: auto;
+}
