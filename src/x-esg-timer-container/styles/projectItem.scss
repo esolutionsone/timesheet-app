@@ -1,58 +1,58 @@
-@import '../../styles/variables.scss';
+// @import '../../styles/variables.scss';
 
-.project-item {
-    padding: $item-padding;
-    font-weight: $font-weight-bold;
-    border-bottom: $border-primary;
+// .project-item {
+//     padding: $item-padding;
+//     font-weight: $font-weight-bold;
+//     border-bottom: $border-primary;
 
-    &:first-child {
-        border-top: $border-primary;
-    }
+//     &:first-child {
+//         border-top: $border-primary;
+//     }
 
-    &:last-child {
-        border-bottom: none;
-    }
+//     &:last-child {
+//         border-bottom: none;
+//     }
 
-    .client-name {
-        font-size: $font-size-medium;
-        color: $color-secondary;
-    }
+//     .client-name {
+//         font-size: $font-size-medium;
+//         color: $color-secondary;
+//     }
 
-    .project-title-container {
-        @include flex-between-center;
-        flex-direction: row;
+//     .project-title-container {
+//         @include flex-between-center;
+//         flex-direction: row;
 
-        .project-title {
-            font-size: 20px;
-            padding-bottom: 8px;
-            padding-top: 8px;
-        }
+//         .project-title {
+//             font-size: 20px;
+//             padding-bottom: 8px;
+//             padding-top: 8px;
+//         }
 
-        .project-start-stop-container {
-            @include flex-between-center;
-            flex-direction: row;
+//         .project-start-stop-container {
+//             @include flex-between-center;
+//             flex-direction: row;
 
-            .roundedTime-input-box{
-                @include input;
-                max-width: 50px;
-            }
+//             .roundedTime-input-box{
+//                 @include input;
+//                 max-width: 50px;
+//             }
 
-            .remove-project {
-                position: relative;
-                left: 100px;
-                color: red;
-                font-size: x-large;
+//             .remove-project {
+//                 position: relative;
+//                 left: 100px;
+//                 color: red;
+//                 font-size: x-large;
 
-                &:hover {
-                    cursor: pointer;
-                }
-            }
-        }
-    }
-}
+//                 &:hover {
+//                     cursor: pointer;
+//                 }
+//             }
+//         }
+//     }
+// }
 
-.project-time {
-    font-weight: $font-weight-bold;
-    font-size: $font-size-large;
-    margin-left: 29px;
-}
+// .project-time {
+//     font-weight: $font-weight-bold;
+//     font-size: $font-size-large;
+//     margin-left: 29px;
+// }

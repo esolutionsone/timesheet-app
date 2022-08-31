@@ -9,7 +9,7 @@ export const Timestamp = ({
                             dispatch,
                             timestampTable,
                             consultantId,
-                            selectedDay }) => {
+                            selectedDay}) => {
 
     const {note, start_time, end_time, sys_id} = stamp;                                     
     const localTimes = {start: format(getUTCTime(start_time), 'HH:mm')}
