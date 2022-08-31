@@ -75,6 +75,7 @@ export const view = (state, {dispatch, updateState}) => {
                     {Array.from(projectMap.values()).map(proj => {
                         return (
                             <DailyProject 
+                                timestampTable={properties.timestampTable}
                                 proj={proj}
                                 editableTimestamp={editableTimestamp}
                                 editMode={editMode}
@@ -82,6 +83,7 @@ export const view = (state, {dispatch, updateState}) => {
                                 projectMap={projectMap}
                                 dispatch={dispatch}
                                 updateState={updateState}
+                                consultantId={consultantId}
                             />
                         );
                     })}

@@ -1,4 +1,5 @@
 import { hhmmToSnTime, getUTCTime, toSnTime } from '../../x-esg-timer-button/helpers';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
 import { format } from 'date-fns';
 
 export const Timestamp = ({ 
@@ -6,7 +7,8 @@ export const Timestamp = ({
                             editableTimestamp, 
                             editMode, 
                             dispatch, 
-                            updateState }) => {
+                            updateState,
+                            timestampTable }) => {
 
     const {note, start_time, end_time, sys_id} = stamp;                                     
     const localTimes = {start: format(getUTCTime(start_time), 'HH:mm')}
@@ -18,7 +20,7 @@ export const Timestamp = ({
         console.log('Timestamp to be deleted', sys_id);
         if (confirm("Click OK to remove this timestamp") == true) {
             dispatch('DELETE_PROJECT_TIMESTAMPS', {
-                tableName: properties.timestampTable,
+                tableName: timestampTable,
                 id: sys_id,
             });
 
