@@ -26,6 +26,7 @@ createCustomElement('x-esg-timer-container', {
 		projectMap: new Map(),
 		addProjectStatus: false,
 		editMode: false,
+		showNotes: true,
 		editableTimestamp: '',
 		selectedDay: new Date(),
 	},

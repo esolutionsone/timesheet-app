@@ -1,7 +1,7 @@
 import { msToString, hhmmToSnTime } from '../../x-esg-timer-button/helpers';
-import '../../timestamp-list';
 import { isToday } from 'date-fns';
 import '../../x-esg-timer-button';
+// import '../../Project';
 
 export const DailyProject = ({
                                 proj,
