@@ -64,20 +64,12 @@ const view = (state, { dispatch, updateState}) => {
             <div className="client-name">{client}</div>
             <div className="project-title-container">
                 <div className="project-title">{short_description} 
-                    {showDetail ? 
-                        <span 
-                            className="material-symbols-outlined details-icon" 
-                            on-click={() => {updateState({showDetail: !showDetail})}}
-                        >
-                                expand_less
-                        </span>
-                        :
-                        <span 
-                            className="material-symbols-outlined details-icon" 
-                            on-click={() => {updateState({showDetail: !showDetail})}}
-                        >
-                                expand_more
-                        </span>}
+                    <span 
+                        className={`material-symbols-outlined details-icon ${showDetail && 'details-icon-down'}`} 
+                        on-click={() => {updateState({showDetail: !showDetail})}}
+                    >
+                            expand_less
+                    </span>
                 </div>
                 <div className="project-start-stop-container">
                     {isToday(selectedDay) ? 

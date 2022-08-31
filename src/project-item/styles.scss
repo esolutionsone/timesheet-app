@@ -24,6 +24,17 @@
         }
         
         .details-icon{
+            transition: .3s transform ease-in-out;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        .details-icon-down{
+
+            transform: rotate(180deg) ;
+
             &:hover{
                 cursor: pointer;
             }
