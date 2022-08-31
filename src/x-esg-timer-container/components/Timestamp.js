@@ -1,5 +1,5 @@
-import { hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../../x-esg-timer-button/helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
+import { hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../../helpers';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../../payloads';
 import { format } from 'date-fns';
 
 export const Timestamp = ({ 

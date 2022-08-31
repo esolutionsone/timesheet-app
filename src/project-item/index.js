@@ -1,8 +1,8 @@
 import { createCustomElement } from '@servicenow/ui-core';
 import { snabbdom } from '@servicenow/ui-renderer-snabbdom';
 import { Timestamp } from '../x-esg-timer-container/components/Timestamp';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../x-esg-timer-container/payloads';
-import { msToString, getSnDayBounds } from '../x-esg-timer-button/helpers';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
+import { msToString, getSnDayBounds } from '../helpers';
 import { isToday } from 'date-fns';
 import styles from './styles.scss';
 import WebFont from 'webfontloader';

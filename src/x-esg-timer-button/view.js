@@ -5,7 +5,7 @@ import {
     getUTCTime,
     stringifyDuration,
     roundDuration
-} from './helpers';
+} from '../helpers';
 
 import WebFont from 'webfontloader';
 

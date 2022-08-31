@@ -1,4 +1,5 @@
-import { msToString, hhmmToSnTime } from '../../x-esg-timer-button/helpers';
+import { msToString, hhmmToSnTime } from '../../helpers';
+import { Timestamp } from './Timestamp';
 import { isToday } from 'date-fns';
 import '../../x-esg-timer-button';
 // import '../../Project';
