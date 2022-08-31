@@ -1,0 +1,64 @@
+@import '../../styles/variables.scss';
+
+.today-container {
+    @include default-border;
+    box-sizing: border-box;
+    width: 80%;
+    background: $bg-primary;
+    font-family: $font-primary;
+    margin: auto;
+
+    .new-project-header {
+        padding: $item-padding;
+        color: $color-secondary;
+        font-size: $font-size-medium;
+        font-weight: $font-weight-bold;
+    }
+
+    .new-project-body {
+        padding: $item-padding;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .new-project-dropdown {
+            @include default-border;
+            padding-left: 25px;
+            margin-bottom: 18px;
+            height: 53px;
+            width: 35%;
+            font-family: $font-primary;
+        }
+
+        .new-project-text-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+
+            .new-project-text {
+                @include default-border;
+                height: 107px;
+                width: 60%;
+                font-family: $font-primary;
+                padding: 10px;
+            }
+
+            .new-project-save-button {
+                background-color: $button-color;
+                border-style: none;
+                outline-style: none;
+                font-size: $font-size-medium;
+                color: white;
+                width: 106px;
+                height: 36px;
+                border-radius: 15px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }  
+}
