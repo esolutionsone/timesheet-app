@@ -85,7 +85,7 @@ createCustomElement('x-esg-timesheet-app', {
 	styles,
 	initialState: {
 		consultantId: '',
-		location: 'week',
+		location: 'day',
 		addProjectStatus: false,
 		editMode: false,
 	},

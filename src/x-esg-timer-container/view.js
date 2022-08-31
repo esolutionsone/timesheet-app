@@ -1,11 +1,7 @@
 import '../x-esg-timer-button';
-import '@servicenow/now-icon';
-import { Fragment } from '@servicenow/ui-renderer-snabbdom';
+import '../project-item';
 import { TimerHeader } from './components/TimerHeader';
 import { AddProject } from './components/AddProject';
-import { DailyProject } from './components/DailyProject';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
-import { getSnDayBounds } from '../helpers';
 
 export const view = (state, {dispatch, updateState}) => {
     const {
@@ -18,6 +14,7 @@ export const view = (state, {dispatch, updateState}) => {
         editableTimestamp,
         selectedDay,
     } = state;
+    const {timeEntryTable, timestampTable } = properties;
 
     const {consultantId, editMode, addProjectStatus} = state.properties;
 
@@ -38,7 +35,9 @@ export const view = (state, {dispatch, updateState}) => {
                     selectedProject={selectedProject}
                     entryNotes={entryNotes}
                     genericProjects={genericProjects}
-                    properties={properties}
+                    timeEntryTable={timeEntryTable}
+                    timestampTable={timestampTable}
+                    consultantId={consultantId}
                     projectMap={projectMap}
                     dispatch={dispatch}
                     updateState={updateState}
@@ -46,14 +45,14 @@ export const view = (state, {dispatch, updateState}) => {
                 <div>
                     {Array.from(projectMap.values()).map(proj => {
                         return (
-                            <DailyProject 
+                            <project-item
+                                timestampTable={properties.timestampTable}
                                 proj={proj}
                                 editableTimestamp={editableTimestamp}
                                 editMode={editMode}
                                 selectedDay={selectedDay}
                                 projectMap={projectMap}
-                                dispatch={dispatch}
-                                updateState={updateState}
+                                consultantId={consultantId}
                             />
                         );
                     })}

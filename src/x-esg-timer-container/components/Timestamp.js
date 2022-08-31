@@ -1,12 +1,15 @@
-import { hhmmToSnTime, getUTCTime, toSnTime } from '../../helpers';
+import { hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../../helpers';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../../payloads';
 import { format } from 'date-fns';
 
 export const Timestamp = ({ 
                             stamp, 
                             editableTimestamp, 
                             editMode, 
-                            dispatch, 
-                            updateState }) => {
+                            dispatch,
+                            timestampTable,
+                            consultantId,
+                            selectedDay }) => {
 
     const {note, start_time, end_time, sys_id} = stamp;                                     
     const localTimes = {start: format(getUTCTime(start_time), 'HH:mm')}
@@ -18,11 +21,11 @@ export const Timestamp = ({
         console.log('Timestamp to be deleted', sys_id);
         if (confirm("Click OK to remove this timestamp") == true) {
             dispatch('DELETE_PROJECT_TIMESTAMPS', {
-                tableName: properties.timestampTable,
+                tableName: timestampTable,
                 id: sys_id,
             });
 
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId));
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(selectedDay)));
         } 
     }
 
@@ -30,16 +33,20 @@ export const Timestamp = ({
         let timeNow = new Date();
 
         if (data.end_time && (data.end_time < timeToCheck)) {
-            updateState({editableTimestamp: ''})
+            dispatch('TIMER_CONTAINER#UPDATE_STATE', {editableTimestamp: ''})
             alert('End time cannot be earlier than start time.');
             return 
+        } else if (data.end_time > toSnTime(timeNow)) {
+            dispatch('TIMER_CONTAINER#UPDATE_STATE', {editableTimestamp: ''})
+            alert('End time cannot be later than current time.');
+            return
         } else if (data.start_time && timeToCheck && (data.start_time > timeToCheck)) {
-            updateState({editableTimestamp: ''})
+            dispatch('TIMER_CONTAINER#UPDATE_STATE', {editableTimestamp: ''})
             alert('Start time cannot be later than end time.');
             return
         } 
         else if (data.start_time && (data.start_time > toSnTime(timeNow))) {
-            updateState({editableTimestamp: ''})
+            dispatch('TIMER_CONTAINER#UPDATE_STATE', {editableTimestamp: ''})
             alert('Start time cannot be later than current time.');
             return
         }
@@ -49,14 +56,14 @@ export const Timestamp = ({
             sys_id,
             data,
         })
-        updateState({editableTimestamp: ''});
+        dispatch('TIMER_CONTAINER#UPDATE_STATE', {editableTimestamp: ''})
     }
 
     return (
         <div className="remove-timestamp">
             <div 
                 className="timestamp-note"
-                on-click={() => updateState({editableTimestamp: sys_id})}
+                on-click={() => dispatch('TIMER_CONTAINER#UPDATE_STATE', {editableTimestamp: sys_id})}
             >
                 {editableTimestamp == sys_id ? 
                     <span>
