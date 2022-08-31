@@ -5,13 +5,13 @@ import {
     getUTCTime,
     stringifyDuration,
     roundDuration
-} from './helpers';
+} from '../helpers';
 
 import WebFont from 'webfontloader';
 
 export const view = (state, { updateState, dispatch }) => {
     const { properties, currentTime } = state;
-    const { active, start, projectData, loadFonts, sysId } = properties;
+    const { active, start, projectData, loadFonts, sysId} = properties;
     const isActive = active === "true" || active === true;
 
     // Load Custom Fonts
@@ -63,7 +63,7 @@ export const view = (state, { updateState, dispatch }) => {
                     </span>
                 </span>
 
-                <span className={'timer-counter ' + isActive ? 'display-active' : 'display-inactive'}>
+                <span className={'timer-counter ' + (isActive ? 'display-active' : 'display-inactive')}>
                     {timerDisplayValue || 'Start'}
                 </span>
                 

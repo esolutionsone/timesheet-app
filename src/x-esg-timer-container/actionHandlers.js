@@ -1,39 +1,23 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
+import { getSnDayBounds} from '../helpers';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
 
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from './payloads';
-const {COMPONENT_BOOTSTRAPPED} = actionTypes;
-
+const {COMPONENT_BOOTSTRAPPED, COMPONENT_RENDERED, COMPONENT_RENDER_REQUESTED} = actionTypes;
 
 export default {
-    [COMPONENT_BOOTSTRAPPED]: ({dispatch}) => {
-        console.log('component bootstrapped');
-        dispatch('FETCH_GENERIC_PROJECTS', {
-            sysparm_query: 'client=705bf1231b6c9950c9df43b8b04bcbec',
-            sysparm_fields: 'short_description,sys_id,client.short_description,client.sys_id'
-        })
-        dispatch('GET_CONSULTANT_ID', {
-            tableName: 'x_esg_one_core_consultant',
-            sysparm_query: 'sys_user=javascript:gs.getUserID()'
-        });
-    },
-    'GET_CONSULTANT_ID': createHttpEffect('api/now/table/:tableName', {
-        method: 'GET',
-        pathParams: ['tableName'],
-        queryParams: ['sysparm_query'],
-        errorActionType: 'LOG_ERROR',
-        successActionType: 'HANDLE_CONSULTANT_ID'
-    }),
-    'HANDLE_CONSULTANT_ID': ({action, dispatch, updateState}) => {
-        const id = action.payload.result[0].sys_id;
-        if(!id || action.payload.result.length !== 1){
-            dispatch('LOG_ERROR', {msg: 'result.length !==1', data: action.payload});
+    [COMPONENT_BOOTSTRAPPED]: ({state, properties, dispatch}) => {
+        console.log('state', state)
+        const {selectedDay} = state;
+        const {consultantId} = properties;
+
+        if(consultantId.length < 1){
+            dispatch('LOG_ERROR', {msg: 'No consultant id provided', data: state});
         }else{
-            updateState({consultantId: id});
-            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(id));
+            dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(selectedDay)));
             dispatch('FETCH_PROJECTS', {
                 tableName: 'x_esg_one_core_project_role', 
-                sysparm_query: `consultant_assigned=${id}`,
+                sysparm_query: `consultant_assigned=${consultantId}`,
                 sysparm_fields: `
                     project.sys_id,
                     project.short_description,
@@ -43,15 +27,73 @@ export default {
             })
         }
     },
+    'TIMER_CONTAINER#UPDATE_STATE': ({action, updateState}) => {updateState(action.payload)},
+    'NEW_ENTRY': createHttpEffect('api/now/table/:tableName', {
+        method: 'POST',
+        pathParams: ['tableName'],
+        dataParam: 'data',
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
+    }),
+    //Testing Timer stoppers,
+    'DELETE_PROJECT_TIMESTAMPS': createHttpEffect(`api/now/table/x_esg_one_delivery_timestamp/:id`, {
+        method: 'DELETE',
+        pathParams: [ 'id'],
+        startActionType: 'TEST_START',
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR'
+    }),
+    'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
+        method: 'POST',
+        pathParams: ['tableName'],
+        dataParam: 'data',
+        headers: {},
+        successActionType: 'INSERT_SUCCESS',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'INSERT_SUCCESS': ({dispatch, state, updateState}) => {
+        const {selectedDay} = state;
+        const {consultantId} = state.properties;
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(
+                consultantId, 
+                ...getSnDayBounds(selectedDay)
+                )
+        );
+        updateState({
+            addProjectStatus: false,
+            selectedProject: '',
+            entryNotes: '',
+        })
+    },
+    'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
+        method: 'PUT',
+        pathParams: ['tableName', 'sys_id'],
+        successActionType: 'UPDATE_SUCCESS',
+        errorActionType: 'LOG_ERROR',
+        startActionType: 'LOG_RESULT',
+        dataParam: 'data',
+    }),
+    'UPDATE_SUCCESS': ({action, dispatch, state, properties}) => {
+        const {consultantId} = properties;
+        const {selectedDay} = state;
+        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(
+                consultantId, 
+                ...getSnDayBounds(selectedDay)
+                )
+            );
+    },
     'FETCH_CONSULTANT_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
+        startActionType: 'TEST_START',
         successActionType: 'SET_CONSULTANT_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
     }),
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
-
+        console.log('Setting timestamps: action:', action);
         const timestamps = action.payload.result;
         const stampsByProject = new Map();
         
@@ -131,50 +173,5 @@ export default {
             delete proj["client.sys_id"];
         }
         updateState({genericProjects: response})
-    },
-    'NEW_ENTRY': createHttpEffect('api/now/table/:tableName', {
-        method: 'POST',
-        pathParams: ['tableName'],
-        dataParam: 'data',
-        successActionType: 'LOG_RESULT',
-        errorActionType: 'LOG_ERROR',
-    }),
-    'TEST_START': () => console.log('test start'),
-    'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
-    'LOG_ERROR': ({action}) => console.error(action.payload.msg, action.payload.data),
-    //Testing Timer stoppers,
-    'DELETE_PROJECT_TIMESTAMPS': createHttpEffect(`api/now/table/x_esg_one_delivery_timestamp/:id`, {
-        method: 'DELETE',
-        pathParams: [ 'id'],
-        startActionType: 'TEST_START',
-        successActionType: 'LOG_RESULT',
-        errorActionType: 'LOG_ERROR'
-    }),
-    'INSERT_TIMESTAMP': createHttpEffect(`api/now/table/:tableName`, {
-        method: 'POST',
-        pathParams: ['tableName'],
-        dataParam: 'data',
-        headers: {},
-        successActionType: 'INSERT_SUCCESS',
-        errorActionType: 'LOG_ERROR',
-    }),
-    'INSERT_SUCCESS': ({action, dispatch, state, updateState}) => {
-        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
-        );
-    },
-    'UPDATE_TIMESTAMP': createHttpEffect(`api/now/table/:tableName/:sys_id`, {
-        method: 'PUT',
-        pathParams: ['tableName', 'sys_id'],
-        successActionType: 'UPDATE_SUCCESS',
-        errorActionType: 'LOG_RESULT',
-        startActionType: 'LOG_RESULT',
-        dataParam: 'data',
-    }),
-    'UPDATE_SUCCESS': ({dispatch, state}) => {
-        console.log('UPDATE RESPONSE:');
-        dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(state.consultantId)
-            );
     },
 } 

@@ -1,7 +1,7 @@
 // import { differenceInMilliseconds, intervalToDuration} from 'date-fns';
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
 import intervalToDuration from 'date-fns/intervalToDuration';
-import format from 'date-fns/format'
+
 /**
  * Accepts two dates and returns the difference between them as a duration object.
  * @param {Date} current Date object
@@ -84,31 +84,84 @@ export const msToString = (ms) => {
     return `${hours}:${minutes}`;
 }
 
+// /**
+//  * Takes in a string in 'hh:mm' format and returns a 
+//  * SN time representation of that time converted to UTC
+//  * @param {string} hoursAndMinutes 
+//  * @returns 
+//  */
+// export const hhmmToSnTime = (hoursAndMinutes) => {
+//     // get correct UTC date
+//     const today = new Date();
+//     const [hours, minutes] = hoursAndMinutes.split(':');
+
+//     const localDate = new Date(today.setHours(hours,minutes));
+
+
+//     const obj = {
+//         utcYear: localDate.getUTCFullYear(),
+//         utcMonth: localDate.getUTCMonth() + 1,
+//         utcDay:localDate.getUTCDate(),
+//         utcHour:localDate.getUTCHours(),
+//         utcMinutes:localDate.getUTCMinutes(),
+//     }
+
+//     for(let el in obj){
+//         obj[el] = obj[el].toString().padStart(2,'0');
+//     }
+//     const {utcYear, utcMonth, utcDay, utcHour, utcMinutes} = obj;
+//     return `${utcYear}-${utcMonth}-${utcDay} ${utcHour}:${utcMinutes}:00`;
+// }
+
 /**
  * Takes in a string in 'hh:mm' format and returns a 
  * SN time representation of that time converted to UTC
  * @param {string} hoursAndMinutes 
  * @returns 
  */
-export const hhmmToSnTime = (hoursAndMinutes) => {
+ export const hhmmToSnTime = (hoursAndMinutes) => {
     // get correct UTC date
     const today = new Date();
     const [hours, minutes] = hoursAndMinutes.split(':');
-
     const localDate = new Date(today.setHours(hours,minutes));
 
+    return toSnTime(localDate);
+}
 
+/**
+ * Convert Javascript Date to ServiceNow Datetime
+ * @param {Date} date Javascript Date object
+ * @returns ServiceNow DateTime in UTC
+ */
+export const toSnTime = (date) => {
     const obj = {
-        utcYear: localDate.getUTCFullYear(),
-        utcMonth: localDate.getUTCMonth() + 1,
-        utcDay:localDate.getUTCDate(),
-        utcHour:localDate.getUTCHours(),
-        utcMinutes:localDate.getUTCMinutes(),
+        utcYear: date.getUTCFullYear(),
+        utcMonth: date.getUTCMonth() + 1,
+        utcDay:date.getUTCDate(),
+        utcHour:date.getUTCHours(),
+        utcMinutes:date.getUTCMinutes(),
     }
 
     for(let el in obj){
         obj[el] = obj[el].toString().padStart(2,'0');
     }
+
     const {utcYear, utcMonth, utcDay, utcHour, utcMinutes} = obj;
     return `${utcYear}-${utcMonth}-${utcDay} ${utcHour}:${utcMinutes}:00`;
+}
+
+/**
+ * Accepts javascript date object and returns two SN datetime strings,
+ * representing the start and end bounds of the date.
+ * @param {Date} date 
+ * @returns {Array} Array in format [startDate, endDate] in SN Date format (UTC)
+ */
+export const getSnDayBounds = (date) => {
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    const startTime = toSnTime(new Date(startDate.setHours(0,0,0,0)));
+    const endTime = toSnTime(new Date(endDate.setHours(24,0,0,0)));
+    console.log([startTime, endTime]);
+
+    return [startTime, endTime];
 }

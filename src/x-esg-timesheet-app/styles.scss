@@ -1,0 +1,45 @@
+@import '../styles/variables.scss';
+@import '../styles/materialSymbols.scss';
+
+.outer-buttons {
+    display: flex;
+    justify-content: flex-start;
+    width: 80%;
+    margin: auto;
+
+    .add-project-button {
+        @include flex-even-center;
+        background-color: $button-color;
+        border-style: none;
+        outline-style: none;
+        font-size: 16px;
+        flex-direction: row;
+        color: white;
+        width: 106px;
+        height: 36px;
+        margin-bottom: 23px;
+        margin-right: 20px;
+        border-radius: $border-radius-default;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .edit-button {
+        @include flex-even-center;
+        @include default-border;
+        background-color: white;
+        outline-style: none;
+        font-size: 16px;
+        flex-direction: row;
+        color: #A0AFC4;
+        width: 106px;
+        height: 36px;
+        margin-bottom: 23px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
