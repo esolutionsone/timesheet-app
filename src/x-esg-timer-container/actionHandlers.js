@@ -51,7 +51,8 @@ export default {
         errorActionType: 'LOG_ERROR',
     }),
     'INSERT_SUCCESS': ({dispatch, state, updateState}) => {
-        const {consultantId, selectedDay} = state;
+        const {selectedDay} = state;
+        const {consultantId} = state.properties;
         dispatch('FETCH_CONSULTANT_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(
                 consultantId, 
