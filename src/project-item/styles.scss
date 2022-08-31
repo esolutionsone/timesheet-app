@@ -2,60 +2,111 @@
 @import '../styles/variables.scss';
 @import '../x-esg-timer-container/styles/materialSymbols.scss';
 
-// Component/subcomponent modules;
-@import '../x-esg-timer-container/styles/projectItem.scss';
+.project-item {
+    padding: $item-padding;
+    font-weight: $font-weight-bold;
+    border-top: $border-primary;
 
-
-.project-notes {
-    font-weight: 500;
-    font-size: $font-size-medium;
-    color: $color-secondary;
-    // height: 1.5rem;
-
-    .edit-project-text {
-        @include default-border;
-        height: 107px;
-        width: 60%;
-        font-family: $font-primary;
-        padding: 10px;
+    .client-name {
+        font-size: $font-size-medium;
+        color: $color-secondary;
     }
 
-    .remove-timestamp {
-        display: flex;
+    .project-title-container {
+        @include flex-between-center;
         flex-direction: row;
-        align-items: center;
 
-        .remove-timestamp-icon {
-            color: red;
-            &:hover {
+        .project-title {
+            font-size: 20px;
+            padding-bottom: 8px;
+            padding-top: 8px;
+            display: flex;
+        }
+        
+        .details-icon{
+            &:hover{
                 cursor: pointer;
             }
         }
+
+        .project-start-stop-container {
+            @include flex-between-center;
+            flex-direction: row;
+
+            .roundedTime-input-box{
+                @include input;
+                max-width: 50px;
+            }
+
+            .remove-project {
+                position: relative;
+                left: 100px;
+                color: red;
+                font-size: x-large;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
     }
-
-    .timestamp-note {
-        margin-top: 5px;
-        margin-bottom: 5px;
-        margin-right: 5px;
-        border-bottom: $border-primary;
-        padding-bottom: 5px;
-        width: 60%;
-        display: grid;
-        grid-template-columns: 4fr 4fr;
-
-        .timestamp-times {
-            text-align: end;
+    .project-time {
+        font-weight: $font-weight-bold;
+        font-size: $font-size-large;
+        margin-left: 29px;
+    }
+    .project-notes {
+        font-weight: 500;
+        font-size: $font-size-medium;
+        color: $color-secondary;
+        // height: 1.5rem;
+    
+        .edit-project-text {
+            @include default-border;
+            height: 107px;
+            width: 60%;
+            font-family: $font-primary;
+            padding: 10px;
         }
-
-        input {
-            @include input;
-            width: 90%;
+    
+        .remove-timestamp {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+    
+            .remove-timestamp-icon {
+                color: red;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
-
-        input[type="time"] {
-            @include input;
-            width: 7rem;
-            margin: auto;
+    
+        .timestamp-note {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-right: 5px;
+            border-bottom: $border-primary;
+            padding-bottom: 5px;
+            width: 60%;
+            display: grid;
+            grid-template-columns: 4fr 4fr;
+    
+            .timestamp-times {
+                text-align: end;
+            }
+    
+            input {
+                @include input;
+                width: 90%;
+            }
+    
+            input[type="time"] {
+                @include input;
+                width: 7rem;
+                margin: auto;
+            }
         }
     }
 }
+
