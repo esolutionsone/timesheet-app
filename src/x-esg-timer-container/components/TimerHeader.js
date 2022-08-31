@@ -1,6 +1,6 @@
 import { msToString, hhmmToSnTime, getSnDayBounds } from '../../helpers';
 import { format, formatDistanceToNow, isToday } from 'date-fns';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../../payloads';
 
 export const TimerHeader = ({consultantId, dispatch, updateState, projectMap, selectedDay}) => {
 

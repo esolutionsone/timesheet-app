@@ -22,6 +22,7 @@ createCustomElement('x-esg-timer-container', {
 		selectedDay: new Date(),
 	},
 	properties: {
+		consultantId: {default: ''},
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
 		timeEntryTable: {default: "x_esg_one_delivery_time_entry"},
 	},
