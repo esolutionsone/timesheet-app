@@ -1,7 +1,7 @@
 // import { differenceInMilliseconds, intervalToDuration} from 'date-fns';
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
 import intervalToDuration from 'date-fns/intervalToDuration';
-import format from 'date-fns/format'
+
 /**
  * Accepts two dates and returns the difference between them as a duration object.
  * @param {Date} current Date object
