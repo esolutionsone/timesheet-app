@@ -4,20 +4,8 @@ import { Fragment } from '@servicenow/ui-renderer-snabbdom';
 import { TimerHeader } from './components/TimerHeader';
 import { AddProject } from './components/AddProject';
 import { DailyProject } from './components/DailyProject';
-import WebFont from 'webfontloader';
 
 export const view = (state, {dispatch, updateState}) => {
-    // Load Custom Fonts
-    WebFont.load({
-        google: {
-            families: [
-                'Montserrat:400,500,600,700', 
-                'Material+Symbols+Outlined', 
-                'Material+Symbols+Rounded'
-            ]
-        }
-    })
-
     const {
         projects, 
         selectedProject, 

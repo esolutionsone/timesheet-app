@@ -1,4 +1,4 @@
-import { hhmmToSnTime, getUTCTime, toSnTime } from '../../x-esg-timer-button/helpers';
+import { hhmmToSnTime, getUTCTime, toSnTime } from '../../helpers';
 import { format } from 'date-fns';
 
 export const Timestamp = ({ 
