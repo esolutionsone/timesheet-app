@@ -118,5 +118,4 @@ export default {
         }
         updateState({projectMap: stampsByProject});
     },
-
 } 

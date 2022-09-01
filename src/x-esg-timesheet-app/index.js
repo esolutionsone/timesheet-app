@@ -13,7 +13,7 @@ createCustomElement('x-esg-timesheet-app', {
 	styles,
 	initialState: {
 		consultantId: '',
-		location: 'day',
+		location: 'week',
 		addProjectStatus: false,
 		editMode: false,
 		genericProjects: [],

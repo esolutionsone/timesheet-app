@@ -20,6 +20,7 @@ export default (state, {updateState}) => {
 		}
 	})
 
+    //Load state while waiting for initial fetch
 	if(consultantId == ''){
 		return <div>Loading...</div>
 	}
