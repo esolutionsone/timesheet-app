@@ -6,6 +6,16 @@ import actionHandlers from './actionHandlers';
 
 const view = (state) => {
 	console.log('week state', state);
+
+	const sortByClients = new Map();
+
+	const {projectMap} = state;
+
+	console.log('projectMap');
+
+	projectMap.forEach(proj => {
+		console.log(proj)
+	})
 	return <div className="week-container">
 		WEEK VIEW
 	</div>
@@ -16,6 +26,7 @@ createCustomElement('x-esg-week-view', {
 	view,
 	initialState: {
 		selectedDay: new Date(),
+		projectMap: new Map(),
 	},
 	styles,
 	properties: {

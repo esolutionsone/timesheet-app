@@ -190,3 +190,40 @@ function addDaysSetHours(date, days, end) {
         0
     );
 }
+
+export const buildProjectMap = (timestamps) => {
+        const stampsByProject = new Map();
+        
+        // Massage for easy mapping
+        // Subtracting the parsed ServiceNow zero duration time with 
+        // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
+        for(let stamp of timestamps){
+            const projectId = stamp['project.sys_id'];
+            const active = stamp.active === 'true';
+
+            const sharedValues = {
+                active,
+                sys_id: projectId,
+                note: stamp.note,
+                client: stamp['project.client.short_description'],
+                ["client.sys_id"]: stamp['project.client.sys_id'],
+                short_description: stamp['project.short_description'],
+            }
+            if(stampsByProject.has(projectId)){
+                stampsByProject.set(projectId, {
+                    ...sharedValues,
+                    timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
+                    totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
+                        (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
+                        || 0),
+                });
+            } else{
+                stampsByProject.set(projectId, {
+                    ...sharedValues,
+                    timestamps: [stamp],
+                    totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
+                })
+            }
+        }
+        return stampsByProject;
+}
