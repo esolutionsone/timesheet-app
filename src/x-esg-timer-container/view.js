@@ -7,8 +7,7 @@ export const view = (state, {dispatch, updateState}) => {
     const {
         projects, 
         selectedProject,
-        entryNotes, 
-        genericProjects, 
+        entryNotes,
         projectMap,
         properties,
         editableTimestamp,
@@ -16,7 +15,7 @@ export const view = (state, {dispatch, updateState}) => {
     } = state;
     const {timeEntryTable, timestampTable } = properties;
 
-    const {consultantId, editMode, addProjectStatus} = state.properties;
+    const {consultantId, editMode, addProjectStatus, genericProjects} = state.properties;
 
     if(consultantId == '') return <div>Loading...</div>;
 

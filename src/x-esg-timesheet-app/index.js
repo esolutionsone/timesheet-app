@@ -10,7 +10,8 @@ const view = (state, {updateState}) => {
 	const {
 		consultantId, 
 		addProjectStatus,
-		editMode
+		editMode,
+		genericProjects,
 	} = state;
 	const {timestampTable, timeEntryTable} = state.properties;
 	// Load Custom Fonts
@@ -38,6 +39,7 @@ const view = (state, {updateState}) => {
 					consultantId={consultantId}
 					addProjectStatus={addProjectStatus}
 					editMode={editMode}
+					genericProjects={genericProjects}
 				></x-esg-timer-container>;
 			break;
 		case 'week':
@@ -47,6 +49,7 @@ const view = (state, {updateState}) => {
 					consultantId={consultantId}
 					addProjectStatus={addProjectStatus}
 					editMode={editMode}
+					genericProjects={genericProjects}
 				></x-esg-week-view>
 			break;
 		default:

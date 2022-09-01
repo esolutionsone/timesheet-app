@@ -14,7 +14,6 @@ createCustomElement('x-esg-timer-container', {
 		selectedProject: '',
 		consultantId: '',
 		entryNotes: '',
-		genericProjects: [],
 		projectMap: new Map(),
 		addProjectStatus: false,
 		editMode: false,
@@ -27,7 +26,8 @@ createCustomElement('x-esg-timer-container', {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},
 		timeEntryTable: {default: "x_esg_one_delivery_time_entry"},
 		addProjectStatus: {default: false},
-		editMode: {default: false}
+		editMode: {default: false},
+		genericProjects: {default: []},
 	},
 	actionHandlers,
 });

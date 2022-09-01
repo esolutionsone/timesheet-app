@@ -61,7 +61,6 @@ export default {
                 )
         );
         updateState({
-            addProjectStatus: false,
             selectedProject: '',
             entryNotes: '',
         })
@@ -154,24 +153,5 @@ export default {
             projects: Array.from(projects.values())
         })
     },
-    'FETCH_GENERIC_PROJECTS': createHttpEffect(
-        'api/now/table/x_esg_one_core_project',
-        {
-            method: 'GET',
-            queryParams: ['sysparm_query', 'sysparm_fields'],
-            successActionType: 'SET_GENERIC_PROJECTS',
-            errorActionType: 'LOG_ERROR'
-    }),
-    'SET_GENERIC_PROJECTS': ({action, updateState}) => {
-        const response = action.payload.result;
-        for(let proj of response){
-            proj["client"] = {
-                short_description: proj["client.short_description"],
-                sys_id: proj["client.sys_id"],
-            }
-            delete proj["client.short_description"];
-            delete proj["client.sys_id"];
-        }
-        updateState({genericProjects: response})
-    },
+
 } 
