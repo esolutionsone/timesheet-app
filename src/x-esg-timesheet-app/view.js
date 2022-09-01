@@ -6,6 +6,7 @@ export default (state, {updateState}) => {
 		addProjectStatus,
 		editMode,
 		genericProjects,
+        projects,
 	} = state;
 	const {timestampTable, timeEntryTable} = state.properties;
 	// Load Custom Fonts
@@ -34,6 +35,7 @@ export default (state, {updateState}) => {
 					addProjectStatus={addProjectStatus}
 					editMode={editMode}
 					genericProjects={genericProjects}
+                    projects={projects}
 				></x-esg-timer-container>;
 			break;
 		case 'week':
@@ -44,11 +46,14 @@ export default (state, {updateState}) => {
 					addProjectStatus={addProjectStatus}
 					editMode={editMode}
 					genericProjects={genericProjects}
+                    projects={projects}
 				></x-esg-week-view>
 			break;
 		default:
 			jsx = <div>Error: route not found</div>
 	}
+
+    console.log(state);
 
 	return (
 		<div>
