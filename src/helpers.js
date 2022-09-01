@@ -161,7 +161,5 @@ export const getSnDayBounds = (date) => {
     const endDate = new Date(date);
     const startTime = toSnTime(new Date(startDate.setHours(0,0,0,0)));
     const endTime = toSnTime(new Date(endDate.setHours(24,0,0,0)));
-    console.log([startTime, endTime]);
-
     return [startTime, endTime];
 }

@@ -18,7 +18,6 @@ export const Timestamp = ({
 
     const handleDeleteTimestamp = (e, sys_id) => {
         e.preventDefault();
-        console.log('Timestamp to be deleted', sys_id);
         if (confirm("Click OK to remove this timestamp") == true) {
             dispatch('DELETE_PROJECT_TIMESTAMPS', {
                 tableName: timestampTable,
