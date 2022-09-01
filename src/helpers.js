@@ -167,14 +167,13 @@ export const getSnDayBounds = (date) => {
 export const getSnWeekBounds = (date) => {
     const dayOfWeek = date.getDay();
     const toMon = 1 - dayOfWeek;
-    const toSun = 7 - dayOfWeek; // what if it's sunday?
+    let toSun = 7 - dayOfWeek;
+    if(toSun == -7) toSun = 0; // handle when .getDay() returns 0;
 
-    console.log(dayOfWeek);
     const startDate = new Date(date);
     const endDate = new Date(date);
     const startTime = toSnTime(addDaysSetHours(startDate, toMon, false));
     const endTime = toSnTime(addDaysSetHours(endDate, toSun, true));
-    console.log(startTime, endTime);
     return [startTime, endTime];
 }
 

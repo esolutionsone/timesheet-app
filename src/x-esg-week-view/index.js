@@ -9,7 +9,7 @@ const view = (state) => {
 	const {projectMap, clientMap} = state;
 	return <div className="week-container">
 		WEEK VIEW 
-		<pre>{JSON.stringify(clientMap, null, 2)}</pre>
+		<pre>{JSON.stringify(Array.from(clientMap.values()), null, 2)}</pre>
 	</div>
 }
 

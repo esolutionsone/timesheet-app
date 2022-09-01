@@ -9,7 +9,6 @@ export default {
     [COMPONENT_BOOTSTRAPPED]: ({state, properties, dispatch}) => {
         const {selectedDay} = state;
         const {consultantId, timeEntryTable} = properties;
-        console.log(FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay)))
         dispatch('FETCH_WEEKLY_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
         );
@@ -21,7 +20,6 @@ export default {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
-        startActionType: 'TEST_START',
         successActionType: 'SET_WEEKLY_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
     }),
@@ -47,7 +45,6 @@ export default {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
-        startActionType: 'TEST_START',
         successActionType: 'SET_WEEKLY_TIME_ENTRIES',
         errorActionType: 'LOG_ERROR',
     }),
