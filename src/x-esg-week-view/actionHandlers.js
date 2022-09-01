@@ -1,17 +1,20 @@
 import {actionTypes} from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 import { getSnDayBounds, getSnWeekBounds, buildProjectMap } from '../helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
 export default {
     [COMPONENT_BOOTSTRAPPED]: ({state, properties, dispatch}) => {
         const {selectedDay} = state;
-        const {consultantId} = properties;
+        const {consultantId, timeEntryTable} = properties;
         console.log(FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, getSnWeekBounds(selectedDay)))
         dispatch('FETCH_WEEKLY_TIMESTAMPS', 
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, getSnWeekBounds(selectedDay))
+        );
+        dispatch('FETCH_WEEKLY_TIME_ENTRIES', 
+            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, getSnWeekBounds(selectedDay))
         );
     },
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
@@ -29,10 +32,8 @@ export default {
         const clientMap = new Map();
         projectMap.forEach(proj => {
             if(clientMap.has(proj['client.sys_id'])){
-                console.log('pushing')
                 clientMap.get(proj['client.sys_id']).projects.push(proj);
             }else{
-                console.log('setting');
                 clientMap.set(proj['client.sys_id'], {
                     short_description: proj.client,
                     projects: [proj]
@@ -41,4 +42,12 @@ export default {
         })
         updateState({projectMap: projectMap, clientMap: clientMap});
     },
+    'FETCH_WEEKLY_TIME_ENTRIES': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        startActionType: 'TEST_START',
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
+    })
 }
