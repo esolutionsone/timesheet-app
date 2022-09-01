@@ -57,8 +57,6 @@ const view = (state, { dispatch, updateState}) => {
         } 
     }
 
-	console.log('timestamp state', state);
-	console.log('editableTimestamp', editableTimestamp);
 	return (
 		<div className="project-item" key={sys_id}>
             <div className="client-name">{client}</div>
