@@ -1,40 +1,11 @@
-# timer-button
+# Timesheet App
 
 ## Description 
-*A button to insert time logs on a target table*
+*A UI Builder component and subcomponents for tracking time related to esolutionsONE projects*
 
 ## Dev Screenshots
 
-<img src="images/mapped-timers.png" />
-
-## Inputs
-
-Schema
-```
-props = {
-    user?: <Contractor>, // maybe not
-    targetTable: e<Table>,
-    project: <Project>,
-    record?: <Timestamp>,
-    recordedTime?: <Reduced TimeEntries>
-}
-```
-
-## Implementation
-(just spitballing)
-- Client State Params: lookup list of user's projects => csp.projects
-- Data resource: get all TimeEntries filtered by today, user, csp.projects (alt: all that, return only most recent for each project)
-- Use Repeater to pass project data to **project cards**, then on to timer-buttons.
-    - Best implementation uses a container to do the logic - automatically detect user, fetch project data, map over it to render and sort timers, handle timer sync (stopping other timers)
-
-## Effects & logic
-- [x] REST - insert/update time entry on click
-    - [x] If button is inactive, insert new record w/ start timestamp
-    - [x] If button is active, use update the record (tracked in state) with timestamp
-- [ ] On Load, get sum of duration of completed time entries => display this + time since start (when entry is active)
-
-## Concerns
-- Dealing with the times is a big problem, when using the Javascript Date object, since SN doesn't use automatic detection of timezones. Better to rely completely on SN patterns and scripting, probably.
+<img src="images/Screen Shot 2022-09-01.png" />
 
 ## Stuff we learned
 - When setting dates in business rules, use .getDisplayValue() instead of .getValue(). On the server side, SN will adjust any times sent or received to a user who has a specified time zone, so when inputting dates, .getDisplayValue() will correspond to the correct UTC time.
