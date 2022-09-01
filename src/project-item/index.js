@@ -64,20 +64,12 @@ const view = (state, { dispatch, updateState}) => {
             <div className="client-name">{client}</div>
             <div className="project-title-container">
                 <div className="project-title">{short_description} 
-                    {showDetail ? 
-                        <span 
-                            className="material-symbols-outlined details-icon" 
-                            on-click={() => {updateState({showDetail: !showDetail})}}
-                        >
-                                expand_less
-                        </span>
-                        :
-                        <span 
-                            className="material-symbols-outlined details-icon" 
-                            on-click={() => {updateState({showDetail: !showDetail})}}
-                        >
-                                expand_more
-                        </span>}
+                    <span 
+                        className={`material-symbols-outlined details-icon ${showDetail && 'details-icon-down'}`} 
+                        on-click={() => {updateState({showDetail: !showDetail})}}
+                    >
+                            expand_less
+                    </span>
                 </div>
                 <div className="project-start-stop-container">
                     {isToday(selectedDay) ? 
@@ -104,7 +96,7 @@ const view = (state, { dispatch, updateState}) => {
                     }
                 </div>
             </div>
-            <div className="project-notes">
+            <div className='project-notes details-icon'>
                 {timestamps.map((stamp, i) => {
                     if (!showDetail && active && (i > 0)) return
                     if (!showDetail && !active) return
