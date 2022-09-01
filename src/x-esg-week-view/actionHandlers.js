@@ -36,7 +36,8 @@ export default {
             }else{
                 clientMap.set(proj['client.sys_id'], {
                     short_description: proj.client,
-                    projects: [proj]
+                    projects: [proj],
+                    sys_id: proj['client.sys_id'],
                 });
             }
         })

@@ -6,17 +6,7 @@ import actionHandlers from './actionHandlers';
 
 const view = (state) => {
 	console.log('week state', state);
-
-	
-
 	const {projectMap, clientMap} = state;
-
-	console.log('projectMap');
-
-	// Reorganize projectMap into sortBy Clients;
-
-
-	console.log(clientMap);
 	return <div className="week-container">
 		WEEK VIEW 
 		<pre>{JSON.stringify(clientMap, null, 2)}</pre>
