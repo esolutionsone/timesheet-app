@@ -9,12 +9,12 @@ export default {
     [COMPONENT_BOOTSTRAPPED]: ({state, properties, dispatch}) => {
         const {selectedDay} = state;
         const {consultantId, timeEntryTable} = properties;
-        console.log(FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, getSnWeekBounds(selectedDay)))
+        console.log(FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay)))
         dispatch('FETCH_WEEKLY_TIMESTAMPS', 
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, getSnWeekBounds(selectedDay))
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
         );
         dispatch('FETCH_WEEKLY_TIME_ENTRIES', 
-            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, getSnWeekBounds(selectedDay))
+            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
         );
     },
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
@@ -47,7 +47,10 @@ export default {
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
         startActionType: 'TEST_START',
-        successActionType: 'LOG_RESULT',
+        successActionType: 'SET_WEEKLY_TIME_ENTRIES',
         errorActionType: 'LOG_ERROR',
-    })
+    }),
+    'SET_WEEKLY_TIME_ENTRIES': ({action, updateState}) => {
+        updateState({dailyEntries: action.payload.result});
+    }
 }

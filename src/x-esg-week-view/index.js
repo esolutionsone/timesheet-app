@@ -30,6 +30,7 @@ createCustomElement('x-esg-week-view', {
 		selectedDay: new Date(),
 		projectMap: new Map(),
 		clientMap: new Map(),
+		dailyEntries: []
 	},
 	styles,
 	properties: {
