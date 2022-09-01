@@ -61,7 +61,6 @@ export default {
                 )
         );
         updateState({
-            addProjectStatus: false,
             selectedProject: '',
             entryNotes: '',
         })
