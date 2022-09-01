@@ -24,6 +24,21 @@ export default {
     }),
     'SET_WEEKLY_TIMESTAMPS': ({action, updateState}) => {
         console.log('Setting timestamps: action:', action);
-        updateState({projectMap: buildProjectMap(action.payload.result)});
+
+        const projectMap = buildProjectMap(action.payload.result)
+        const clientMap = new Map();
+        projectMap.forEach(proj => {
+            if(clientMap.has(proj['client.sys_id'])){
+                console.log('pushing')
+                clientMap.get(proj['client.sys_id']).projects.push(proj);
+            }else{
+                console.log('setting');
+                clientMap.set(proj['client.sys_id'], {
+                    short_description: proj.client,
+                    projects: [proj]
+                });
+            }
+        })
+        updateState({projectMap: projectMap, clientMap: clientMap});
     },
 }
