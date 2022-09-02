@@ -1,13 +1,8 @@
-import {createCustomElement} from '@servicenow/ui-core';
-import {snabbdom} from '@servicenow/ui-renderer-snabbdom';
+import { createCustomElement } from '@servicenow/ui-core';
+import { snabbdom } from '@servicenow/ui-renderer-snabbdom';
+import { view } from './view';
 import '../x-esg-timer-container';
 import styles from './styles.scss';
-
-const view = (state) => {
-	return <div className="week-container">
-		WEEK VIEW
-	</div>
-}
 
 createCustomElement('x-esg-week-view', {
 	renderer: {type: snabbdom},
