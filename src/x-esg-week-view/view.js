@@ -1,11 +1,15 @@
 import { WeeklyHeader } from "./components/WeeklyHeader";
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
+import { Client } from './components/Client'
 
 export const view = (state) => {
 
-    const { selectedDay } = state
+    const { selectedDay, clientMap } = state
+    const clientList = Array.from(clientMap.values())
 
     console.log("STATE", state);
+    console.log("Client Map", clientMap);
+    console.log(Array.from(clientMap.values()));
     
 
 	return (
@@ -14,7 +18,10 @@ export const view = (state) => {
                 selectedDay={selectedDay}
             />
             <WeeklySubHeader />
-            WEEK VIEW
+            <div>
+                {clientList.map(client => <Client client={client}/> )}
+            </div>
+            
         </div>
     );
 }
