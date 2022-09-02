@@ -1,7 +1,10 @@
 import WebFont from 'webfontloader';
+import { getWeekBounds } from '../../helpers';
+import { dateFormatter } from '../../constants'
+import {format} from 'date-fns'
 
 
-export const WeeklyHeader = () => {
+export const WeeklyHeader = ({selectedDay}) => {
    
     // Load Custom Fonts
     WebFont.load({
@@ -13,6 +16,10 @@ export const WeeklyHeader = () => {
            ]
        }
     })
+
+    const startDay = format(getWeekBounds(selectedDay)[0], 'MMM dd')
+    const endDay = format(getWeekBounds(selectedDay)[1], 'MMM dd, Y')
+
 
     return (
         <div className="weekly-header">
@@ -26,7 +33,7 @@ export const WeeklyHeader = () => {
             </div>
 
             <div className="weekly-date-start">Week of</div>
-            <div className="weekly-date-end">Aug 29 to Sep 04, 2022</div>
+            <div className="weekly-date-end">{startDay} to {endDay}</div>
         </div>
     );
 }
