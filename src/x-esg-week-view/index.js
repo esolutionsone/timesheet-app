@@ -1,17 +1,9 @@
-import {createCustomElement} from '@servicenow/ui-core';
-import {snabbdom} from '@servicenow/ui-renderer-snabbdom';
+import { createCustomElement } from '@servicenow/ui-core';
+import { snabbdom } from '@servicenow/ui-renderer-snabbdom';
+import { view } from './view';
 import '../x-esg-timer-container';
 import styles from './styles.scss';
 import actionHandlers from './actionHandlers';
-
-const view = (state) => {
-	console.log('week state', state);
-	const {projectMap, clientMap} = state;
-	return <div className="week-container">
-		WEEK VIEW 
-		<pre>{JSON.stringify(Array.from(clientMap.values()), null, 2)}</pre>
-	</div>
-}
 
 createCustomElement('x-esg-week-view', {
 	renderer: {type: snabbdom},

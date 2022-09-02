@@ -1,11 +1,20 @@
-export default (state) => {
+import { WeeklyHeader } from "./components/WeeklyHeader";
+import { WeeklySubHeader } from "./components/WeeklySubHeader";
 
-    console.log('week state', state);
-	return <div className="week-container">
-		<div className="week-header">
-            <span className="material-symbols-outlined">chevron_left</span>
-            <span className="material-symbols-outlined">chevron_right</span>
-            <span></span>
+export const view = (state) => {
+
+    const { selectedDay } = state
+
+    console.log("STATE", state);
+    
+
+	return (
+        <div className="week-container">
+            <WeeklyHeader 
+                selectedDay={selectedDay}
+            />
+            <WeeklySubHeader />
+            WEEK VIEW
         </div>
-	</div>
+    );
 }

@@ -7,6 +7,7 @@ export default (state, {updateState}) => {
 		editMode,
 		genericProjects,
         projects,
+		location
 	} = state;
 	const {timestampTable, timeEntryTable} = state.properties;
 	// Load Custom Fonts
@@ -58,25 +59,42 @@ export default (state, {updateState}) => {
 
 	return (
 		<div>
-			    <div className="outer-buttons">
-                <button 
-                    className="add-project-button"
-                    on-click={()=>updateState({
-                                    addProjectStatus: !addProjectStatus, 
-                                    editMode: false
-                                })
-                            }>
-                        <span className="material-symbols-outlined">add</span>
-                        Project
-                </button>
-                <button 
-                    className="edit-button"
-                    on-click={()=>updateState({editMode: !editMode})}>
-                        <span className="material-symbols-outlined">edit_square</span>
-                        Edit
-                </button>
-            </div>
+			<div className="outer-buttons">
+				<div className="add-edit-buttons">
+					<button 
+						className="add-project-button"
+						on-click={()=>updateState({
+										addProjectStatus: !addProjectStatus, 
+										editMode: false
+									})
+								}>
+							<span className="material-symbols-outlined">add</span>
+							Project
+					</button>
+					<button 
+						className="edit-button"
+						on-click={()=>updateState({editMode: !editMode})}>
+							<span className="material-symbols-outlined">edit_square</span>
+							Edit
+					</button>
+				</div>
+				<div>
+					<button 
+						className={`day-button ${(location == 'day') ? 'active' : ''}`}
+						on-click={()=> updateState({location: 'day'})}>
+							Day
+					</button>
+					<button 
+						className={`week-button ${(location == 'week') ? 'active' : ''}`}
+						on-click={()=> updateState({location: 'week'})}>
+							Week
+					</button>
+				</div>
+			</div>
 			{jsx}
+			<div >
+
+			</div>
 		</div>
 		
 	)

@@ -4,8 +4,7 @@ import '../x-esg-timer-container';
 import '../x-esg-week-view';
 import actionHandlers from './actionHandlers';
 import styles from './styles.scss';
-import view from './view.js';
-
+import view from './view'
 
 createCustomElement('x-esg-timesheet-app', {
 	renderer: {type: snabbdom},

@@ -177,6 +177,20 @@ export const getSnWeekBounds = (date) => {
     return [startTime, endTime];
 }
 
+export const getWeekBounds = (date) => {
+    const dayOfWeek = date.getDay();
+    const toMon = 1 - dayOfWeek;
+    let toSun = 7 - dayOfWeek;
+    if(toSun == -7) toSun = 0; // handle when .getDay() returns 0;
+
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    const startTime = addDaysSetHours(startDate, toMon, false);
+    const endTime = addDaysSetHours(endDate, toSun, true);
+    endTime.setMilliseconds(endTime.getMilliseconds()-1);
+    return [startTime, endTime];
+}
+
 function addDaysSetHours(date, days, end) {
     const hours = end ? 24 : 0;
     return new Date(
