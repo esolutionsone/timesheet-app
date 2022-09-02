@@ -65,10 +65,25 @@
 
     .weekly-subheader {
         padding: $item-padding;
+        border-bottom: $border-primary;
 
         .weekly-subheader-title {
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
+            align-self: center;
+        }
+
+        .weekday-hours {
+            font-weight: $font-weight-bold;
+
+            &.weekday-hours-zero {
+                display: none;
+            }
         }
     }
+}
+
+.week-view-grid {
+    display: grid;
+    grid-template-columns: 3fr repeat(7, 1fr);
 }
