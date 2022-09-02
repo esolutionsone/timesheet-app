@@ -39,6 +39,20 @@ export const WeeklySubHeader = ({
 
                 const totalHours = totalTime / 1000 / 60 / 60;
 
+
+                /* The following code theoretically works,
+                // but we'll have to adjust how we handle weekly time input and negative values
+                            
+                const timeEntries = dailyEntries.filter(entry => {
+                    return entry.date == bounds[0].split(' ')[0]
+                        && entry.time_adjustment.length > 0;
+                })
+
+                const adjustmentsInMs = timeEntries.reduce((ms, entry) => {
+                    return ms + getUTCTime(entry.time_adjustment).getTime();
+                }, 0)
+
+                */
                 return <div>
                         <div>{format(date, 'MMM dd')}</div>
                         <div>{format(date, 'E')}</div>
