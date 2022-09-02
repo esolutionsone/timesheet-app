@@ -163,3 +163,80 @@ export const getSnDayBounds = (date) => {
     const endTime = toSnTime(new Date(endDate.setHours(24,0,0,0)));
     return [startTime, endTime];
 }
+
+export const getSnWeekBounds = (date) => {
+    const dayOfWeek = date.getDay();
+    const toMon = 1 - dayOfWeek;
+    let toSun = 7 - dayOfWeek;
+    if(toSun == -7) toSun = 0; // handle when .getDay() returns 0;
+
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    const startTime = toSnTime(addDaysSetHours(startDate, toMon, false));
+    const endTime = toSnTime(addDaysSetHours(endDate, toSun, true));
+    return [startTime, endTime];
+}
+
+export const getWeekBounds = (date) => {
+    const dayOfWeek = date.getDay();
+    const toMon = 1 - dayOfWeek;
+    let toSun = 7 - dayOfWeek;
+    if(toSun == -7) toSun = 0; // handle when .getDay() returns 0;
+
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    const startTime = addDaysSetHours(startDate, toMon, false);
+    const endTime = addDaysSetHours(endDate, toSun, true);
+    endTime.setMilliseconds(endTime.getMilliseconds()-1);
+    return [startTime, endTime];
+}
+
+function addDaysSetHours(date, days, end) {
+    const hours = end ? 24 : 0;
+    return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() + days,
+        hours,
+        0,
+        0,
+        0
+    );
+}
+
+export const buildProjectMap = (timestamps) => {
+        const stampsByProject = new Map();
+        
+        // Massage for easy mapping
+        // Subtracting the parsed ServiceNow zero duration time with 
+        // Date.parse("1970-01-01 00:00:00") corrects for timezone issues, etc.
+        for(let stamp of timestamps){
+            const projectId = stamp['project.sys_id'];
+            const active = stamp.active === 'true';
+
+            const sharedValues = {
+                active,
+                sys_id: projectId,
+                note: stamp.note,
+                client: stamp['project.client.short_description'],
+                ["client.sys_id"]: stamp['project.client.sys_id'],
+                short_description: stamp['project.short_description'],
+            }
+            if(stampsByProject.has(projectId)){
+                stampsByProject.set(projectId, {
+                    ...sharedValues,
+                    timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
+                    totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
+                        (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
+                        || 0),
+                });
+            } else{
+                stampsByProject.set(projectId, {
+                    ...sharedValues,
+                    timestamps: [stamp],
+                    totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
+                })
+            }
+        }
+        return stampsByProject;
+}
