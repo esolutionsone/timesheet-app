@@ -10,7 +10,6 @@ createCustomElement('x-esg-timer-container', {
 	view,
 	styles,
 	initialState: {
-		projects: [],
 		selectedProject: '',
 		consultantId: '',
 		entryNotes: '',
@@ -28,6 +27,7 @@ createCustomElement('x-esg-timer-container', {
 		addProjectStatus: {default: false},
 		editMode: {default: false},
 		genericProjects: {default: []},
+		projects: {default: []}
 	},
 	actionHandlers,
 });
