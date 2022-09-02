@@ -25,9 +25,19 @@ export default {
         errorActionType: 'LOG_ERROR',
         successActionType: 'HANDLE_CONSULTANT_ID'
     }),
-    'HANDLE_CONSULTANT_ID': ({action, updateState}) => {
+    'HANDLE_CONSULTANT_ID': ({action, updateState, dispatch}) => {
         const id = action.payload.result[0].sys_id;
         updateState({consultantId: id})
+        dispatch('FETCH_PROJECTS', {
+            tableName: 'x_esg_one_core_project_role', 
+            sysparm_query: `consultant_assigned=${id}`,
+            sysparm_fields: `
+                project.sys_id,
+                project.short_description,
+                project.client.short_description,
+                project.client.sys_id
+            `
+        })
     },
     'FETCH_GENERIC_PROJECTS': createHttpEffect(
         'api/now/table/x_esg_one_core_project',
@@ -49,7 +59,31 @@ export default {
         }
         updateState({genericProjects: response})
     },
-    
+    'FETCH_PROJECTS': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        successActionType: 'SET_PROJECTS',
+        errorActionType: 'LOG_ERROR'
+    }),
+    'SET_PROJECTS': ({action, updateState, state}) => {
+        // Store in Map to avoid duplicates
+        // Also massage dot-walked addresses into a normal-looking object
+        const projects = new Map();
+
+        action.payload.result.forEach(role => {
+            projects.set(role["project.sys_id"], {
+            short_description: role["project.short_description"],
+            client: {
+                short_description: role["project.client.short_description"],
+                sys_id: role["project.client.sys_id"],
+            },
+            sys_id: role["project.sys_id"],
+        })})
+        updateState({
+            projects: Array.from(projects.values())
+        })
+    },
     'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
     'LOG_ERROR': ({action}) => console.error('ERROR', action.payload.msg, action.payload.data),
     'TEST_START': () => console.log('test start'),
