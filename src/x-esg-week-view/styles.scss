@@ -9,6 +9,11 @@
     font-family: $font-primary;
     margin: auto;
 
+    .week-view-grid {
+        display: grid;
+        grid-template-columns: 3fr repeat(7, 1fr);
+    }
+
     .weekly-header {
         display: flex;
         flex-direction: row;
@@ -65,10 +70,69 @@
 
     .weekly-subheader {
         padding: $item-padding;
+        border-bottom: $border-primary;
 
         .weekly-subheader-title {
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
         }
     }
+    
+    .add-project-container {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        padding: $item-padding;
+
+        .add-project-items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .add-project-client {
+                color: $color-secondary;
+                font-weight: $font-weight-bold;
+                font-size: $font-size-medium;
+            }
+    
+            .add-project-selections {
+                border-top: $border-primary;
+            }
+        }
+
+        
+        
+    }
+    
+
+    .client-container {
+        padding: $item-padding;
+        border-top: $border-primary;
+
+        .client-name {
+            color: $color-secondary;
+            font-weight: $font-weight-bold;
+            font-size: $font-size-medium;
+        }
+
+        .project-item {
+            font-weight: $font-weight-bold;
+            font-size: $font-size-medium;
+            padding-top: 8px;
+
+            .project-item-title {
+                align-self: center
+            }
+
+            .project-item-time {
+                @include input;
+                height: 30px;
+                width: 74px;
+
+            }
+        }
+
+    }
 }
+
+

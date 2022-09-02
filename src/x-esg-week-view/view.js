@@ -8,20 +8,38 @@ export const view = (state) => {
     const clientList = Array.from(clientMap.values())
 
     console.log("STATE", state);
-    console.log("Client Map", clientMap);
-    console.log(Array.from(clientMap.values()));
+    
     
 
 	return (
         <div className="week-container">
-            <WeeklyHeader 
-                selectedDay={selectedDay}
-            />
+            <WeeklyHeader selectedDay={selectedDay}/>
             <WeeklySubHeader />
+            <div className="add-project-container">
+                {clientList.map(client => {
+                    const allProjects = client.projects;
+                    console.log("allProjects", allProjects);
+                    return(
+                        <div className="add-project-items">
+                            <span className="add-project-client">{client.short_description}</span>
+                            <div className="add-project-selections">
+                                {allProjects.map(project => {
+                                    return (
+                                        <div>
+                                            <input type="checkbox" id={project.short_description} name={project.short_description}/>
+                                            <label className="" htmlFor={project.short_description}>{project.short_description}</label>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
             <div>
                 {clientList.map(client => <Client client={client}/> )}
             </div>
-            
+
         </div>
     );
 }
