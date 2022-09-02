@@ -2,19 +2,25 @@ import { WeeklyHeader } from "./components/WeeklyHeader";
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { Client } from './components/Client'
 
-export const view = (state) => {
+export const view = (state, {updateState}) => {
 
-    const { selectedDay, clientMap } = state
+    const { selectedDay, clientMap, projectMap, dailyEntries } = state
     const clientList = Array.from(clientMap.values())
 
     console.log("STATE", state);
     
-    
 
 	return (
         <div className="week-container">
-            <WeeklyHeader selectedDay={selectedDay}/>
-            <WeeklySubHeader />
+            <WeeklyHeader 
+                selectedDay={selectedDay}
+                updateState={updateState}
+            />
+            <WeeklySubHeader
+                selectedDay={selectedDay}
+                projectMap={projectMap}
+                dailyEntries={dailyEntries}
+            />
             <div className="add-project-container">
                 {clientList.map(client => {
                     const allProjects = client.projects;

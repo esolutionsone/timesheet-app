@@ -75,6 +75,15 @@
         .weekly-subheader-title {
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
+            align-self: center;
+        }
+        
+        .weekday-hours {
+            font-weight: $font-weight-bold;
+
+            &.weekday-hours-zero {
+                display: none;
+            }
         }
     }
     
