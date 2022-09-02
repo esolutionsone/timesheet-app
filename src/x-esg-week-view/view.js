@@ -3,9 +3,11 @@ import { WeeklySubHeader } from "./components/WeeklySubHeader";
 
 export const view = (state) => {
 
-    const { selectedDay } = state
+    const { selectedDay, projectMap, dailyEntries } = state
 
     console.log("STATE", state);
+
+    
     
 
 	return (
@@ -13,7 +15,11 @@ export const view = (state) => {
             <WeeklyHeader 
                 selectedDay={selectedDay}
             />
-            <WeeklySubHeader />
+            <WeeklySubHeader
+                selectedDay={selectedDay}
+                projectMap={projectMap}
+                dailyEntries={dailyEntries}
+            />
             WEEK VIEW
         </div>
     );
