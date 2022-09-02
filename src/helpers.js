@@ -204,8 +204,9 @@ function addDaysSetHours(date, days, end) {
     );
 }
 
-export const buildProjectMap = (timestamps) => {
+export const buildProjectMap = (timestamps, entries) => {
         const stampsByProject = new Map();
+        console.log('entries', entries);
         
         // Massage for easy mapping
         // Subtracting the parsed ServiceNow zero duration time with 
@@ -221,22 +222,40 @@ export const buildProjectMap = (timestamps) => {
                 client: stamp['project.client.short_description'],
                 ["client.sys_id"]: stamp['project.client.sys_id'],
                 short_description: stamp['project.short_description'],
+                time_entries: [],
             }
+
+            if(entries){
+                sharedValues.time_entries = entries.filter(entry => {
+                    return entry['project.sys_id'] == projectId;
+                })
+            }
+
+            console.log('sharedValues', sharedValues);
+
             if(stampsByProject.has(projectId)){
-                stampsByProject.set(projectId, {
+                const project = {
                     ...sharedValues,
                     timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
                     totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
                         (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
                         || 0),
-                });
+                }
+
+                console.log('project has', project);
+
+                stampsByProject.set(projectId, project);
             } else{
-                stampsByProject.set(projectId, {
+                const project = {
                     ...sharedValues,
                     timestamps: [stamp],
                     totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
-                })
+                }
+                console.log('project set', project)
+                stampsByProject.set(projectId, project)
             }
         }
+
+        console.log('stamps by project', stampsByProject)
         return stampsByProject;
 }

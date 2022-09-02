@@ -6,6 +6,7 @@ export const view = (state, {updateState}) => {
     const { selectedDay, projectMap, dailyEntries } = state
 
     console.log("STATE", state);
+
     
 	return (
         <div className="week-container">
