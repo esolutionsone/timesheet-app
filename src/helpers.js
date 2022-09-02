@@ -204,9 +204,15 @@ function addDaysSetHours(date, days, end) {
     );
 }
 
+/**
+ * Takes in an array of timestamps, and organizes them into a map of projects.
+ * Optionally takes in array of time entries as well, to complete the 
+ * @param {*} timestamps 
+ * @param {*} entries optional
+ * @returns 
+ */
 export const buildProjectMap = (timestamps, entries) => {
         const stampsByProject = new Map();
-        console.log('entries', entries);
         
         // Massage for easy mapping
         // Subtracting the parsed ServiceNow zero duration time with 
@@ -231,8 +237,6 @@ export const buildProjectMap = (timestamps, entries) => {
                 })
             }
 
-            console.log('sharedValues', sharedValues);
-
             if(stampsByProject.has(projectId)){
                 const project = {
                     ...sharedValues,
@@ -242,8 +246,6 @@ export const buildProjectMap = (timestamps, entries) => {
                         || 0),
                 }
 
-                console.log('project has', project);
-
                 stampsByProject.set(projectId, project);
             } else{
                 const project = {
@@ -251,11 +253,22 @@ export const buildProjectMap = (timestamps, entries) => {
                     timestamps: [stamp],
                     totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
                 }
-                console.log('project set', project)
                 stampsByProject.set(projectId, project)
             }
         }
 
-        console.log('stamps by project', stampsByProject)
+        //handle projects with entries but no timestamps
+        if(entries){
+            for(let entry of entries){
+                if(!stampsByProject.has(entry['project.sys_id'])){
+                    stampsByProject.set(entry['project.sys_id'], {
+                        time_entries: entries.filter(en => {
+                            return en['project.sys_id'] == entry['project.sys_id']
+                        }),
+                    })
+                }
+            }
+        }
+        
         return stampsByProject;
 }
