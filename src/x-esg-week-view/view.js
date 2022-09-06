@@ -15,7 +15,6 @@ export const view = (state, {updateState}) => {
     const {genericProjects, projects} = state.properties;
 
     console.log("WEEK STATE", state);
-    console.log('generic projects', genericProjects)
 
 	return (
         <div className="week-container">
@@ -30,8 +29,11 @@ export const view = (state, {updateState}) => {
             />
             <div className="add-project-container">
                 {clientList.map(client => {
-                    const allProjects = [...genericProjects, ...projects];
-                    console.log("allProjects", allProjects);
+                    // Get the ids of current active Projects, then filter
+                    // consultant projects to return difference.
+                    const activeProjectIds = Array.from(projectMap.keys());
+                    const allProjects = [...genericProjects, ...projects]
+                        .filter(proj => !activeProjectIds.includes(proj.sys_id));
                     return(
                         <div className="add-project-items">
                             <span className="add-project-client">{client.short_description}</span>
