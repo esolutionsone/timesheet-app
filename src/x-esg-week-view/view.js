@@ -1,26 +1,28 @@
-import { WeeklyHeader } from "./components/WeeklyHeader";
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
+import { WeeklyHeader } from "./components/WeeklyHeader";
 import { Client } from './components/Client'
 
-export const view = (state, {updateState}) => {
+export const view = (state, { updateState, dispatch }) => {
 
-    const { 
-        selectedDay, 
-        clientMap, 
-        projectMap, 
+    const {
+        selectedDay,
+        clientMap,
+        projectMap,
         dailyEntries,
     } = state
     const clientList = Array.from(clientMap.values());
 
-    const {genericProjects, projects} = state.properties;
+    const { genericProjects, projects } = state.properties;
 
     console.log("WEEK STATE", state);
+    console.log('selectedDay = ', selectedDay);
 
-	return (
+    return (
         <div className="week-container">
-            <WeeklyHeader 
+            <WeeklyHeader
                 selectedDay={selectedDay}
                 updateState={updateState}
+                dispatch={dispatch}
             />
             <WeeklySubHeader
                 selectedDay={selectedDay}
@@ -34,14 +36,14 @@ export const view = (state, {updateState}) => {
                     const activeProjectIds = Array.from(projectMap.keys());
                     const allProjects = [...genericProjects, ...projects]
                         .filter(proj => !activeProjectIds.includes(proj.sys_id));
-                    return(
+                    return (
                         <div className="add-project-items">
                             <span className="add-project-client">{client.short_description}</span>
                             <div className="add-project-selections">
                                 {allProjects.map(project => {
                                     return (
                                         <div>
-                                            <input type="checkbox" id={project.short_description} name={project.short_description}/>
+                                            <input type="checkbox" id={project.short_description} name={project.short_description} />
                                             <label className="" htmlFor={project.short_description}>{project.short_description}</label>
                                         </div>
                                     );
@@ -52,7 +54,7 @@ export const view = (state, {updateState}) => {
                 })}
             </div>
             <div>
-                {clientList.map(client => <Client client={client}/> )}
+                {clientList.map(client => <Client client={client} />)}
             </div>
 
         </div>
