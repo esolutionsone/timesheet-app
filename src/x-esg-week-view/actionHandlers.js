@@ -21,7 +21,7 @@ export default {
         successActionType: 'SET_WEEKLY_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
     }),
-    'SET_WEEKLY_TIMESTAMPS': ({state, action, updateState}) => {
+    'SET_WEEKLY_TIMESTAMPS': ({state, action, updateState, dispatch}) => {
         console.log('Setting timestamps: action:', action);
 
         const {dailyEntries} = state;

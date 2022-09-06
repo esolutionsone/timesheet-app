@@ -25,6 +25,8 @@ export const view = (state, {dispatch, updateState}) => {
 
     if(consultantId == '') return <div>Loading...</div>;
 
+    console.log('DAILY STATE', state);
+
     return (
             <div className="today-container">
                 <TimerHeader 

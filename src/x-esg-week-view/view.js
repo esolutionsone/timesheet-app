@@ -4,12 +4,18 @@ import { Client } from './components/Client'
 
 export const view = (state, {updateState}) => {
 
-    const { selectedDay, clientMap, projectMap, dailyEntries } = state
-    const clientList = Array.from(clientMap.values())
+    const { 
+        selectedDay, 
+        clientMap, 
+        projectMap, 
+        dailyEntries,
+    } = state
+    const clientList = Array.from(clientMap.values());
 
-    console.log("STATE", state);
+    const {genericProjects, projects} = state.properties;
 
-    
+    console.log("WEEK STATE", state);
+    console.log('generic projects', genericProjects)
 
 	return (
         <div className="week-container">
@@ -24,7 +30,7 @@ export const view = (state, {updateState}) => {
             />
             <div className="add-project-container">
                 {clientList.map(client => {
-                    const allProjects = client.projects;
+                    const allProjects = [...genericProjects, ...projects];
                     console.log("allProjects", allProjects);
                     return(
                         <div className="add-project-items">
