@@ -53,7 +53,6 @@
                     cursor: pointer;
                 }
             }
-
         }
 
         .weekly-date-start {
@@ -70,7 +69,6 @@
 
     .weekly-subheader {
         padding: $item-padding;
-        border-bottom: $border-primary;
 
         .weekly-subheader-title {
             font-weight: $font-weight-bold;
@@ -91,6 +89,7 @@
         display: flex;
         justify-content: space-evenly;
         flex-wrap: wrap;
+        border-top: $border-primary;
         padding: $item-padding;
 
         .add-project-items {
@@ -108,12 +107,8 @@
                 border-top: $border-primary;
             }
         }
-
-        
-        
     }
     
-
     .client-container {
         padding: $item-padding;
         border-top: $border-primary;
@@ -140,7 +135,6 @@
 
             }
         }
-
     }
 }
 

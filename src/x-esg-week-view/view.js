@@ -13,7 +13,7 @@ export const view = (state, { updateState, dispatch }) => {
     } = state
     const clientList = Array.from(clientMap.values());
 
-    const { genericProjects, projects } = state.properties;
+    const { genericProjects, projects, addProjectStatus } = state.properties;
 
     // Get the ids of current active Projects, then filter
     // consultant projects to return difference.
@@ -56,28 +56,31 @@ export const view = (state, { updateState, dispatch }) => {
                 dailyEntries={dailyEntries}
                 dateArr={dateArr}
             />
-            <div className="add-project-container">
-                {Array.from(sortedProjects.entries()).map(([client, projects]) => {
-                    // Get the ids of current active Projects, then filter
-                    // consultant projects to return difference.
-                    return (
-                        <div className="add-project-items">
-                            <span className="add-project-client">{client}</span>
-                            <div className="add-project-selections">
-                                {projects.map(project => {
-                                    console.log('PROJECT => ', project)
-                                    return (
-                                        <div>
-                                            <input type="checkbox" id={project.short_description} name={project.short_description} />
-                                            <label className="" htmlFor={project.short_description}>{project.short_description}</label>
-                                        </div>
-                                    );
-                                })}
+            {!addProjectStatus ? 
+                ''
+                :
+                <div className="add-project-container">
+                    {Array.from(sortedProjects.entries()).map(([client, projects]) => {
+                        // Get the ids of current active Projects, then filter
+                        // consultant projects to return difference.
+                        return (
+                            <div className="add-project-items">
+                                <span className="add-project-client">{client}</span>
+                                <div className="add-project-selections">
+                                    {projects.map(project => {
+                                        return (
+                                            <div>
+                                                <input type="checkbox" id={project.short_description} name={project.short_description} />
+                                                <label className="" htmlFor={project.short_description}>{project.short_description}</label>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </div>
+                        );
+                    })}
+                </div>
+            }
             <div>
                 {clientList.map(client => <Client client={client} dateArr={dateArr} />)}
             </div>
