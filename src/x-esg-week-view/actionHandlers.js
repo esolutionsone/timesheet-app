@@ -1,6 +1,6 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
-import { getSnDayBounds, getSnWeekBounds, buildProjectMap } from '../helpers';
+import { getSnWeekBounds, buildProjectMap } from '../helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
 const { COMPONENT_BOOTSTRAPPED } = actionTypes;
@@ -61,31 +61,4 @@ export default {
             FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
         );
     },
-    'UPDATE_CLIENT_MAP': ({ action, state, updateState }) => {
-        // console.log(action.payload.result);
-        // const clientMap = state.clientMap;
-
-        // for(let entry of action.payload.result){
-
-        //     if(clientMap.has(entry['project.client.sys_id'])){
-        //         const client = clientMap.get(entry['project.client.sys_id'])
-        //         const project = client.projects.find(proj => {
-        //             return entry['project.sys_id'] == proj.sys_id;
-        //         });
-
-        //         if(project){
-        //             project.entries.push(entry);
-        //         }else{
-        //             client.projects.push({
-        //                 sys_id: entry['project.sys_id'],
-        //                 entries: [entry],
-        //             })
-        //         }
-        //     }else{
-        //         clientMap.set(entry['project.client.sys_id'], {
-        //             projects: []
-        //         })
-        //     }
-        // }
-    }
 } 
