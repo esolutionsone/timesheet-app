@@ -1,8 +1,11 @@
 
 
 export const Client = ({client}) => {
+    console.log('Client', client)
 
-    const projectList = client.projects
+    const projectList = client.projects;
+
+
 
     return (
         <div className="client-container">

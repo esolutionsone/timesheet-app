@@ -4,17 +4,10 @@ import { format } from "date-fns";
 export const WeeklySubHeader = ({
     selectedDay, 
     projectMap, 
-    dailyEntries
+    dailyEntries,
+    dateArr,
 }) => {
     const projects = Array.from(projectMap.values());
-    
-    // Create array of mappable dates
-    const firstDate = getWeekBounds(selectedDay)[0];
-    const dateArr = [];
-    for(let i=0; i<7; i++){
-        dateArr.push(new Date(firstDate));
-        firstDate.setDate(firstDate.getDate() + 1);
-    }
 
     return (
         <div className="weekly-subheader week-view-grid">

@@ -1,6 +1,7 @@
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
-import { Client } from './components/Client'
+import { Client } from './components/Client';
+import { getWeekBounds } from "../helpers";
 
 export const view = (state, { updateState, dispatch }) => {
 
@@ -31,6 +32,14 @@ export const view = (state, { updateState, dispatch }) => {
         }
     })
 
+    // Create array of mappable dates
+    const firstDate = getWeekBounds(selectedDay)[0];
+    const dateArr = [];
+    for(let i=0; i<7; i++){
+        dateArr.push(new Date(firstDate));
+        firstDate.setDate(firstDate.getDate() + 1);
+    }
+
     console.log("WEEK STATE", state);
     console.log('selectedDay = ', selectedDay);
 
@@ -45,6 +54,7 @@ export const view = (state, { updateState, dispatch }) => {
                 selectedDay={selectedDay}
                 projectMap={projectMap}
                 dailyEntries={dailyEntries}
+                dateArr={dateArr}
             />
             <div className="add-project-container">
                 {Array.from(sortedProjects.entries()).map(([client, projects]) => {
@@ -55,6 +65,7 @@ export const view = (state, { updateState, dispatch }) => {
                             <span className="add-project-client">{client}</span>
                             <div className="add-project-selections">
                                 {projects.map(project => {
+                                    console.log('PROJECT => ', project)
                                     return (
                                         <div>
                                             <input type="checkbox" id={project.short_description} name={project.short_description} />
@@ -68,7 +79,7 @@ export const view = (state, { updateState, dispatch }) => {
                 })}
             </div>
             <div>
-                {clientList.map(client => <Client client={client} />)}
+                {clientList.map(client => <Client client={client} dateArr={dateArr} />)}
             </div>
 
         </div>
