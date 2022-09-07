@@ -69,7 +69,7 @@ export default (state, {updateState}) => {
 									})
 								}>
 							<span className="material-symbols-outlined">add</span>
-							Project
+							Time Entry
 					</button>
 					<button 
 						className="edit-button"
@@ -81,12 +81,12 @@ export default (state, {updateState}) => {
 				<div>
 					<button 
 						className={`day-button ${(location == 'day') ? 'active' : ''}`}
-						on-click={()=> updateState({location: 'day'})}>
-							Day
+						on-click={()=> updateState({location: 'day', addProjectStatus: false, editMode: false})}>
+							Timers
 					</button>
 					<button 
 						className={`week-button ${(location == 'week') ? 'active' : ''}`}
-						on-click={()=> updateState({location: 'week'})}>
+						on-click={()=> updateState({location: 'week', addProjectStatus: false, editMode: false})}>
 							Week
 					</button>
 				</div>
