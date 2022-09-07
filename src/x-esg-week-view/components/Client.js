@@ -40,11 +40,20 @@ export const Client = ({client, dateArr}) => {
                                             return acc + getUTCTime(stamp.rounded_duration).getTime();
                                         }, 0) / 1000 / 60 / 60;
 
-                                    console.log('timestampHours', timestampHours);
+                                    // Add time adjustment from timeEntry
+                                    let timeAdjustment = 0;
+                                    if(todayEntry){
+                                        console.log('time adjustment', todayEntry.timeAdjustment);
+                                        timeAdjustment = getUTCTime(todayEntry.time_adjustment).getTime();
+                                        timeAdjustment = timeAdjustment / 1000 / 60 / 60;
+                                        timeAdjustment *= todayEntry.adjustment_direction == 'add' 
+                                            ? 1 : -1;
+                                    }
+                                    console.log('timeAdjustment', timeAdjustment);
                                     return <input 
                                         className="project-item-time" 
                                         type="number" 
-                                        value={timestampHours}    
+                                        value={timestampHours + timeAdjustment}    
                                     />   
                                 }     
                             })}                
