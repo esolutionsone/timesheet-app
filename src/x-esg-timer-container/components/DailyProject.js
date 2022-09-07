@@ -5,19 +5,20 @@ import '../../x-esg-timer-button';
 // import '../../Project';
 
 export const DailyProject = ({
-                                proj,
-                                editableTimestamp, 
-                                editMode, 
-                                selectedDay, 
-                                projectMap, 
-                                dispatch, 
-                                timestampTable,
-                                consultantId }) => {
+    proj,
+    editableTimestamp,
+    editMode,
+    selectedDay,
+    projectMap,
+    dispatch,
+    timestampTable,
+    consultantId 
+}) => {
     const {
-        client, 
-        short_description, 
-        sys_id, 
-        active, 
+        client,
+        short_description,
+        sys_id,
+        active,
         timestamps
     } = proj;
     const latestActive = timestamps.find(stamp => stamp.active === "true");
@@ -33,16 +34,16 @@ export const DailyProject = ({
             });
 
             dispatch('FETCH_CONSULTANT_TIMESTAMPS', FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnDayBounds(selectedDay)));
-        } 
+        }
     }
-    
+
     return (
         <div className="project-item" key={sys_id}>
             <div className="client-name">{client}</div>
             <div className="project-title-container">
                 <div className="project-title">{short_description}</div>
                 <div className="project-start-stop-container">
-                    {isToday(selectedDay) ? <x-esg-timer-button 
+                    {isToday(selectedDay) ? <x-esg-timer-button
                         projectData={proj}
                         active={active}
                         start={latestActive ? latestActive.start_time : null}
@@ -50,11 +51,11 @@ export const DailyProject = ({
                         sysId={latestActive ? latestActive.sys_id : null}
                     /> : ''}
 
-                <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
-                    {!editMode ? 
-                        '' 
-                        : 
-                        <span 
+                    <div>{msToString(projectMap.get(sys_id).totalRoundedTime)}</div>
+                    {!editMode ?
+                        ''
+                        :
+                        <span
                             className="material-symbols-rounded remove-project"
                             on-click={(e) => handleDeleteProject(e, proj)}
                         >
@@ -63,7 +64,7 @@ export const DailyProject = ({
                     }
                 </div>
             </div>
-            <timestamp-list 
+            <timestamp-list
                 editableTimestamp={editableTimestamp}
                 editMode={editMode}
                 timestamps={timestamps}

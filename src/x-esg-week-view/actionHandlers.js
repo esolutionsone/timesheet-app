@@ -17,14 +17,24 @@ export default {
         successActionType: 'SET_WEEKLY_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
     }),
-    'SET_WEEKLY_TIMESTAMPS': ({ state, action, updateState, dispatch }) => {
+    'SET_WEEKLY_TIMESTAMPS': ({ state, action, updateState, properties }) => {
         console.log('Setting timestamps: action:', action);
 
         const { dailyEntries } = state;
         const projectMap = buildProjectMap(action.payload.result, dailyEntries)
         const clientMap = state.clientMap;
+        const {genericProjects, projects} = properties;
+
+        const allProjects = [...genericProjects, ...projects];
+        const untrackedProjects = allProjects.filter(proj => {
+            return !Array.from(projectMap.values())
+                .map(p => p.sys_id)
+                .includes(proj.sys_id)
+        })
+
         projectMap.forEach(proj => {
             proj.entries = [];
+
             if (clientMap.has(proj['client.sys_id'])) {
                 clientMap.get(proj['client.sys_id']).projects.push(proj);
             } else {
@@ -34,6 +44,18 @@ export default {
                     sys_id: proj['client.sys_id'],
                 });
             }
+        })
+
+        untrackedProjects.forEach(proj => {
+            if(clientMap.has(proj.client.sys_id)){
+                clientMap.get(proj.client.sys_id).projects.push(proj);
+            }else{
+                clientMap.set(proj.client.sys_id, {
+                    short_description: proj.client.short_description,
+                    projects: [proj],
+                    sys_id: proj.client.sys_id,
+                })
+            }     
         })
         updateState({ projectMap: projectMap, clientMap: clientMap });
     },
