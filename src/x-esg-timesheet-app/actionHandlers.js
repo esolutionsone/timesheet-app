@@ -26,7 +26,7 @@ export default {
         successActionType: 'HANDLE_CONSULTANT_ID'
     }),
     'HANDLE_CONSULTANT_ID': ({action, updateState, dispatch}) => {
-        const id = action.payload.result[0].sys_id;
+        const id = action.payload.result[0].sys_id || action.payload.sys_id;
         updateState({consultantId: id})
         dispatch('FETCH_PROJECTS', {
             tableName: 'x_esg_one_core_project_role', 

@@ -21,6 +21,8 @@ createCustomElement('x-esg-week-view', {
 		addProjectStatus: {default: false},
 		editMode: {default: false},
 		consultantId: {default: ''},
+		genericProjects: {default: []},
+		projects: {default: []},
 	},
 	actionHandlers
 });

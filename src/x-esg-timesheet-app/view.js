@@ -55,7 +55,7 @@ export default (state, {updateState}) => {
 			jsx = <div>Error: route not found</div>
 	}
 
-    console.log(state);
+    console.log('APP STATE', state);
 
 	return (
 		<div>

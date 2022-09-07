@@ -1,20 +1,14 @@
-import {actionTypes} from '@servicenow/ui-core';
+import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
-import { getSnDayBounds, getSnWeekBounds, buildProjectMap } from '../helpers';
+import { getSnWeekBounds, buildProjectMap } from '../helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
-const {COMPONENT_BOOTSTRAPPED} = actionTypes;
+const { COMPONENT_BOOTSTRAPPED } = actionTypes;
 
 export default {
-    [COMPONENT_BOOTSTRAPPED]: ({state, properties, dispatch}) => {
-        const {selectedDay} = state;
-        const {consultantId, timeEntryTable} = properties;
-        dispatch('FETCH_WEEKLY_TIMESTAMPS', 
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
-        );
-        dispatch('FETCH_WEEKLY_TIME_ENTRIES', 
-            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        );
+    [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
+        console.log('WEEK VIEW BOOTSTRAPPED');        
+        dispatch('WEEK_REFETCH');
     },
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -23,15 +17,17 @@ export default {
         successActionType: 'SET_WEEKLY_TIMESTAMPS',
         errorActionType: 'LOG_ERROR',
     }),
-    'SET_WEEKLY_TIMESTAMPS': ({action, updateState}) => {
+    'SET_WEEKLY_TIMESTAMPS': ({ state, action, updateState, dispatch }) => {
         console.log('Setting timestamps: action:', action);
 
-        const projectMap = buildProjectMap(action.payload.result)
-        const clientMap = new Map();
+        const { dailyEntries } = state;
+        const projectMap = buildProjectMap(action.payload.result, dailyEntries)
+        const clientMap = state.clientMap;
         projectMap.forEach(proj => {
-            if(clientMap.has(proj['client.sys_id'])){
+            proj.entries = [];
+            if (clientMap.has(proj['client.sys_id'])) {
                 clientMap.get(proj['client.sys_id']).projects.push(proj);
-            }else{
+            } else {
                 clientMap.set(proj['client.sys_id'], {
                     short_description: proj.client,
                     projects: [proj],
@@ -39,7 +35,7 @@ export default {
                 });
             }
         })
-        updateState({projectMap: projectMap, clientMap: clientMap});
+        updateState({ projectMap: projectMap, clientMap: clientMap });
     },
     'FETCH_WEEKLY_TIME_ENTRIES': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -48,7 +44,21 @@ export default {
         successActionType: 'SET_WEEKLY_TIME_ENTRIES',
         errorActionType: 'LOG_ERROR',
     }),
-    'SET_WEEKLY_TIME_ENTRIES': ({action, updateState}) => {
-        updateState({dailyEntries: action.payload.result});
-    }
-}
+    'SET_WEEKLY_TIME_ENTRIES': ({ action, state, properties, updateState, dispatch }) => {
+        updateState({ dailyEntries: action.payload.result });
+        const { selectedDay } = state;
+        const { consultantId, timeEntryTable } = properties;
+        dispatch('FETCH_WEEKLY_TIMESTAMPS',
+            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
+        );
+    },
+    'WEEK_REFETCH': ({ dispatch, state, properties, updateState }) => {
+        const { selectedDay } = state;
+        const { consultantId, timeEntryTable } = properties;
+
+        updateState({ clientMap: new Map() });
+        dispatch('FETCH_WEEKLY_TIME_ENTRIES',
+            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
+        );
+    },
+} 

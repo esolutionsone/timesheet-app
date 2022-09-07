@@ -204,7 +204,14 @@ function addDaysSetHours(date, days, end) {
     );
 }
 
-export const buildProjectMap = (timestamps) => {
+/**
+ * Takes in an array of timestamps, and organizes them into a map of projects.
+ * Optionally takes in array of time entries as well, to complete the 
+ * @param {*} timestamps 
+ * @param {*} entries optional
+ * @returns 
+ */
+export const buildProjectMap = (timestamps, entries) => {
         const stampsByProject = new Map();
         
         // Massage for easy mapping
@@ -221,22 +228,47 @@ export const buildProjectMap = (timestamps) => {
                 client: stamp['project.client.short_description'],
                 ["client.sys_id"]: stamp['project.client.sys_id'],
                 short_description: stamp['project.short_description'],
+                time_entries: [],
             }
+
+            if(entries){
+                sharedValues.time_entries = entries.filter(entry => {
+                    return entry['project.sys_id'] == projectId;
+                })
+            }
+
             if(stampsByProject.has(projectId)){
-                stampsByProject.set(projectId, {
+                const project = {
                     ...sharedValues,
                     timestamps: [stamp, ...stampsByProject.get(projectId).timestamps],
                     totalRoundedTime: stampsByProject.get(projectId).totalRoundedTime + 
                         (Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") 
                         || 0),
-                });
+                }
+
+                stampsByProject.set(projectId, project);
             } else{
-                stampsByProject.set(projectId, {
+                const project = {
                     ...sharedValues,
                     timestamps: [stamp],
                     totalRoundedTime: Date.parse(stamp.rounded_duration) - Date.parse("1970-01-01 00:00:00") || 0,
-                })
+                }
+                stampsByProject.set(projectId, project)
             }
         }
+
+        //handle projects with entries but no timestamps
+        if(entries){
+            for(let entry of entries){
+                if(!stampsByProject.has(entry['project.sys_id'])){
+                    stampsByProject.set(entry['project.sys_id'], {
+                        time_entries: entries.filter(en => {
+                            return en['project.sys_id'] == entry['project.sys_id']
+                        }),
+                    })
+                }
+            }
+        }
+        
         return stampsByProject;
 }

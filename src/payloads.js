@@ -11,5 +11,6 @@ export const FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD = (consultantId, start_time, en
 export const FETCH_TIME_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
     tableName,
     sysparm_query: `consultant=${consultantId}^date>${start_time}^date<${end_time}
-    ^ORDERBYstart_time`
+    ^ORDERBYstart_time`,
+    sysparm_fields: 'date,sys_id,time_adjustment, project.sys_id, project.client.sys_id'
 })

@@ -2,9 +2,10 @@ import WebFont from 'webfontloader';
 import { getWeekBounds } from '../../helpers';
 import { dateFormatter } from '../../constants'
 import {format} from 'date-fns'
+import { FETCH_TIME_ENTRIES_PAYLOAD } from '../../payloads';
 
 
-export const WeeklyHeader = ({selectedDay, updateState}) => {
+export const WeeklyHeader = ({selectedDay, updateState, dispatch}) => {
 
     const startDay = format(getWeekBounds(selectedDay)[0], 'MMM dd')
     const endDay = format(getWeekBounds(selectedDay)[1], 'MMM dd, Y')
@@ -15,6 +16,8 @@ export const WeeklyHeader = ({selectedDay, updateState}) => {
         updateState({
             selectedDay: new Date(selectedDay.setDate(selectedDay.getDate() + increment))
         })
+        dispatch('WEEK_REFETCH');
+
     }
 
     return (

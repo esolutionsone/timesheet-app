@@ -7,9 +7,10 @@ const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
 export default {
     [COMPONENT_BOOTSTRAPPED]: ({state, properties, dispatch}) => {
-        console.log('state', state)
+        console.log('DAILY VIEW BOOTSTRAPPED', state)
         const {selectedDay} = state;
         const {consultantId} = properties;
+        
 
         if(consultantId.length < 1){
             dispatch('LOG_ERROR', {msg: 'No consultant id provided', data: state});
