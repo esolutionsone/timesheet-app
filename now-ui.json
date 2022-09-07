@@ -33,6 +33,16 @@
 				"description": "A description of my component",
 				"category": "primitives"
 			}
+		},
+		"x-esg-timesheet-app": {
+			"innerComponents": ["x-esg-timer-container", "x-esg-week-view"],
+			"uiBuilder": {
+				"associatedTypes": ["global.core", "global.landing-page"],
+				"label": "Timesheet App",
+				"icon": "document-outline",
+				"description": "Combined time tracking components",
+				"category": "primitives"
+			}
 		}
 	},
 	"scopeName": "x_esg_one_delivery_timer_b_0"
