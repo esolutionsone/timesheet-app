@@ -1,0 +1,141 @@
+@import '../styles/variables.scss';
+@import '../styles/materialSymbols.scss';
+
+.week-container {
+    @include default-border;
+    box-sizing: border-box;
+    width: 80%;
+    background: $bg-primary;
+    font-family: $font-primary;
+    margin: auto;
+
+    .week-view-grid {
+        display: grid;
+        grid-template-columns: 3fr repeat(7, 1fr);
+    }
+
+    .weekly-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: $item-padding;
+        border-bottom: $border-primary;
+        font-family: $font-primary;
+
+        .weekly-left-right-buttons {
+            margin-right: 42px;
+
+            .chevron-left {
+                height: 36px;
+                width:46px;
+                border: $border-primary;
+                background-color: $bg-primary;
+                outline: none;
+                border-bottom-left-radius: $border-radius-default;
+                border-top-left-radius: $border-radius-default;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .chevron-right {
+                height: 36px;
+                width:46px;
+                border: $border-primary;
+                background-color: $bg-primary;
+                outline: none;
+                border-bottom-right-radius: $border-radius-default;
+                border-top-right-radius: $border-radius-default;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .weekly-date-start {
+            font-weight: $font-weight-bold;
+            font-size: $font-size-large;
+            padding-right: 10px;
+        }
+
+        .weekly-date-end {
+            font-size: $font-size-large;
+            padding-right: 10px;
+        }
+    }
+
+    .weekly-subheader {
+        padding: $item-padding;
+
+        .weekly-subheader-title {
+            font-weight: $font-weight-bold;
+            font-size: $font-size-medium;
+            align-self: center;
+        }
+        
+        .weekday-hours {
+            font-weight: $font-weight-bold;
+
+            &.weekday-hours-zero {
+                display: none;
+            }
+        }
+    }
+    
+    .add-project-container {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        border-top: $border-primary;
+        padding: $item-padding;
+
+        .add-project-items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .add-project-client {
+                color: $color-secondary;
+                font-weight: $font-weight-bold;
+                font-size: $font-size-medium;
+            }
+    
+            .add-project-selections {
+                border-top: $border-primary;
+            }
+        }
+    }
+    
+    .client-container {
+        padding: $item-padding;
+        border-top: $border-primary;
+
+        .client-name {
+            color: $color-secondary;
+            font-weight: $font-weight-bold;
+            font-size: $font-size-medium;
+        }
+
+        .project-item {
+            font-weight: $font-weight-bold;
+            font-size: $font-size-medium;
+            padding-top: 8px;
+
+            .project-item-title {
+                align-self: center
+            }
+
+            .project-item-time {
+                @include input;
+                height: 30px;
+                width: 74px;
+
+            }
+        }
+    }
+}
+
+

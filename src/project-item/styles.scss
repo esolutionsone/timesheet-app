@@ -1,0 +1,129 @@
+@import '@servicenow/sass-kit/host';
+@import '../styles/variables.scss';
+@import '../styles/materialSymbols.scss';
+
+.project-item {
+    padding: $item-padding;
+    font-weight: $font-weight-bold;
+    border-top: $border-primary;
+
+    .client-name {
+        font-size: $font-size-medium;
+        color: $color-secondary;
+    }
+
+    .project-title-container {
+        @include flex-between-center;
+        flex-direction: row;
+
+        .project-title {
+            font-size: 20px;
+            padding-bottom: 8px;
+            padding-top: 8px;
+            display: flex;
+        }
+        
+        .details-icon{
+            transition: .2s transform ease-in-out;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        .details-icon-down{
+            transform: rotate(180deg) ;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        .project-start-stop-container {
+            @include flex-between-center;
+            flex-direction: row;
+
+            .roundedTime-input-box{
+                @include input;
+                max-width: 50px;
+            }
+
+            .remove-project {
+                position: relative;
+                left: 100px;
+                color: red;
+                font-size: x-large;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .project-time {
+        font-weight: $font-weight-bold;
+        font-size: $font-size-large;
+        margin-left: 29px;
+    }
+    .project-notes {
+        font-weight: 500;
+        font-size: $font-size-medium;
+        color: $color-secondary;
+        max-height: 1000px;
+        transition: .3s max-height;
+        overflow: hidden;
+        // height: 1.5rem;
+
+        &.close-notes {
+            max-height: 0px;
+        }
+    
+        .edit-project-text {
+            @include default-border;
+            height: 107px;
+            width: 60%;
+            font-family: $font-primary;
+            padding: 10px;
+        }
+    
+        .remove-timestamp {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+    
+            .remove-timestamp-icon {
+                color: red;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    
+        .timestamp-note {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-right: 5px;
+            border-bottom: $border-primary;
+            padding-bottom: 5px;
+            width: 60%;
+            display: grid;
+            grid-template-columns: 4fr 4fr;
+    
+            .timestamp-times {
+                text-align: end;
+            }
+    
+            input {
+                @include input;
+                width: 90%;
+            }
+    
+            input[type="time"] {
+                @include input;
+                width: 7rem;
+                margin: auto;
+            }
+        }
+    }
+}
+

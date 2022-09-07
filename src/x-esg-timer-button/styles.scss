@@ -1,6 +1,7 @@
 @import '@servicenow/sass-kit/host';
+@import '../styles/variables.scss';
 
-$btn-dimensions: 1.3rem;
+$btn-dimensions: 1.6rem;
 
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
@@ -12,34 +13,27 @@ $btn-dimensions: 1.3rem;
 }
 
 .timer-button-container {
-    display: flex;
+    @include flex-even-center;
     width: 200px;
     flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
 }
 
 .timer-container {
-    background: #FEFEFD;
-    border: 1px solid #D6D6D6;
+    @include flex-between-center;
+    background: $bg-primary;
+    border: $border-primary;
 
     /* Shadow */
     box-shadow: 2px 2px 7px 1px rgba(0, 0, 0, 0.05);
     border-radius: 12px;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    font-family: 'Montserrat', sans-serif;
+    font-family: $font-primary;
     height: 37px;
-    padding: .5rem;
+    padding: $container-padding;
 }
 
 .timer-items-right {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-between-center;
     margin-right: 1rem;
     width: 300px;
 
@@ -50,21 +44,21 @@ $btn-dimensions: 1.3rem;
     text-align: center;
 }
 
-.timer-counter {
-    &.display-active {}
-}
-
 .display-active {
     color: green;
+    font-weight: 400;
+    font-size: larger;
 }
 
 .display-inactive {
-    color: red;
+    // color: red;
+    font-weight: 400;
+    font-size: larger;
 }
 
 .display-rounded {
     color: lightgray;
-    font-size: .8rem;
+    font-size: 1rem;
 }
 
 button {
@@ -86,19 +80,14 @@ button {
 }
 
 .btn-circle {
-    $border-width: .05rem;
+    @include flex-between-center;
     background-color: lightgreen;
     border-radius: 100%;
     width: $btn-dimensions;
     height: $btn-dimensions;
-    text-align: center;
-    // vertical-align: middle;
-    // line-height: $btn-dimensions;
-    display: flex;
-    align-items: center;
     border: 1px solid black;
-    border-width: $border-width;
-    box-sizing: contnent-box;
+    border-width: .05rem;
+    box-sizing: content-box;
     box-shadow: none;
     transition: all .5s ease-out;
 
