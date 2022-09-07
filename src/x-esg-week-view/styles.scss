@@ -122,7 +122,7 @@
         .project-item {
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
-            padding-top: 8px;
+            padding-top: 15px;
 
             .project-item-title {
                 align-self: center
@@ -130,9 +130,8 @@
 
             .project-item-time {
                 @include input;
-                height: 30px;
-                width: 74px;
-
+                height: 25px;
+                width: 55px;
             }
         }
     }
