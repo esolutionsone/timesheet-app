@@ -11,22 +11,19 @@ export const view = (state, { updateState, dispatch }) => {
         projectMap,
         dailyEntries,
     } = state
-    const clientList = Array.from(clientMap.values());
 
-    const { genericProjects, projects, addProjectStatus } = state.properties;
+    //  // Sort Projects by client
+    // const allProjects = [...genericProjects, ...projects]
+    // const sortedProjects = new Map();
 
-     // Sort Projects by client
-    const allProjects = [...genericProjects, ...projects]
-    const sortedProjects = new Map();
-
-    allProjects.forEach(proj => {
-        const client_id = proj.client.sys_id;
-        if(sortedProjects.has(client_id)){
-            sortedProjects.get(client_id).push(proj);
-        }else{
-            sortedProjects.set(client_id, [proj]);
-        }
-    })
+    // allProjects.forEach(proj => {
+    //     const client_id = proj.client.sys_id;
+    //     if(sortedProjects.has(client_id)){
+    //         sortedProjects.get(client_id).push(proj);
+    //     }else{
+    //         sortedProjects.set(client_id, [proj]);
+    //     }
+    // })
 
     // Create array of mappable dates
     const firstDate = getWeekBounds(selectedDay)[0];
@@ -35,9 +32,6 @@ export const view = (state, { updateState, dispatch }) => {
         dateArr.push(new Date(firstDate));
         firstDate.setDate(firstDate.getDate() + 1);
     }
-
-    console.log("WEEK STATE", state);
-    console.log('sortedProjects', sortedProjects);
 
     return (
         <div className="week-container">
@@ -57,7 +51,6 @@ export const view = (state, { updateState, dispatch }) => {
                     return <Client client={client} dateArr={dateArr} />
                 })}
             </div>
-
         </div>
     );
 }

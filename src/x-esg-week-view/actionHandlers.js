@@ -32,6 +32,7 @@ export default {
                 .includes(proj.sys_id)
         })
 
+        // Include projects initialized from timestamps
         projectMap.forEach(proj => {
             proj.entries = [];
 
@@ -46,6 +47,7 @@ export default {
             }
         })
 
+        // Include projects with no timestamps
         untrackedProjects.forEach(proj => {
             if(clientMap.has(proj.client.sys_id)){
                 clientMap.get(proj.client.sys_id).projects.push(proj);
