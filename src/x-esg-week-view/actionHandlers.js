@@ -85,4 +85,11 @@ export default {
             FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
         );
     },
+    'UPDATE_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry/:sys_id', {
+        method: 'PUT',
+        pathParams: ['sys_id'],
+        dataParam: 'data',
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
+    }),
 } 

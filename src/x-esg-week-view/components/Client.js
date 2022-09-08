@@ -1,12 +1,29 @@
 import {format} from 'date-fns';
-import { getUTCTime } from '../../helpers';
+import { getUTCTime, stringifyDuration } from '../../helpers';
 
-export const Client = ({client, dateArr}) => {
+export const Client = ({client, dateArr, dispatch}) => {
     console.log('Client', client)
 
     const projectList = client.projects;
 
+    const handleBlur = (e, timestampHours, todayEntry) => {
+        const inputHours = Number(e.target.value);
+        const difference = inputHours - timestampHours;
 
+        const adjustment_direction = difference >= 0 ? 'add' : 'subtract';
+        const stringDuration = "1970-01-01 " + stringifyDuration({hours: Math.abs(difference)});
+
+        if(todayEntry){
+            dispatch('UPDATE_TIME_ENTRY', {
+                data: {
+                    time_adjustment: stringDuration,
+                    submitted_note: 'changed',
+                    adjustment_direction,
+                },
+                sys_id: todayEntry.sys_id,   
+            })
+        }
+    }
 
     return (
         <div className="client-container">
@@ -43,7 +60,6 @@ export const Client = ({client, dateArr}) => {
                                     // Add time adjustment from timeEntry
                                     let timeAdjustment = 0;
                                     if(todayEntry){
-                                        console.log('time adjustment', todayEntry.timeAdjustment);
                                         timeAdjustment = getUTCTime(todayEntry.time_adjustment).getTime();
                                         timeAdjustment = timeAdjustment / 1000 / 60 / 60;
                                         timeAdjustment *= todayEntry.adjustment_direction == 'add' 
@@ -53,7 +69,8 @@ export const Client = ({client, dateArr}) => {
                                     return <input 
                                         className="project-item-time" 
                                         type="number" 
-                                        value={timestampHours + timeAdjustment}    
+                                        value={timestampHours + timeAdjustment}
+                                        on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}   
                                     />   
                                 }     
                             })}                

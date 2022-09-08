@@ -48,7 +48,10 @@ export const view = (state, { updateState, dispatch }) => {
             />
             <div>
                 {Array.from(clientMap.values()).map(client => {
-                    return <Client client={client} dateArr={dateArr} />
+                    return <Client 
+                        client={client} 
+                        dateArr={dateArr} 
+                        dispatch={dispatch} />
                 })}
             </div>
         </div>
