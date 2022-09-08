@@ -1,4 +1,5 @@
 import WebFont from "webfontloader";
+import LoadingIcon from "../components/LoadingIcon";
 
 export default (state, {updateState}) => {
 	const {
@@ -23,7 +24,7 @@ export default (state, {updateState}) => {
 
     //Load state while waiting for initial fetch
 	if(consultantId == ''){
-		return <div>Loading...</div>
+		return <LoadingIcon style={{transform: 'scale(.5)'}}/>
 	}
 
 	// Router
@@ -60,25 +61,29 @@ export default (state, {updateState}) => {
 	return (
 		<div>
 			<div className="outer-buttons">
-				<div className="add-edit-buttons">
-					<button 
-						className="add-project-button"
-						on-click={()=>updateState({
-										addProjectStatus: !addProjectStatus, 
-										editMode: false
-									})
-								}>
-							<span className="material-symbols-outlined">add</span>
-							Time Entry
-					</button>
-					<button 
-						className="edit-button"
-						on-click={()=>updateState({editMode: !editMode})}>
-							<span className="material-symbols-outlined">edit_square</span>
-							Edit
-					</button>
-				</div>
-				<div>
+				{location == 'day' ?
+					<div className="add-edit-buttons">
+						<button 
+							className="add-project-button"
+							on-click={()=>updateState({
+											addProjectStatus: !addProjectStatus, 
+											editMode: false
+										})
+									}>
+								<span className="material-symbols-outlined">add</span>
+								Time Entry
+						</button>
+						<button 
+							className="edit-button"
+							on-click={()=>updateState({editMode: !editMode})}>
+								<span className="material-symbols-outlined">edit_square</span>
+								Edit
+						</button>
+					</div> 
+					: 
+					<div></div>
+				}
+				<div className={`${(location == 'week') ? 'timer-week-showing' : ''}`}>
 					<button 
 						className={`day-button ${(location == 'day') ? 'active' : ''}`}
 						on-click={()=> updateState({location: 'day', addProjectStatus: false, editMode: false})}>
@@ -92,10 +97,6 @@ export default (state, {updateState}) => {
 				</div>
 			</div>
 			{jsx}
-			<div >
-
-			</div>
 		</div>
-		
 	)
 }

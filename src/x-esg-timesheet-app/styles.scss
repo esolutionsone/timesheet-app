@@ -1,10 +1,11 @@
 @import '../styles/variables.scss';
 @import '../styles/materialSymbols.scss';
+@import '../components/LoadingIcon.scss';
 
 .outer-buttons {
     display: flex;
     justify-content: space-between;
-    width: 80%;
+    width: 100%;
     margin: auto;
 
     .add-edit-buttons{
@@ -46,6 +47,10 @@
                 cursor: pointer;
             }
         }
+    }
+
+    .timer-week-showing {
+        margin-bottom: 23px;
     }
 
     .day-button {
