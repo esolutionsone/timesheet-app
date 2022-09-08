@@ -77,23 +77,43 @@ export default {
             FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
         );
     },
-    'WEEK_REFETCH': ({ dispatch, state, properties, updateState }) => {
+    'WEEK_REFETCH': async ({ dispatch, state, properties, updateState }) => {
         const { selectedDay } = state;
-        const { consultantId, timeEntryTable } = properties;
+        const { consultantId, timeEntryTable, timestampTable } = properties;
 
         const [start_time, end_time] = getSnWeekBounds(selectedDay);
 
-        const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
-        const url = `${window.location.origin}/api/now/table/${encodeURI(timeEntryTable)}
-            ?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}
+        console.log('STATREINROSIHNATISEHTASTHETHASIH', start_time, end_time);
+
+        const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
+        const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}
         `
-        console.log(url);
-        axios.get(url).then((res)=>console.log(res))
-        // updateState({ clientMap: new Map() });
-        // dispatch('FETCH_WEEKLY_TIME_ENTRIES',
-        //     FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        // );
+
+        // Get the time entries first
+        axios.get(url)
+            .then(entries => {
+                console.log('TIME ENTRIES:', entries);
+
+                const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay));
+                const url = `api/now/table/${timestampTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
+
+                console.log('STAMP URL', url)
+                axios.get(url)
+                    .then(stamps => {
+                        console.log('stamps', stamps);
+                    })
+            })
+
+            // .then((res)=>console.log(res))
+        updateState({ clientMap: new Map() });
+        dispatch('FETCH_WEEKLY_TIME_ENTRIES',
+            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
+        );
     },
+
+    //NOT WORKING
+    // api/now/tablex_esg_one_delivery_timestamp?sysparm_query=consultant%3D9fc870221b959d50c9df43b8b04bcb8c%5Estart_time%3E2022-09-05%2005%3A00%3A00%5Estart_time%3C2022-09-12%2005%3A00%3A00%0A%20%20%20%20%20%20%20%20%5EORDERBYstart_time&sysparm_fields=project.client.short_description%2C%20project.client.sys_id%2C%20project.sys_id%2C%20project.short_description%2C%20start_time%2Cend_time%2Cactive%2Cduration%2Crounded_duration%2Csys_id%2Cnote
+    // api/now/table/x_esg_one_delivery_timestamp?sysparm_query=consultant%3D9fc870221b959d50c9df43b8b04bcb8c%5Estart_time%3E2022-09-05%2005%3A00%3A00%5Estart_time%3C2022-09-12%2005%3A00%3A00%0A%20%20%20%20%20%20%20%20%5EORDERBYstart_time&sysparm_fields=project.client.short_description%2C%20project.client.sys_id%2C%20project.sys_id%2C%20project.short_description%2C%20start_time%2Cend_time%2Cactive%2Cduration%2Crounded_duration%2Csys_id%2Cnote
     'UPDATE_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry/:sys_id', {
         method: 'PUT',
         pathParams: ['sys_id'],
