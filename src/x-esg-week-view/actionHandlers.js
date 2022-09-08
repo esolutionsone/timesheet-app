@@ -92,4 +92,10 @@ export default {
         successActionType: 'LOG_RESULT',
         errorActionType: 'LOG_ERROR',
     }),
+    'INSERT_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry', {
+        method: 'POST',
+        dataParam: 'data',
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
+    })
 } 

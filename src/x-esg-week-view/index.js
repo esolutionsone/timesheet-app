@@ -23,6 +23,7 @@ createCustomElement('x-esg-week-view', {
 		consultantId: {default: ''},
 		genericProjects: {default: []},
 		projects: {default: []},
+		consultantId: {default: ''}
 	},
 	actionHandlers
 });

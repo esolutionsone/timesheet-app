@@ -12,6 +12,8 @@ export const view = (state, { updateState, dispatch }) => {
         dailyEntries,
     } = state
 
+    const {consultantId} = state.properties;
+
     //  // Sort Projects by client
     // const allProjects = [...genericProjects, ...projects]
     // const sortedProjects = new Map();
@@ -51,7 +53,8 @@ export const view = (state, { updateState, dispatch }) => {
                     return <Client 
                         client={client} 
                         dateArr={dateArr} 
-                        dispatch={dispatch} />
+                        dispatch={dispatch}
+                        consultantId={consultantId} />
                 })}
             </div>
         </div>
