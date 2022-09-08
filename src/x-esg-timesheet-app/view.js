@@ -1,4 +1,5 @@
 import WebFont from "webfontloader";
+import LoadingIcon from "../components/LoadingIcon";
 
 export default (state, {updateState}) => {
 	const {
@@ -23,7 +24,7 @@ export default (state, {updateState}) => {
 
     //Load state while waiting for initial fetch
 	if(consultantId == ''){
-		return <div>Loading...</div>
+		return <LoadingIcon style={{transform: 'scale(.5)'}}/>
 	}
 
 	// Router
