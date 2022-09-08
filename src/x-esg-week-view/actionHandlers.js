@@ -101,15 +101,65 @@ export default {
                 axios.get(url)
                     .then(stamps => {
                         console.log('stamps', stamps);
+
+                        const dailyEntries = entries.data.result;
+                        const projectMap = buildProjectMap(stamps.data.result, dailyEntries)
+                        const clientMap = new Map();
+                        const {genericProjects, projects} = properties;
+                
+                        const allProjects = [...genericProjects, ...projects];
+
+                        console.log('POROJECTS', projects)
+
+                        console.log('ALL PROJECTS', allProjects)
+                        const untrackedProjects = allProjects.filter(proj => {
+                            return !Array.from(projectMap.values())
+                                .map(p => p.sys_id)
+                                .includes(proj.sys_id)
+                        })
+                
+                        // Include projects initialized from timestamps
+                        projectMap.forEach(proj => {
+                            proj.entries = [];
+                
+                            if (clientMap.has(proj['client.sys_id'])) {
+                                clientMap.get(proj['client.sys_id']).projects.push(proj);
+                            } else {
+                                clientMap.set(proj['client.sys_id'], {
+                                    short_description: proj.client,
+                                    projects: [proj],
+                                    sys_id: proj['client.sys_id'],
+                                });
+                            }
+                        })
+                
+                        // Include projects with no timestamps
+                        untrackedProjects.forEach(proj => {
+                            if(clientMap.has(proj.client.sys_id)){
+                                clientMap.get(proj.client.sys_id).projects.push(proj);
+                            }else{
+                                clientMap.set(proj.client.sys_id, {
+                                    short_description: proj.client.short_description,
+                                    projects: [proj],
+                                    sys_id: proj.client.sys_id,
+                                })
+                            }     
+                        })
+
+                        dispatch('SET_WEEK_STATE', {projectMap, clientMap, dailyEntries});
+                        dispatch('SET_LOADING', {loading: false})
+                        console.log('clientMap', clientMap)
+                        // updateState({ projectMap: projectMap, clientMap: clientMap, dailyEntries: dailyEntries });
                     })
             })
 
-            // .then((res)=>console.log(res))
-        updateState({ clientMap: new Map() });
-        dispatch('FETCH_WEEKLY_TIME_ENTRIES',
-            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        );
+        //     // .then((res)=>console.log(res))
+        // updateState({ clientMap: new Map() });
+        // dispatch('FETCH_WEEKLY_TIME_ENTRIES',
+        //     FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
+        // );
     },
+    'SET_WEEK_STATE': ({action, updateState}) => updateState(action.payload),
 
     //NOT WORKING
     // api/now/tablex_esg_one_delivery_timestamp?sysparm_query=consultant%3D9fc870221b959d50c9df43b8b04bcb8c%5Estart_time%3E2022-09-05%2005%3A00%3A00%5Estart_time%3C2022-09-12%2005%3A00%3A00%0A%20%20%20%20%20%20%20%20%5EORDERBYstart_time&sysparm_fields=project.client.short_description%2C%20project.client.sys_id%2C%20project.sys_id%2C%20project.short_description%2C%20start_time%2Cend_time%2Cactive%2Cduration%2Crounded_duration%2Csys_id%2Cnote
@@ -118,13 +168,13 @@ export default {
         method: 'PUT',
         pathParams: ['sys_id'],
         dataParam: 'data',
-        successActionType: 'LOG_RESULT',
+        successActionType: 'WEEK_REFETCH',
         errorActionType: 'LOG_ERROR',
     }),
     'INSERT_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry', {
         method: 'POST',
         dataParam: 'data',
-        successActionType: 'LOG_RESULT',
+        successActionType: 'WEEK_REFETCH',
         errorActionType: 'LOG_ERROR',
     })
 } 
