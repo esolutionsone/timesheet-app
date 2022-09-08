@@ -1,5 +1,6 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
+import axios from 'axios';
 import { getSnWeekBounds, buildProjectMap } from '../helpers';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
@@ -80,10 +81,18 @@ export default {
         const { selectedDay } = state;
         const { consultantId, timeEntryTable } = properties;
 
-        updateState({ clientMap: new Map() });
-        dispatch('FETCH_WEEKLY_TIME_ENTRIES',
-            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        );
+        const [start_time, end_time] = getSnWeekBounds(selectedDay);
+
+        const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
+        const url = `${window.location.origin}/api/now/table/${encodeURI(timeEntryTable)}
+            ?sysparm_query=consultant=${consultantId}&sysparm_fields=${encodeURIComponent(sysparm_fields)}
+        `
+        console.log(url);
+        axios.get(url).then((res)=>console.log(res))
+        // updateState({ clientMap: new Map() });
+        // dispatch('FETCH_WEEKLY_TIME_ENTRIES',
+        //     FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
+        // );
     },
     'UPDATE_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry/:sys_id', {
         method: 'PUT',
