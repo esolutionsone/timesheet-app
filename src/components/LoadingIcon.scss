@@ -26,18 +26,20 @@
         transform-origin: center;
         border-radius: 50%;
 
+        $anim-props: 3s infinite ease-in-out;
+
         &.first {
-            animation: move-first 3s infinite ease-in-out;
+            animation: move-first $anim-props;
             background-color: #EE7D31;
         }
 
         &.middle {
-            animation: move-middle 3s infinite ease-in-out;
+            animation: move-middle $anim-props;
             background-color: #006FC7;
         }
 
         &.last {
-            animation: move-last 3s infinite ease-in-out;
+            animation: move-last $anim-props;
             background-color: #C00000;
         }
     }
