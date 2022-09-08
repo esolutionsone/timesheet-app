@@ -1,6 +1,7 @@
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
-import { Client } from './components/Client'
+import { Client } from './components/Client';
+import { getWeekBounds } from "../helpers";
 
 export const view = (state, { updateState, dispatch }) => {
 
@@ -10,29 +11,27 @@ export const view = (state, { updateState, dispatch }) => {
         projectMap,
         dailyEntries,
     } = state
-    const clientList = Array.from(clientMap.values());
 
-    const { genericProjects, projects, addProjectStatus } = state.properties;
+    //  // Sort Projects by client
+    // const allProjects = [...genericProjects, ...projects]
+    // const sortedProjects = new Map();
 
-    // Get the ids of current active Projects, then filter
-    // consultant projects to return difference.
-    const activeProjectIds = Array.from(projectMap.keys());
-    const allProjects = [...genericProjects, ...projects]
-        .filter(proj => !activeProjectIds.includes(proj.sys_id));
-    const sortedProjects = new Map();
+    // allProjects.forEach(proj => {
+    //     const client_id = proj.client.sys_id;
+    //     if(sortedProjects.has(client_id)){
+    //         sortedProjects.get(client_id).push(proj);
+    //     }else{
+    //         sortedProjects.set(client_id, [proj]);
+    //     }
+    // })
 
-    // Then sort the lists into a map based on client.
-    allProjects.forEach(proj => {
-        const client = proj.client.short_description;
-        if(sortedProjects.has(client)){
-            sortedProjects.get(client).push(proj);
-        }else{
-            sortedProjects.set(client, [proj]);
-        }
-    })
-
-    console.log("WEEK STATE", state);
-    console.log('selectedDay = ', selectedDay);
+    // Create array of mappable dates
+    const firstDate = getWeekBounds(selectedDay)[0];
+    const dateArr = [];
+    for(let i=0; i<7; i++){
+        dateArr.push(new Date(firstDate));
+        firstDate.setDate(firstDate.getDate() + 1);
+    }
 
     return (
         <div className="week-container">
@@ -45,36 +44,13 @@ export const view = (state, { updateState, dispatch }) => {
                 selectedDay={selectedDay}
                 projectMap={projectMap}
                 dailyEntries={dailyEntries}
+                dateArr={dateArr}
             />
-            {!addProjectStatus ? 
-                ''
-                :
-                <div className="add-project-container">
-                    {Array.from(sortedProjects.entries()).map(([client, projects]) => {
-                        // Get the ids of current active Projects, then filter
-                        // consultant projects to return difference.
-                        return (
-                            <div className="add-project-items">
-                                <span className="add-project-client">{client}</span>
-                                <div className="add-project-selections">
-                                    {projects.map(project => {
-                                        return (
-                                            <div>
-                                                <input type="checkbox" id={project.short_description} name={project.short_description} />
-                                                <label className="" htmlFor={project.short_description}>{project.short_description}</label>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            }
             <div>
-                {clientList.map(client => <Client client={client} />)}
+                {Array.from(clientMap.values()).map(client => {
+                    return <Client client={client} dateArr={dateArr} />
+                })}
             </div>
-
         </div>
     );
 }
