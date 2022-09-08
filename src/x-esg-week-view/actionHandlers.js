@@ -85,7 +85,7 @@ export default {
 
         const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
         const url = `${window.location.origin}/api/now/table/${encodeURI(timeEntryTable)}
-            ?sysparm_query=consultant=${consultantId}&sysparm_fields=${encodeURIComponent(sysparm_fields)}
+            ?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}
         `
         console.log(url);
         axios.get(url).then((res)=>console.log(res))
