@@ -50,8 +50,12 @@ export const stringifyDuration = (duration) => {
     // coerce to strings and pad to get hh:mm:ss format
     const result = { hours, minutes, seconds };
     for (let el in result){
-		result[el] = result[el].toString().padStart(2, '0');
-	}
+        if(!result[el]){
+            result[el] = '00';
+        }else{
+            result[el] = result[el].toString().padStart(2, '0');
+        }
+    }
     return `${result.hours || '00'}:${result.minutes || '00'}:${result.seconds || '00'}`;
 }
 

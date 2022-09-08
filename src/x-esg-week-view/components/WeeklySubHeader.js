@@ -8,6 +8,8 @@ export const WeeklySubHeader = ({
     dateArr,
 }) => {
     const projects = Array.from(projectMap.values());
+    console.log('subheader projects', projects);
+    console.log('dailyEntries', dailyEntries)
 
     return (
         <div className="weekly-subheader week-view-grid">
@@ -30,10 +32,7 @@ export const WeeklySubHeader = ({
                     return ms + getUTCTime(stamp.rounded_duration).getTime();
                 }, 0)
 
-                const totalHours = totalTime / 1000 / 60 / 60;
-
-
-                /* The following code theoretically works,
+                // The following code theoretically works,
                 // but we'll have to adjust how we handle weekly time input and negative values
                             
                 const timeEntries = dailyEntries.filter(entry => {
@@ -41,11 +40,12 @@ export const WeeklySubHeader = ({
                         && entry.time_adjustment.length > 0;
                 })
 
-                const adjustmentsInMs = timeEntries.reduce((ms, entry) => {
+                const adjustmentMs = timeEntries.reduce((ms, entry) => {
                     return ms + getUTCTime(entry.time_adjustment).getTime();
-                }, 0)
+                }, 0);
 
-                */
+                const totalHours = (totalTime + adjustmentMs) / 1000 / 60 / 60;
+
                 return <div>
                         <div>{format(date, 'MMM dd')}</div>
                         <div>{format(date, 'E')}</div>
