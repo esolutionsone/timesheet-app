@@ -37,7 +37,9 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         }
     }
 
-    console.log('date:', date, 'todayEntry', todayEntry)
+    
+
+    console.log('date:', date, 'todayEntry', todayEntry, 'project.timestamps', project.timestamps)
     if (!todayEntry && !project.timestamps) {
         return <input className="project-item-time" type="number" />
     } else {
@@ -57,10 +59,12 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         if (todayEntry) {
             timeAdjustment = getUTCTime(todayEntry.time_adjustment).getTime();
             timeAdjustment = timeAdjustment / 1000 / 60 / 60;
-            timeAdjustment *= todayEntry.adjustment_direction == 'add'
+            timeAdjustment *= (todayEntry.adjustment_direction == 'add')
                 ? 1 : -1;
         }
+        console.log('todayEntry', todayEntry);
         console.log('timeAdjustment', timeAdjustment);
+        console.log('timestampHours', timestampHours);
         return <input
             className="project-item-time"
             type="number"
