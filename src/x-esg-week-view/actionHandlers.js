@@ -10,6 +10,7 @@ export default {
     [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
         console.log('WEEK VIEW BOOTSTRAPPED');        
         dispatch('WEEK_REFETCH');
+        // dispatch('SET_LOADING', {loading: false})
     },
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -86,8 +87,7 @@ export default {
         console.log('STATREINROSIHNATISEHTASTHETHASIH', start_time, end_time);
 
         const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}
-        `
+        const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
         // Get the time entries first
         axios.get(url)
@@ -147,7 +147,7 @@ export default {
                         })
 
                         dispatch('SET_WEEK_STATE', {projectMap, clientMap, dailyEntries});
-                        dispatch('SET_LOADING', {loading: false})
+                        // dispatch('SET_LOADING', {loading: false})
                         console.log('clientMap', clientMap)
                         // updateState({ projectMap: projectMap, clientMap: clientMap, dailyEntries: dailyEntries });
                     })
