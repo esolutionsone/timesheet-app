@@ -101,6 +101,7 @@ const view = (state, { dispatch, updateState}) => {
             </div>
             <div className='project-notes details-icon'>
                 {timestamps.map((stamp, i) => {
+                    const timestampLength = timestamps.length;
                     if (!showDetail && active && (i > 0)) return
                     if (!showDetail && !active) return
                     return (
@@ -113,6 +114,8 @@ const view = (state, { dispatch, updateState}) => {
                             timestampTable={timestampTable}
                             consultantId={consultantId}
                             selectedDay={selectedDay}
+                            timeEntryTable={timeEntryTable}
+                            timestampLength={timestampLength}
                         />
                     );
                 })}

@@ -1,5 +1,5 @@
 import { hhmmToSnTime, getUTCTime, toSnTime, getSnDayBounds } from '../../helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../../payloads';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_FOR_DELETE_PAYLOAD } from '../../payloads';
 import { format } from 'date-fns';
 
 export const Timestamp = ({ 
@@ -9,7 +9,9 @@ export const Timestamp = ({
                             dispatch,
                             timestampTable,
                             consultantId,
-                            selectedDay}) => {
+                            selectedDay, 
+                            timeEntryTable,
+                            timestampLength}) => {
 
     const {note, start_time, end_time, sys_id} = stamp;                                     
     const localTimes = {start: format(getUTCTime(start_time), 'HH:mm')}
@@ -18,7 +20,13 @@ export const Timestamp = ({
 
     const handleDeleteTimestamp = (e, sys_id) => {
         e.preventDefault();
+        
         if (confirm("Click OK to remove this timestamp") == true) {
+
+            if(timestampLength == 1) {
+                dispatch('FETCH_TIME_ENTRIES_FOR_DELETE', FETCH_TIME_ENTRIES_FOR_DELETE_PAYLOAD(consultantId, timeEntryTable, stamp['project.sys_id']))
+            }
+                
             dispatch('DELETE_PROJECT_TIMESTAMPS', {
                 tableName: timestampTable,
                 id: sys_id,
