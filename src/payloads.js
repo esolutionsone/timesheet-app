@@ -14,3 +14,10 @@ export const FETCH_TIME_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, 
     ^ORDERBYstart_time`,
     sysparm_fields: 'date,sys_id,time_adjustment, project.sys_id, project.client.sys_id, adjustment_direction'
 })
+
+export const FETCH_TIME_ENTRIES_FOR_DELETE_PAYLOAD = (consultantId, tableName, project) => ({
+    tableName,
+    sysparm_query: `consultant=${consultantId}^project=${project}^dateONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()
+    ^ORDERBYstart_time`,
+    sysparm_fields: 'date,sys_id,time_adjustment, project.sys_id, project.client.sys_id, adjustment_direction'
+})
