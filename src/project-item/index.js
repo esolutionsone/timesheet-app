@@ -1,7 +1,7 @@
 import { createCustomElement } from '@servicenow/ui-core';
 import { snabbdom } from '@servicenow/ui-renderer-snabbdom';
 import { Timestamp } from '../x-esg-timer-container/components/Timestamp';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../payloads';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_FOR_DELETE_PAYLOAD} from '../payloads';
 import { msToString, getSnDayBounds } from '../helpers';
 import { isToday } from 'date-fns';
 import styles from './styles.scss';
@@ -30,6 +30,7 @@ const view = (state, { dispatch, updateState}) => {
             proj,
             projectMap,
             selectedDay,
+            timeEntryTable
 
         } = properties;
 
@@ -45,7 +46,11 @@ const view = (state, { dispatch, updateState}) => {
 
     const handleDeleteProject = (e, projectToBeDeleted) => {
         e.preventDefault();
+
         if (confirm("Click OK to remove this project") == true) {
+
+            dispatch('FETCH_TIME_ENTRIES_FOR_DELETE', FETCH_TIME_ENTRIES_FOR_DELETE_PAYLOAD(consultantId, timeEntryTable, projectToBeDeleted.sys_id))
+
             projectToBeDeleted.timestamps.forEach(timestamp => {
                 dispatch('DELETE_PROJECT_TIMESTAMPS', {
                     tableName: timestampTable,
@@ -96,6 +101,7 @@ const view = (state, { dispatch, updateState}) => {
             </div>
             <div className='project-notes details-icon'>
                 {timestamps.map((stamp, i) => {
+                    const timestampLength = timestamps.length;
                     if (!showDetail && active && (i > 0)) return
                     if (!showDetail && !active) return
                     return (
@@ -108,6 +114,8 @@ const view = (state, { dispatch, updateState}) => {
                             timestampTable={timestampTable}
                             consultantId={consultantId}
                             selectedDay={selectedDay}
+                            timeEntryTable={timeEntryTable}
+                            timestampLength={timestampLength}
                         />
                     );
                 })}
@@ -130,6 +138,7 @@ createCustomElement('project-item', {
 		consultantId: {default: ''},
 		proj: {default: {}},
 		projectMap: {default: []},
-		selectedDay: {default: ''}
+		selectedDay: {default: ''},
+        timeEntryTable: {default: ''}
 	}
 });

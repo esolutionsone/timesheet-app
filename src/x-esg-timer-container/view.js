@@ -61,6 +61,7 @@ export const view = (state, {dispatch, updateState}) => {
                                 selectedDay={selectedDay}
                                 projectMap={projectMap}
                                 consultantId={consultantId}
+                                timeEntryTable={timeEntryTable}
                             />
                         );
                     })}

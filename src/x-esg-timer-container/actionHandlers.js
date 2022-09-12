@@ -27,9 +27,9 @@ export default {
         errorActionType: 'LOG_ERROR',
     }),
     //Testing Timer stoppers,
-    'DELETE_PROJECT_TIMESTAMPS': createHttpEffect(`api/now/table/x_esg_one_delivery_timestamp/:id`, {
+    'DELETE_PROJECT_TIMESTAMPS': createHttpEffect(`api/now/table/:tableName/:id`, {
         method: 'DELETE',
-        pathParams: [ 'id'],
+        pathParams: ['tableName', 'id'],
         startActionType: 'TEST_START',
         successActionType: 'LOG_RESULT',
         errorActionType: 'LOG_ERROR'
@@ -85,4 +85,23 @@ export default {
     'SET_CONSULTANT_TIMESTAMPS': ({action, updateState}) => {
         updateState({projectMap: buildProjectMap(action.payload.result)});
     },
+    'FETCH_TIME_ENTRIES_FOR_DELETE': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        startActionType: 'TEST_START',
+        successActionType: 'DELETE_TIME_ENTRIES',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'DELETE_TIME_ENTRIES': ({action, dispatch}) => {
+        console.log('TIME ENTRY TO BE DELETED', action.payload);
+        const entriesToBeDeleted = action.payload.result;
+
+        entriesToBeDeleted.map(entry => {
+            dispatch('DELETE_PROJECT_TIMESTAMPS', {
+                tableName: "x_esg_one_delivery_time_entry",
+                id: entry.sys_id,
+            });
+        })
+    }
 } 
