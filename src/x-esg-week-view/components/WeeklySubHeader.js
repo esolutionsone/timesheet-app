@@ -18,13 +18,16 @@ export const WeeklySubHeader = ({
                 //Iterate through projectMap to get all timestamps for current day
                 let dailyTimestamps = []
                 const bounds = getSnDayBounds(date);
-                projects.forEach(proj => {    
-                    dailyTimestamps = dailyTimestamps.concat(
-                        proj.timestamps.filter(stamp => {
-                            return stamp.start_time > bounds[0] 
-                                && stamp.start_time < bounds[1];
-                        })
-                    );
+                projects.forEach(proj => {  
+                    if(proj.timestamps){
+                        console.log('line 22, project.timestamps', proj.timestamps)
+                        dailyTimestamps = dailyTimestamps.concat(
+                            proj.timestamps.filter(stamp => {
+                                return stamp.start_time > bounds[0] 
+                                    && stamp.start_time < bounds[1];
+                            })
+                        );
+                    }  
                 })
 
                 const totalTime = dailyTimestamps.reduce((ms, stamp) => {
@@ -34,7 +37,7 @@ export const WeeklySubHeader = ({
 
                 // The following code theoretically works,
                 // but we'll have to adjust how we handle weekly time input and negative values
-                            
+                           
                 const timeEntries = dailyEntries.filter(entry => {
                     return entry.date == bounds[0].split(' ')[0]
                         && entry.time_adjustment.length > 0;

@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
 const ClientDay = ({ project, day, dispatch, consultantId }) => {
+    console.log('CLIENTDAY LOADED')
     const date = format(day, 'Y-MM-dd')
     const todayEntry = project.time_entries ?
         project.time_entries
@@ -9,7 +10,7 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         :
         null;
 
-    const handleBlur = (e, timestampHours, todayEntry) => {
+    const handleBlur = (e, timestampHours = 0, todayEntry) => {
         const inputHours = Number(e.target.value);
         const difference = inputHours - timestampHours;
 
@@ -44,7 +45,9 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
 
     console.log('date:', date, 'todayEntry', todayEntry, 'project.timestamps', project.timestamps)
     if (!todayEntry && !project.timestamps) {
-        return <input className="project-item-time" type="number" />
+        return <input
+            on-blur={(e)=>handleBlur(e)}
+            className="project-item-time" type="number" />
     } else {
         console.log('FOUND ONE')
         console.log(project.timestamps)
