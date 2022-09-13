@@ -264,15 +264,22 @@ export const buildProjectMap = (timestamps, entries) => {
         //handle projects with entries but no timestamps
         if(entries){
             for(let entry of entries){
+                console.log('entries:', entry);
                 if(!stampsByProject.has(entry['project.sys_id'])){
                     stampsByProject.set(entry['project.sys_id'], {
                         time_entries: entries.filter(en => {
                             return en['project.sys_id'] == entry['project.sys_id']
                         }),
+                        client: entry['project.client.short_description'],
+                        ["client.sys_id"]: entry['project.client.sys_id'],
+                        short_description: entry['project.short_description'],
+                        sys_id: entry['project.sys_id'],
                     })
                 }
             }
         }
         
+
+        console.log('stampsbyproject', stampsByProject);
         return stampsByProject;
 }

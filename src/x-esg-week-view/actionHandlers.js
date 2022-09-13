@@ -119,7 +119,10 @@ export default {
                         })
                 
                         // Include projects initialized from timestamps
+
+                        console.log('projectMap', projectMap);
                         projectMap.forEach(proj => {
+                            console.log('project map iter', proj);
                             proj.entries = [];
                 
                             if (clientMap.has(proj['client.sys_id'])) {
@@ -135,6 +138,7 @@ export default {
                 
                         // Include projects with no timestamps
                         untrackedProjects.forEach(proj => {
+                            console.log('untracked proj: ', proj)
                             if(clientMap.has(proj.client.sys_id)){
                                 clientMap.get(proj.client.sys_id).projects.push(proj);
                             }else{
