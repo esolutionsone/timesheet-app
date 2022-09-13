@@ -66,6 +66,7 @@ export const stringifyDuration = (duration) => {
  * @returns {Date} Date object
  */
 export const getUTCTime = (dateString) => {
+    // console.trace('datestring in funciton', dateString)
     if(!dateString){
         console.error('Cannot transform datestring of type', typeof(dateString), '\ndate: ', dateString);
         return new Date();

@@ -52,12 +52,14 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         // set the timestamp hours for the project if they exist
         let timestampHours = 0
         if (project.timestamps) {
+            console.log("project.timestmaps", project.timestamps)
             timestampHours = project.timestamps
                 .filter(stamp => {
                     return stamp.rounded_duration !== ''
                         && stamp.start_time.split(' ')[0] == date;
                 })
                 .reduce((acc, stamp) => {
+                    console.log('stamp.rounded_duration', stamp.rounded_duration)
                     return acc + getUTCTime(stamp.rounded_duration).getTime();
                 }, 0) / 1000 / 60 / 60;
         }
@@ -65,7 +67,9 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         // Add time adjustment from timeEntry
         let timeAdjustment = 0;
         if (todayEntry) {
-            timeAdjustment = getUTCTime(todayEntry.time_adjustment).getTime();
+            if(todayEntry.time_adjustment){
+                timeAdjustment = getUTCTime(todayEntry.time_adjustment).getTime();
+            }
             timeAdjustment = timeAdjustment / 1000 / 60 / 60;
             timeAdjustment *= (todayEntry.adjustment_direction == 'add')
                 ? 1 : -1;
