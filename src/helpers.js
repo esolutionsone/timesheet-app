@@ -67,7 +67,7 @@ export const stringifyDuration = (duration) => {
  */
 export const getUTCTime = (dateString) => {
     if(!dateString){
-        console.error('Cannot transform datestring of type', typeof(dateString), '\ndate: ', dateString);
+        console.error('undefined datestring');
         return new Date();
     } 
     const arr = dateString.split(/[\-\s:]/g);
@@ -269,6 +269,10 @@ export const buildProjectMap = (timestamps, entries) => {
                         time_entries: entries.filter(en => {
                             return en['project.sys_id'] == entry['project.sys_id']
                         }),
+                        client: entry['project.client.short_description'],
+                        ["client.sys_id"]: entry['project.client.sys_id'],
+                        short_description: entry['project.short_description'],
+                        sys_id: entry['project.sys_id'],
                     })
                 }
             }

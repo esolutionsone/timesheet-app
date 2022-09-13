@@ -51,6 +51,7 @@ export const view = (state, { updateState, dispatch }) => {
             <div>
                 {Array.from(clientMap.values()).map(client => {
                     return <Client 
+                        key={client.sys_id}
                         client={client} 
                         dateArr={dateArr} 
                         dispatch={dispatch}

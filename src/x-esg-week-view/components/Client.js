@@ -3,10 +3,8 @@ import { getUTCTime, stringifyDuration } from '../../helpers';
 import ClientDay from './ClientDay';
 
 export const Client = ({client, dateArr, dispatch, consultantId}) => {
-    console.log('Client', client)
 
     const projectList = client.projects;
-    
 
     return (
         <div className="client-container">
