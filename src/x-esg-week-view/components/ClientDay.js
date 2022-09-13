@@ -51,15 +51,19 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
     } else {
         console.log('FOUND ONE')
         console.log(project.timestamps)
-        const timestampHours = project.timestamps
-            .filter(stamp => {
-                return stamp.rounded_duration !== ''
-                    && stamp.start_time.split(' ')[0] == date;
-            })
-            .reduce((acc, stamp) => {
-                return acc + getUTCTime(stamp.rounded_duration).getTime();
-            }, 0) / 1000 / 60 / 60;
 
+        let timestampHours = 0
+        if(project.timestamps){
+            timestampHours = project.timestamps
+                .filter(stamp => {
+                    return stamp.rounded_duration !== ''
+                        && stamp.start_time.split(' ')[0] == date;
+                })
+                .reduce((acc, stamp) => {
+                    return acc + getUTCTime(stamp.rounded_duration).getTime();
+                }, 0) / 1000 / 60 / 60;
+        }
+      
         // Add time adjustment from timeEntry
         let timeAdjustment = 0;
         if (todayEntry) {
