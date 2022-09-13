@@ -10,7 +10,6 @@ export default {
     [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
         console.log('WEEK VIEW BOOTSTRAPPED');        
         dispatch('WEEK_REFETCH');
-        // dispatch('SET_LOADING', {loading: false})
     },
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -82,10 +81,6 @@ export default {
         const { selectedDay } = state;
         const { consultantId, timeEntryTable, timestampTable } = properties;
 
-        const [start_time, end_time] = getSnWeekBounds(selectedDay);
-
-        console.log('STATREINROSIHNATISEHTASTHETHASIH', start_time, end_time);
-
         const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
         const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
@@ -97,7 +92,6 @@ export default {
                 const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay));
                 const url = `api/now/table/${timestampTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
-                console.log('STAMP URL', url)
                 axios.get(url)
                     .then(stamps => {
                         console.log('stamps', stamps);
@@ -108,8 +102,6 @@ export default {
                         const {genericProjects, projects} = properties;
                 
                         const allProjects = [...genericProjects, ...projects];
-
-                        console.log('POROJECTS', projects)
 
                         console.log('ALL PROJECTS', allProjects)
                         const untrackedProjects = allProjects.filter(proj => {
@@ -122,7 +114,6 @@ export default {
 
                         console.log('projectMap', projectMap);
                         projectMap.forEach(proj => {
-                            console.log('project map iter', proj);
                             proj.entries = [];
                 
                             if (clientMap.has(proj['client.sys_id'])) {
@@ -138,7 +129,6 @@ export default {
                 
                         // Include projects with no timestamps
                         untrackedProjects.forEach(proj => {
-                            console.log('untracked proj: ', proj)
                             if(clientMap.has(proj.client.sys_id)){
                                 clientMap.get(proj.client.sys_id).projects.push(proj);
                             }else{

@@ -66,9 +66,8 @@ export const stringifyDuration = (duration) => {
  * @returns {Date} Date object
  */
 export const getUTCTime = (dateString) => {
-    // console.trace('datestring in funciton', dateString)
     if(!dateString){
-        console.error('Cannot transform datestring of type', typeof(dateString), '\ndate: ', dateString);
+        console.error('undefined datestring');
         return new Date();
     } 
     const arr = dateString.split(/[\-\s:]/g);
@@ -265,7 +264,6 @@ export const buildProjectMap = (timestamps, entries) => {
         //handle projects with entries but no timestamps
         if(entries){
             for(let entry of entries){
-                console.log('entries:', entry);
                 if(!stampsByProject.has(entry['project.sys_id'])){
                     stampsByProject.set(entry['project.sys_id'], {
                         time_entries: entries.filter(en => {
@@ -280,7 +278,5 @@ export const buildProjectMap = (timestamps, entries) => {
             }
         }
         
-
-        console.log('stampsbyproject', stampsByProject);
         return stampsByProject;
 }

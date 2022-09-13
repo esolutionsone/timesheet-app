@@ -8,8 +8,6 @@ export const WeeklySubHeader = ({
     dateArr,
 }) => {
     const projects = Array.from(projectMap.values());
-    console.log('subheader projects', projects);
-    console.log('dailyEntries', dailyEntries)
 
     return (
         <div className="weekly-subheader week-view-grid">
@@ -20,7 +18,6 @@ export const WeeklySubHeader = ({
                 const bounds = getSnDayBounds(date);
                 projects.forEach(proj => {  
                     if(proj.timestamps){
-                        console.log('line 22, project.timestamps', proj.timestamps)
                         dailyTimestamps = dailyTimestamps.concat(
                             proj.timestamps.filter(stamp => {
                                 return stamp.start_time > bounds[0] 

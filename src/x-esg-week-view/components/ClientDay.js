@@ -1,4 +1,4 @@
-import { format, intervalToDuration } from "date-fns";
+import { format } from "date-fns";
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
 const ClientDay = ({ project, day, dispatch, consultantId }) => {
@@ -32,7 +32,6 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
                 sys_id: todayEntry.sys_id,
             })
         } else {
-            console.log('+++++++++++++++PROJECT+++++++++', project);
             const data = {
                 adjustment_direction,
                 time_adjustment: stringDuration,
@@ -52,14 +51,14 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         // set the timestamp hours for the project if they exist
         let timestampHours = 0
         if (project.timestamps) {
-            console.log("project.timestmaps", project.timestamps)
             timestampHours = project.timestamps
+                //filter by stamps matching date
                 .filter(stamp => {
                     return stamp.rounded_duration !== ''
                         && stamp.start_time.split(' ')[0] == date;
                 })
+                // reduce on time, and convert to hours
                 .reduce((acc, stamp) => {
-                    console.log('stamp.rounded_duration', stamp.rounded_duration)
                     return acc + getUTCTime(stamp.rounded_duration).getTime();
                 }, 0) / 1000 / 60 / 60;
         }
