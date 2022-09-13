@@ -8,7 +8,8 @@ export default (state, {updateState}) => {
 		editMode,
 		genericProjects,
         projects,
-		location
+		location,
+		loading
 	} = state;
 	const {timestampTable, timeEntryTable} = state.properties;
 	// Load Custom Fonts
@@ -23,7 +24,7 @@ export default (state, {updateState}) => {
 	})
 
     //Load state while waiting for initial fetch
-	if(consultantId == ''){
+	if(loading){
 		return <LoadingIcon style={{transform: 'scale(.5)'}}/>
 	}
 
