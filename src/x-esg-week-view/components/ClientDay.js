@@ -2,7 +2,6 @@ import { format } from "date-fns";
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
 const ClientDay = ({ project, day, dispatch, consultantId }) => {
-    console.log('CLIENTDAY LOADED')
     const date = format(day, 'Y-MM-dd')
     const todayEntry = project.time_entries ?
         project.time_entries
@@ -14,11 +13,8 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         const inputHours = Number(e.target.value);
         const difference = inputHours - timestampHours;
 
-
         const adjustment_direction = difference >= 0 ? 'add' : 'subtract';
         const stringDuration = "1970-01-01 " + stringifyDuration({ hours: Math.abs(difference) });
-
-        console.log('todayEntry ******', todayEntry);
 
         if (todayEntry) {
             dispatch('UPDATE_TIME_ENTRY', {
@@ -49,9 +45,7 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
             on-blur={(e)=>handleBlur(e)}
             className="project-item-time" type="number" />
     } else {
-        console.log('FOUND ONE')
-        console.log(project.timestamps)
-
+        // set the timestamp hours for the project if they exist
         let timestampHours = 0
         if(project.timestamps){
             timestampHours = project.timestamps
@@ -72,9 +66,6 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
             timeAdjustment *= (todayEntry.adjustment_direction == 'add')
                 ? 1 : -1;
         }
-        console.log('todayEntry', todayEntry);
-        console.log('timeAdjustment', timeAdjustment);
-        console.log('timestampHours', timestampHours);
         return <input
             className="project-item-time"
             type="number"
