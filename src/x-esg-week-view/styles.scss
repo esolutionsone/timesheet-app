@@ -4,7 +4,7 @@
 .week-container {
     @include default-border;
     box-sizing: border-box;
-    width: 100%;
+    width: 95%;
     background: $bg-primary;
     font-family: $font-primary;
     margin: auto;
@@ -67,6 +67,10 @@
         }
     }
 
+    th:nth-child(even), td:nth-child(even) {
+        background-color: rgba(150, 212, 212, 0.4);
+    }
+
     .weekly-subheader {
         padding: $item-padding;
 
@@ -113,6 +117,8 @@
         padding: $item-padding;
         border-top: $border-primary;
 
+       
+          
         .client-name {
             color: $color-secondary;
             font-weight: $font-weight-bold;
