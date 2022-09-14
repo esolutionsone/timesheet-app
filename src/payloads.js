@@ -31,10 +31,13 @@ export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_t
         project_stage_role.sys_id,
         project_stage_role.project_stage.sys_id,
         project_stage_role.project_stage.project.sys_id,
+        project_stage_role.project_stage.project.short_description,
         project_stage_role.project_stage.project.client.sys_id,
+        project_stage_role.project_stage.project.client.short_description,
         project_stage_role.project_role.sys_id
         `
 })
+
 export const FETCH_TIMESTAMPS_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
     tableName,
     sysparm_query: (start_time && end_time) ?

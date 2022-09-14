@@ -2,6 +2,7 @@ import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
 import { Client } from './components/Client';
 import { getWeekBounds } from "../helpers";
+import { unflatten } from "../helpers";
 
 export const view = (state, { updateState, dispatch }) => {
 
@@ -15,6 +16,20 @@ export const view = (state, { updateState, dispatch }) => {
 
     const {consultantId} = state.properties;
 
+    const data = 
+        {
+            'project_role.project.client.short_description': "Cosmetic Company",
+            'project_role.project.short_description': "LOL v2",
+            'project_role.project.sys_id': "a8be7ce31bbd9110c9df43b8b04bcba9",
+            'project_role.short_description': "LOLv2 Developer",
+            'project_stage.name': "Initiate",
+            'project_stage.sys_id': "33cefce31bbd9110c9df43b8b04bcb9e",
+            sys_id: "a53089671bbd9110c9df43b8b04bcb08",
+            used_hours: "",
+        }
+    ;
+
+    console.log('NEW OBJECT###### ',unflatten(data));
     //  // Sort Projects by client
     // const allProjects = [...genericProjects, ...projects]
     // const sortedProjects = new Map();
