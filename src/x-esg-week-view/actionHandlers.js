@@ -2,7 +2,7 @@ import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 import axios from 'axios';
 import { getSnWeekBounds, buildProjectMap } from '../helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_ENTRIES_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_ENTRIES_PAYLOAD, FETCH_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
 const { COMPONENT_BOOTSTRAPPED } = actionTypes;
 
@@ -20,6 +20,13 @@ export default {
         errorActionType: 'LOG_ERROR',
     }),
     'FETCH_ENTRIES_SUCCESS': ({action, updateState}) => updateState({entries: action.payload.result}),
+    'FETCH_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
+    }),
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -93,8 +100,11 @@ export default {
         const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
         const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
+        const bounds = getSnWeekBounds(selectedDay);
         //New entries fetch
-        dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay)));
+        dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...bounds));
+        dispatch('FETCH_TIMESTAMPS', FETCH_TIMESTAMPS_PAYLOAD(consultantId, timestampTable, ...bounds))
+
         
         // Get the time entries first
         axios.get(url)

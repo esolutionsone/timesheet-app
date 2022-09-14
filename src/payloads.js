@@ -25,5 +25,22 @@ export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_t
         project_stage_role.project_stage.sys_id,
         project_stage_role.project_stage.project.sys_id,
         project_stage_role.project_stage.project.client.sys_id,
+        project_stage_role.project_role.sys_id
+        `
+})
+export const FETCH_TIMESTAMPS_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
+    tableName,
+    sysparm_query: (start_time && end_time) ?
+        `consultant=${consultantId}^start_time>${start_time}^start_time<${end_time}
+        ^ORDERBYstart_time`
+        :
+        `consultant=${consultantId}^start_timeONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^ORDERBYstart_time`,
+    sysparm_fields: `
+        sys_id,start_time,end_time,duration,rounded_duration,note,
+        project_stage_role.sys_id,
+        project_stage_role.project_stage.sys_id,
+        project_stage_role.project_stage.project.sys_id,
+        project_stage_role.project_stage.project.client.sys_id,
+        project_stage_role.project_role.sys_id
         `
 })
