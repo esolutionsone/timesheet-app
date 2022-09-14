@@ -14,3 +14,16 @@ export const FETCH_TIME_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, 
     ^ORDERBYstart_time`,
     sysparm_fields: 'date,sys_id,time_adjustment, project.sys_id, project.short_description, project.client.sys_id, project.client.short_description, adjustment_direction'
 })
+
+export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
+    tableName,
+    sysparm_query: `consultant=${consultantId}^date>${start_time}^date<${end_time}
+    ^ORDERBYstart_time`,
+    sysparm_fields: `
+        date,sys_id,time_adjustment,adjustment_direction,note,
+        project_stage_role.sys_id,
+        project_stage_role.project_stage.sys_id,
+        project_stage_role.project_stage.project.sys_id,
+        project_stage_role.project_stage.project.client.sys_id,
+        `
+})

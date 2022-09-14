@@ -2,7 +2,7 @@ import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 import axios from 'axios';
 import { getSnWeekBounds, buildProjectMap } from '../helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_ENTRIES_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
 const { COMPONENT_BOOTSTRAPPED } = actionTypes;
 
@@ -10,7 +10,18 @@ export default {
     [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
         console.log('WEEK VIEW BOOTSTRAPPED');        
         dispatch('WEEK_REFETCH');
+
+        const {consultantId, timeEntryTable} = properties;
+        const {selectedDay} = state;
+        dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay)));
     },
+    'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        successActionType: 'LOG_RESULT',
+        errorActionType: 'LOG_ERROR',
+    }),
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
