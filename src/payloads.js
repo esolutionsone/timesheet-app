@@ -14,3 +14,9 @@ export const FETCH_TIME_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, 
     ^ORDERBYstart_time`,
     sysparm_fields: 'date,sys_id,time_adjustment, project.sys_id, project.short_description, project.client.sys_id, project.client.short_description, adjustment_direction'
 })
+
+export const FETCH_PROJECT_STAGE_ROLE_PAYLOAD = (consultantId) => ({
+    tableName: 'x_esg_one_core_project_stage_role',
+    sysparm_query: `project_role.consultant_assigned=${consultantId}`,
+    sysparm_fields: 'sys_id, used_hours, project_role.project.short_description, project_role.project.sys_id, roject_role.project.client.sys_id, project_role.project.client.short_description, project_stage.sys_id, project_stage.name '
+})

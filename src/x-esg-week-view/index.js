@@ -12,7 +12,8 @@ createCustomElement('x-esg-week-view', {
 		selectedDay: new Date(),
 		projectMap: new Map(),
 		clientMap: new Map(),
-		dailyEntries: []
+		dailyEntries: [],
+		project_stage_roles: [],
 	},
 	styles,
 	properties: {
@@ -23,7 +24,7 @@ createCustomElement('x-esg-week-view', {
 		consultantId: {default: ''},
 		genericProjects: {default: []},
 		projects: {default: []},
-		consultantId: {default: ''}
+		consultantId: {default: ''},
 	},
 	actionHandlers
 });
