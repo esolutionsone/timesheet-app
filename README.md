@@ -19,3 +19,7 @@
 ## Errors
 - Cannot create property 'elm' on boolean 'false' at createElm
     - While we can use short circuits in jsx, we can't use them to wipe out an entire element. Instead, use a ternary (I guess so there's something to replace it with on the VDOM, even if it's just a string?)
+
+## Architectural Q's
+
+- Will the project_role and project_stage 'active' statuses be updated and in sync? Do we need to check project.state as well?
