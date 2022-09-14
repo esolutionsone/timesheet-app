@@ -1,18 +1,37 @@
 import {format} from 'date-fns';
 import { getUTCTime, stringifyDuration } from '../../helpers';
 import ClientDay from './ClientDay';
+import { Role } from './Role';
+export const Client = ({psrs}) => {
 
-export const Client = ({client, dateArr, dispatch, consultantId, project_stage_roles}) => {
-
-    const projectList = client.projects;
-    const roleName = project_stage_roles[0]['project_role.short_description'];
+    console.log(psrs);
+    const projectIds = [...new Set(psrs.map(role => role.project_role.project.sys_id))]
+    console.log('all clients', projectIds);
+    // const projectList = client.projects;
     // console.log('Project_stage_roles in week state', project_stage_roles);
     // console.log(roleName);
     return (
         <div className="client-container">
-            <span className="client-name">{client.short_description}</span>
+            <span className="client-name">{psrs[0].project_role.project.client.short_description}</span>
+
             <div>
-                {projectList.map(project => {
+                {projectIds.map(sys_id => {
+                    let filteredPsrs = psrs.filter(psr => {
+                        return sys_id === psr.project_role.project.sys_id
+                    })
+                    return (
+                        <div>
+                            <pre>
+                                {filteredPsrs[0].project_role.project.short_description}
+                            </pre>
+                            <Role
+                                psrs={filteredPsrs}
+                            />
+                        </div>
+                    );
+
+                })}
+                {/* {projectList.map(project => {
                     return (
                         <div className="project-item week-view-grid">
                             <div className="project-item-title">{project.short_description}</div>
@@ -25,8 +44,8 @@ export const Client = ({client, dateArr, dispatch, consultantId, project_stage_r
                                 />   
                             )}                
                         </div>
-                    );
-                })}
+                    ); 
+                })}*/}
             </div>
         </div>
     );

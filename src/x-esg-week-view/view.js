@@ -16,20 +16,11 @@ export const view = (state, { updateState, dispatch }) => {
 
     const {consultantId} = state.properties;
 
-    const data = 
-        {
-            'project_role.project.client.short_description': "Cosmetic Company",
-            'project_role.project.short_description': "LOL v2",
-            'project_role.project.sys_id': "a8be7ce31bbd9110c9df43b8b04bcba9",
-            'project_role.short_description': "LOLv2 Developer",
-            'project_stage.name': "Initiate",
-            'project_stage.sys_id': "33cefce31bbd9110c9df43b8b04bcb9e",
-            sys_id: "a53089671bbd9110c9df43b8b04bcb08",
-            used_hours: "",
-        }
-    ;
+    
+    const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))]
+    console.log(project_stage_roles);
+    console.log('all clients', clientIds);
 
-    console.log('NEW OBJECT###### ',unflatten(data));
     //  // Sort Projects by client
     // const allProjects = [...genericProjects, ...projects]
     // const sortedProjects = new Map();
@@ -67,7 +58,7 @@ export const view = (state, { updateState, dispatch }) => {
                 dateArr={dateArr}
             />
             <div>
-                {Array.from(clientMap.values()).map(client => {
+                {/* {Array.from(clientMap.values()).map(client => {
                     return <Client 
                         key={client.sys_id}
                         client={client} 
@@ -76,6 +67,17 @@ export const view = (state, { updateState, dispatch }) => {
                         consultantId={consultantId} 
                         project_stage_roles={project_stage_roles}
                         />
+                })} */}
+                {clientIds.map(sys_id => {
+                    let psrs = project_stage_roles.filter(psr => {
+                        return sys_id === psr.project_role.project.client.sys_id
+                    })
+                    return (
+                        <Client
+                            psrs={psrs}
+
+                        />
+                    );
                 })}
             </div>
         </div>
