@@ -5,7 +5,9 @@ import ClientDay from './ClientDay';
 export const Client = ({client, dateArr, dispatch, consultantId, project_stage_roles}) => {
 
     const projectList = client.projects;
-    console.log('Project_stage_roles in week state', project_stage_roles);
+    const roleName = project_stage_roles[0]['project_role.short_description'];
+    // console.log('Project_stage_roles in week state', project_stage_roles);
+    // console.log(roleName);
     return (
         <div className="client-container">
             <span className="client-name">{client.short_description}</span>
