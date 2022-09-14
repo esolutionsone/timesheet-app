@@ -10,18 +10,16 @@ export default {
     [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
         console.log('WEEK VIEW BOOTSTRAPPED');        
         dispatch('WEEK_REFETCH');
-
-        const {consultantId, timeEntryTable} = properties;
-        const {selectedDay} = state;
-        dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay)));
     },
+    // NEW STUFF: FETCH_ENTRIES, FETCH_ENTRIES_SUCCESS
     'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
-        successActionType: 'LOG_RESULT',
+        successActionType: 'FETCH_ENTRIES_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
+    'FETCH_ENTRIES_SUCCESS': ({action, updateState}) => updateState({entries: action.payload.result}),
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -95,6 +93,9 @@ export default {
         const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
         const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
+        //New entries fetch
+        dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay)));
+        
         // Get the time entries first
         axios.get(url)
             .then(entries => {

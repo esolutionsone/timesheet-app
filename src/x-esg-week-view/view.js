@@ -35,6 +35,8 @@ export const view = (state, { updateState, dispatch }) => {
         firstDate.setDate(firstDate.getDate() + 1);
     }
 
+    console.log('week state:', state)
+
     return (
         <div className="week-container">
             <WeeklyHeader
