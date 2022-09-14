@@ -2,14 +2,28 @@ import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 import axios from 'axios';
 import { getSnWeekBounds, buildProjectMap } from '../helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
+import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD, FETCH_PROJECT_STAGE_ROLE_PAYLOAD } from '../payloads';
 
 const { COMPONENT_BOOTSTRAPPED } = actionTypes;
 
 export default {
     [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
-        console.log('WEEK VIEW BOOTSTRAPPED');        
+        const { consultantId } = state.properties;
+
+        console.log('WEEK VIEW BOOTSTRAPPED');     
+        dispatch('FETCH_PROJECT_STAGE_ROLE', FETCH_PROJECT_STAGE_ROLE_PAYLOAD(consultantId))
         dispatch('WEEK_REFETCH');
+    },
+    'FETCH_PROJECT_STAGE_ROLE':  createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        successActionType: 'SET_PROJECT_STAGE_ROLE',
+        errorActionType: 'LOG_ERROR'
+    }),
+    'SET_PROJECT_STAGE_ROLE': ({action, updateState}) => {
+        console.log('####### SET_PROJECT_STAGE_ROLE #######', action.payload.result);
+        updateState({project_stage_roles: action.payload.result})
     },
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
