@@ -10,6 +10,7 @@ export const view = (state, { updateState, dispatch }) => {
         clientMap,
         projectMap,
         dailyEntries,
+        project_stage_roles
     } = state
 
     const {consultantId} = state.properties;
@@ -57,7 +58,9 @@ export const view = (state, { updateState, dispatch }) => {
                         client={client} 
                         dateArr={dateArr} 
                         dispatch={dispatch}
-                        consultantId={consultantId} />
+                        consultantId={consultantId} 
+                        project_stage_roles={project_stage_roles}
+                        />
                 })}
             </div>
         </div>
