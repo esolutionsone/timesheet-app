@@ -11,7 +11,7 @@ export default {
         console.log('WEEK VIEW BOOTSTRAPPED');        
         dispatch('WEEK_REFETCH');
     },
-    // NEW STUFF: FETCH_ENTRIES, FETCH_ENTRIES_SUCCESS
+    // NEW STUFF BELOW
     'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -24,9 +24,11 @@ export default {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
-        successActionType: 'LOG_RESULT',
+        successActionType: 'FETCH_TIMESTAMPS_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
+    'FETCH_TIMESTAMPS_SUCCESS': ({action, updateState}) => updateState({timestamps: action.payload.result}),
+    // END NEW STUFF
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -105,7 +107,7 @@ export default {
         dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...bounds));
         dispatch('FETCH_TIMESTAMPS', FETCH_TIMESTAMPS_PAYLOAD(consultantId, timestampTable, ...bounds))
 
-        
+
         // Get the time entries first
         axios.get(url)
             .then(entries => {
