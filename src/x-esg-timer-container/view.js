@@ -5,7 +5,6 @@ import { AddProject } from './components/AddProject';
 
 export const view = (state, {dispatch, updateState}) => {
     const {
-        projects, 
         selectedProject,
         entryNotes,
         projectMap,
@@ -13,11 +12,21 @@ export const view = (state, {dispatch, updateState}) => {
         editableTimestamp,
         selectedDay,
     } = state;
-    const {timeEntryTable, timestampTable } = properties;
 
-    const {consultantId, editMode, addProjectStatus, genericProjects} = state.properties;
+    const {
+        timeEntryTable,
+        timestampTable,
+        consultantId, 
+        editMode, 
+        addProjectStatus, 
+        genericProjects, 
+        projects
+    } = state.properties;
 
     if(consultantId == '') return <div>Loading...</div>;
+
+    console.log('DAILY STATE', state);
+    console.log('selectedDay = ', selectedDay);
 
     return (
             <div className="today-container">

@@ -1,45 +1,87 @@
 @import '../styles/variables.scss';
 @import '../styles/materialSymbols.scss';
+@import '../components/LoadingIcon.scss';
 
 .outer-buttons {
     display: flex;
-    justify-content: flex-start;
-    width: 80%;
+    justify-content: space-between;
+    width: 95%;
     margin: auto;
 
-    .add-project-button {
-        @include flex-even-center;
-        background-color: $button-color;
-        border-style: none;
-        outline-style: none;
-        font-size: 16px;
-        flex-direction: row;
-        color: white;
-        width: 106px;
-        height: 36px;
+    .add-edit-buttons{
+        display: flex;
+
+        .add-project-button {
+            @include flex-even-center;
+            background-color: $button-color;
+            border-style: none;
+            outline-style: none;
+            font-size: 16px;
+            flex-direction: row;
+            color: white;
+            width: 120px;
+            height: 36px;
+            margin-bottom: 23px;
+            margin-right: 20px;
+            border-radius: $border-radius-default;
+            padding: 13px;
+    
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    
+        .edit-button {
+            @include flex-even-center;
+            @include default-border;
+            background-color: white;
+            outline-style: none;
+            font-size: 16px;
+            flex-direction: row;
+            color: #A0AFC4;
+            width: 106px;
+            height: 36px;
+            margin-bottom: 23px;
+    
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .timer-week-showing {
         margin-bottom: 23px;
-        margin-right: 20px;
-        border-radius: $border-radius-default;
+    }
+
+    .day-button {
+        height: 36px;
+        width: 75px;
+        border: $border-primary;
+        background-color: $bg-primary;
+        outline: none;
+        border-bottom-left-radius: $border-radius-default;
+        border-top-left-radius: $border-radius-default;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    
+    .week-button {
+        height: 36px;
+        width: 75px;
+        border: $border-primary;
+        background-color: $bg-primary;
+        outline: none;
+        border-bottom-right-radius: $border-radius-default;
+        border-top-right-radius: $border-radius-default;
 
         &:hover {
             cursor: pointer;
         }
     }
 
-    .edit-button {
-        @include flex-even-center;
-        @include default-border;
-        background-color: white;
-        outline-style: none;
-        font-size: 16px;
-        flex-direction: row;
-        color: #A0AFC4;
-        width: 106px;
-        height: 36px;
-        margin-bottom: 23px;
-
-        &:hover {
-            cursor: pointer;
-        }
+    .active {
+        background-color: $highlight-color;
     }
 }
