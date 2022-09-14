@@ -23,3 +23,84 @@
 ## Architectural Q's
 
 - Will the project_role and project_stage 'active' statuses be updated and in sync? Do we need to check project.state as well?
+## Data Structure
+    fetch on project_stage_role where consultant is you, project_role = active, project_stage = active
+
+    2x fetch on timestamp/time entry where consultant is you, 
+    EITHER: start_time within bounds OR date within bounds and project_role.active = true, project_stage.active = true
+
+    Query for project_stage_role table and gets the default projects, stages, clients: 
+        project_stage_roles: [{
+            sys_id,
+            used_hours,
+            project_role.project.short_description
+            project_role.project.sys_id,
+            project_role.project.client.sys_id,
+            project_role.project.client.short_description,
+            project_stage.sys_id,
+            project_stage.name
+            }
+        ]
+
+    Query for time_entry table:
+        entries: [{
+            sys_id,
+            date,
+            time_adjustment,
+            adjustment_direction,
+            note,
+            project_stage_role.sys_id,
+            project_stage_role.project_stage.sys_id,
+            project_stage_role.project_stage.project.sys_id,
+            project_stage_role.project_stage.project.client.sys_id,
+            }
+        ]
+
+    Query for timestamp table:
+        stamps: [{
+            sys_id,
+            start_time,
+            end_time,
+            duration,
+            rounded_duration,
+            note,
+            project_stage_role.sys_id,
+            project_stage_role.project_stage.sys_id,
+            project_stage_role.project_stage.project.sys_id,
+            project_stage_role.project_stage.project.client.sys_id,
+            }
+        ]
+
+    App state: 
+        {
+            consultantId,
+            addProjectState,
+            editMode,
+            loading,
+            location,
+        }
+    NOTE: Generic projects must have a project_role and Project_stage_role for each consultant
+
+    Week State: 
+        {
+            selectedDay,
+            stamps,
+            entries,
+            project_stage_roles,
+        }
+        
+    NOTE: Maybe a state to indicate that all APIs have returned (week/day)
+
+    Day state:
+        {
+            selectedDay,
+            timerNotes,
+            selectedProject,
+            selectedRole,
+            editableTimestamp,
+            stamps,
+        }
+
+
+    
+    

@@ -10,7 +10,6 @@ export default {
     [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
         console.log('WEEK VIEW BOOTSTRAPPED');        
         dispatch('WEEK_REFETCH');
-        // dispatch('SET_LOADING', {loading: false})
     },
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -82,10 +81,6 @@ export default {
         const { selectedDay } = state;
         const { consultantId, timeEntryTable, timestampTable } = properties;
 
-        const [start_time, end_time] = getSnWeekBounds(selectedDay);
-
-        console.log('STATREINROSIHNATISEHTASTHETHASIH', start_time, end_time);
-
         const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
         const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
@@ -97,7 +92,6 @@ export default {
                 const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay));
                 const url = `api/now/table/${timestampTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
-                console.log('STAMP URL', url)
                 axios.get(url)
                     .then(stamps => {
                         console.log('stamps', stamps);
@@ -109,8 +103,6 @@ export default {
                 
                         const allProjects = [...genericProjects, ...projects];
 
-                        console.log('POROJECTS', projects)
-
                         console.log('ALL PROJECTS', allProjects)
                         const untrackedProjects = allProjects.filter(proj => {
                             return !Array.from(projectMap.values())
@@ -119,6 +111,8 @@ export default {
                         })
                 
                         // Include projects initialized from timestamps
+
+                        console.log('projectMap', projectMap);
                         projectMap.forEach(proj => {
                             proj.entries = [];
                 
