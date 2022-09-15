@@ -1,12 +1,13 @@
 import {format} from 'date-fns';
 import { getUTCTime, stringifyDuration } from '../../helpers';
 import ClientDay from './ClientDay';
-import { Role } from './Role';
-export const Client = ({psrs}) => {
+import { Stages } from './Stages';
+
+export const Clients = ({psrs}) => {
 
     console.log(psrs);
     const projectIds = [...new Set(psrs.map(role => role.project_role.project.sys_id))]
-    console.log('all clients', projectIds);
+    console.log('all projects', projectIds);
     // const projectList = client.projects;
     // console.log('Project_stage_roles in week state', project_stage_roles);
     // console.log(roleName);
@@ -19,12 +20,13 @@ export const Client = ({psrs}) => {
                     let filteredPsrs = psrs.filter(psr => {
                         return sys_id === psr.project_role.project.sys_id
                     })
+
                     return (
                         <div>
                             <pre>
                                 {filteredPsrs[0].project_role.project.short_description}
                             </pre>
-                            <Role
+                            <Stages
                                 psrs={filteredPsrs}
                             />
                         </div>

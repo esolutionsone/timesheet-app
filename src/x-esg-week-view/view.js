@@ -1,6 +1,6 @@
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
-import { Client } from './components/Client';
+import { Clients } from './components/Clients';
 import { getWeekBounds } from "../helpers";
 import { unflatten } from "../helpers";
 
@@ -73,7 +73,7 @@ export const view = (state, { updateState, dispatch }) => {
                         return sys_id === psr.project_role.project.client.sys_id
                     })
                     return (
-                        <Client
+                        <Clients
                             psrs={psrs}
 
                         />
