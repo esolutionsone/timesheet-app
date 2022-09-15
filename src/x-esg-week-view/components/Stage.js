@@ -12,13 +12,15 @@ export const Stage = (props) => {
                 console.log('psr (role) => ', psr)
                 console.log('entries => ', entries)
                 const roleEntries = entries.filter(e => e.project_stage_role.sys_id == psr.sys_id)
+                const roleTimestamps = timestamps.filter(stamp => stamp.project_stage_role.sys_id == psr.sys_id);
+                console.log('timeStamps', timestamps)
                 return (
                     <Role
                         {...props}
                         psr={psr}
                         name={psr.project_role.short_description}
                         entries={roleEntries}
-                        timestamps={timestamps}
+                        timestamps={roleTimestamps}
                         dateArr={dateArr}
                     />
                 )
