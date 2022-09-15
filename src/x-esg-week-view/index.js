@@ -14,6 +14,7 @@ createCustomElement('x-esg-week-view', {
 		clientMap: new Map(),
 		dailyEntries: [],
 		project_stage_roles: [],
+		addStages: [],
 	},
 	styles,
 	properties: {

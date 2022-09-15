@@ -33,12 +33,13 @@
         project_stage_roles: [{
             sys_id,
             used_hours,
-            project_role.project.short_description
+            project_role.role_description, (project_role.short_description -> not role_description??)
+            project_role.project.short_description,
             project_role.project.sys_id,
             project_role.project.client.sys_id,
             project_role.project.client.short_description,
             project_stage.sys_id,
-            project_stage.name
+            project_stage.name,
             }
         ]
 
