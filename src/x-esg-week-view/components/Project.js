@@ -1,12 +1,14 @@
 import { Stage } from "./Stage"
 
-export const Project = ({ psrs, updateState, addStages, name, entries, timestamps, dateArr }) => {
-
+export const Project = (props) => {
+    const { psrs, updateState, addStages, name, entries, timestamps, dateArr } = props;
     let stageIds = [...new Set(psrs
         .filter(psr => {
             return (psr.project_role.project.current_stage.value == psr.project_stage.sys_id || psr.project_stage.sys_id == addStages[0])
         })
         .map(psr => psr.project_stage.sys_id))]
+
+    console.log('props, ', props)
 
     // gets psrs that aren't visible on dom
     let dropDownPsrs = psrs.filter(psr => {
@@ -40,13 +42,10 @@ export const Project = ({ psrs, updateState, addStages, name, entries, timestamp
                 })
                 return (
                     <Stage
+                        {...props}
                         psrs={filteredPsrs}
-                        updateState={updateState}
-                        addStages={addStages}
                         name={filteredPsrs[0].project_stage.name}
-                        entries={entries}
-                        timestamps={timestamps}
-                        dateArr={dateArr}
+
                     />
                 )
             })}

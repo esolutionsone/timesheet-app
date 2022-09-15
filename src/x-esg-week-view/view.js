@@ -84,6 +84,8 @@ export const view = (state, { updateState, dispatch }) => {
                             entries={state.entries}
                             timestamps={state.timestamps}
                             dateArr={dateArr}
+                            dispatch={dispatch}
+                            consultantId={consultantId}
                         />
                     );
                 })}

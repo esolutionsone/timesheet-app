@@ -1,7 +1,7 @@
 import { Role } from "./Role";
 
-export const Stage = ({ psrs, name, entries, timestamps, dateArr }) => {
-
+export const Stage = (props) => {
+    const { psrs, name, entries, timestamps, dateArr } = props;
     const roleIds = [...new Set(psrs.map(role => role.project_role.sys_id))]
 
     return (
@@ -10,6 +10,7 @@ export const Stage = ({ psrs, name, entries, timestamps, dateArr }) => {
             {psrs.map(psr => {
                 return (
                     <Role
+                        {...props}
                         psr={psr}
                         name={psr.project_role.short_description}
                         entries={entries}

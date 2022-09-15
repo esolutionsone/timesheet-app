@@ -1,13 +1,12 @@
-import { format } from "date-fns";
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ project, day, dispatch, consultantId }) => {
-    const date = format(day, 'Y-MM-dd')
-    const todayEntry = project.time_entries ?
-        project.time_entries
-            .find(e => e.date == date)
-        :
-        null;
+const ClientDay = ({ entry, timestamps, date, dispatch, consultantId }) => {
+    
+    
+    const todayEntry = entry;
+
+    console.log('TODAY ENTRY', todayEntry)
+    console.log(dispatch);
 
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
         let inputHours = 0;
@@ -35,7 +34,7 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
             const data = {
                 adjustment_direction,
                 time_adjustment: stringDuration,
-                date: day,
+                date: date,
                 project: project.sys_id,
                 consultant: consultantId,
             };
@@ -43,15 +42,15 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         }
     }
 
-    if (!todayEntry && !project.timestamps) {
+    if (!todayEntry && timestamps.length === 0) {
         return <input
             on-blur={(e) => handleBlur(e)}
             className="project-item-time" type="number" />
     } else {
         // set the timestamp hours for the project if they exist
         let timestampHours = 0
-        if (project.timestamps) {
-            timestampHours = project.timestamps
+        if (timestamps) {
+            timestampHours = timestamps
                 //filter by stamps matching date
                 .filter(stamp => {
                     return stamp.rounded_duration !== ''
