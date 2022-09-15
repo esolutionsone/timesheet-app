@@ -1,9 +1,9 @@
 
 
-export const Role = ({ psr }) => {
+export const Role = ({ name }) => {
     return (
         <div>
-            <div>{psr.project_role.short_description}</div>
+            <div>{name}</div>
         </div>
     );
 }

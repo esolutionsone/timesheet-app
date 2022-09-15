@@ -1,6 +1,6 @@
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
-import { Clients } from './components/Clients';
+import { Client } from './components/Client';
 import { getWeekBounds } from "../helpers";
 import { unflatten } from "../helpers";
 
@@ -11,11 +11,11 @@ export const view = (state, { updateState, dispatch }) => {
         clientMap,
         projectMap,
         dailyEntries,
-        project_stage_roles
+        project_stage_roles,
+        addStages
     } = state
 
     const {consultantId} = state.properties;
-
     
     const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))]
     console.log(project_stage_roles);
@@ -72,11 +72,13 @@ export const view = (state, { updateState, dispatch }) => {
                     let psrs = project_stage_roles.filter(psr => {
                         return sys_id === psr.project_role.project.client.sys_id
                     })
+                    
                     return (
-                        <Clients
+                        <Client
                             psrs={psrs}
                             updateState={updateState}
-
+                            addStages={addStages}
+                            name={psrs[0].project_role.project.client.short_description}
                         />
                     );
                 })}
