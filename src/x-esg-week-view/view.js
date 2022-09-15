@@ -12,7 +12,9 @@ export const view = (state, { updateState, dispatch }) => {
         projectMap,
         dailyEntries,
         project_stage_roles,
-        addStages
+        addStages,
+        entries,
+        timestamps,
     } = state
 
     const {consultantId} = state.properties;
@@ -79,6 +81,9 @@ export const view = (state, { updateState, dispatch }) => {
                             updateState={updateState}
                             addStages={addStages}
                             name={psrs[0].project_role.project.client.short_description}
+                            entries={state.entries}
+                            timestamps={state.timestamps}
+                            dateArr={dateArr}
                         />
                     );
                 })}

@@ -4,7 +4,7 @@ import ClientDay from './ClientDay';
 import { Project } from './Project';
 import { Stages } from './Stage';
 
-export const Client = ({ psrs, updateState, addStages, name }) => {
+export const Client = ({ psrs, updateState, addStages, name, entries, timestamps, dateArr }) => {
 
     console.log(psrs);
     const projectIds = [...new Set(psrs.map(role => role.project_role.project.sys_id))]
@@ -28,6 +28,9 @@ export const Client = ({ psrs, updateState, addStages, name }) => {
                                 updateState={updateState}
                                 addStages={addStages}
                                 name={filteredPsrs[0].project_role.project.short_description}
+                                entries={entries}
+                                timestamps={timestamps}
+                                dateArr={dateArr}
                             />
                         </div>
                     );

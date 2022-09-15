@@ -1,6 +1,6 @@
 import { Stage } from "./Stage"
 
-export const Project = ({ psrs, updateState, addStages, name }) => {
+export const Project = ({ psrs, updateState, addStages, name, entries, timestamps, dateArr }) => {
 
     let stageIds = [...new Set(psrs
         .filter(psr => {
@@ -44,6 +44,9 @@ export const Project = ({ psrs, updateState, addStages, name }) => {
                         updateState={updateState}
                         addStages={addStages}
                         name={filteredPsrs[0].project_stage.name}
+                        entries={entries}
+                        timestamps={timestamps}
+                        dateArr={dateArr}
                     />
                 )
             })}
