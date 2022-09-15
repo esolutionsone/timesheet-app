@@ -9,25 +9,22 @@ export const Client = ({ psrs, updateState, addStages, name }) => {
 
     return (
         <div className="client-container">
-            <span className="client-name">{name}</span>
+            <div className="client-name">{name}</div>
 
-            <div>
-                {projectIds.map(sys_id => {
-                    let filteredPsrs = psrs.filter(psr => {
-                        return sys_id === psr.project_role.project.sys_id
-                    })
-                    return (
-                        <div>
-                            <Project
-                                psrs={filteredPsrs}
-                                updateState={updateState}
-                                addStages={addStages}
-                                name={filteredPsrs[0].project_role.project.short_description}
-                            />
-                        </div>
-                    );
+            {projectIds.map(sys_id => {
+                let filteredPsrs = psrs.filter(psr => {
+                    return sys_id === psr.project_role.project.sys_id
+                })
+                return (
+                    <Project
+                        psrs={filteredPsrs}
+                        updateState={updateState}
+                        addStages={addStages}
+                        name={filteredPsrs[0].project_role.project.short_description}
+                    />
+                );
 
-                })}
+            })}
                 {/* {projectList.map(project => {
                     return (
                         <div className="project-item week-view-grid">
@@ -43,7 +40,6 @@ export const Client = ({ psrs, updateState, addStages, name }) => {
                         </div>
                     ); 
                 })}*/}
-            </div>
         </div>
     );
 }

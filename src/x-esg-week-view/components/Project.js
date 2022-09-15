@@ -36,8 +36,7 @@ export const Project = ({ psrs, updateState, addStages, name }) => {
     
     return (
         <div>
-            <pre>{name}</pre>
-            {stagesDropDown}
+            <div className='project-item'>{name} <span>{stagesDropDown}</span> </div>
             {stageIds.map(sys_id => {
                 let filteredPsrs = psrs.filter(psr => {
                     return sys_id === psr.project_stage.sys_id

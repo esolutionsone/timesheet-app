@@ -67,9 +67,7 @@
         }
     }
 
-    th:nth-child(even), td:nth-child(even) {
-        background-color: rgba(150, 212, 212, 0.4);
-    }
+    
 
     .weekly-subheader {
         padding: $item-padding;
@@ -116,24 +114,55 @@
     .client-container {
         padding: $item-padding;
         border-top: $border-primary;
+        background-color: #F9F9F9;
 
-       
-          
         .client-name {
             color: $color-secondary;
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
+            // padding-top: 10px;
         }
+
+        // .more-padding {
+        //     padding-top: 10px;
+        // }
 
         .project-item {
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
-            padding-top: 15px;
+            padding-top: 20px;
+            // padding-top: 15px;
 
             .project-item-title {
                 align-self: center
             }
 
+        }
+
+        .stage-item {
+            color: $button-color;
+            font-weight: $font-weight-bold;
+            font-size: $font-size-medium;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .role-project-grid {
+            display: grid;
+            grid-template-columns: 3fr repeat(7, 1fr);
+
+            &:hover {
+                background-color: $highlight-color;
+             }
+
+            .role-item {
+                font-weight: $font-weight-bold;
+                font-size: $font-size-medium;
+                padding-left: 50px;
+
+                
+            }
+    
             .project-item-time {
                 @include input;
                 height: 25px;
