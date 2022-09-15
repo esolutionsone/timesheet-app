@@ -1,8 +1,6 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
 const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => {
-    console.log('date', date)
-    console.log('entry', entry)
     const project = psr.project_role.project;
     
     const todayEntry = entry;
@@ -21,7 +19,7 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => 
         const adjustment_direction = difference >= 0 ? 'add' : 'subtract';
         const stringDuration = "1970-01-01 " + stringifyDuration(differenceDur);
 
-        console.log(psr.sys_id)
+
 
         if (todayEntry) {
             dispatch('UPDATE_TIME_ENTRY', {
@@ -76,7 +74,6 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => 
                 ? 1 : -1;
         }
 
-        console.log('timestampHours', timestampHours, '\ntimeAdjustment', timeAdjustment)
         return <input
             className="project-item-time"
             type="number"

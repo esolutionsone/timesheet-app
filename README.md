@@ -23,6 +23,8 @@
 ## Architectural Q's
 
 - Will the project_role and project_stage 'active' statuses be updated and in sync? Do we need to check project.state as well?
+- What's the road to deployment? Apparently, components within an AES app don't get promoted along with the app
+- We'll need to try to promote again, fixing the name in the package.json as well
 ## Data Structure
     fetch on project_stage_role where consultant is you, project_role = active, project_stage = active
 

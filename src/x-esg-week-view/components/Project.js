@@ -8,8 +8,6 @@ export const Project = (props) => {
         })
         .map(psr => psr.project_stage.sys_id))]
 
-    console.log('props, ', props)
-
     // gets psrs that aren't visible on dom
     let dropDownPsrs = psrs.filter(psr => {
             return !stageIds.includes(psr.project_stage.sys_id)
@@ -30,8 +28,6 @@ export const Project = (props) => {
                             })}
                         </select>
         
-
-    console.log('stages dropdown stuff',stagesDropDown);
     return (
         <div>
             <pre>{name}</pre>
