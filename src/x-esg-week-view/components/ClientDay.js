@@ -1,12 +1,11 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ entry, timestamps, date, dispatch, consultantId }) => {
-    
+const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => {
+    console.log('date', date)
+    console.log('entry', entry)
+    const project = psr.project_role.project;
     
     const todayEntry = entry;
-
-    console.log('TODAY ENTRY', todayEntry)
-    console.log(dispatch);
 
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
         let inputHours = 0;
@@ -22,11 +21,14 @@ const ClientDay = ({ entry, timestamps, date, dispatch, consultantId }) => {
         const adjustment_direction = difference >= 0 ? 'add' : 'subtract';
         const stringDuration = "1970-01-01 " + stringifyDuration(differenceDur);
 
+        console.log(psr.sys_id)
+
         if (todayEntry) {
             dispatch('UPDATE_TIME_ENTRY', {
                 data: {
                     time_adjustment: stringDuration,
                     adjustment_direction,
+                    project_stage_role: psr.sys_id,
                 },
                 sys_id: todayEntry.sys_id,
             })
@@ -37,6 +39,7 @@ const ClientDay = ({ entry, timestamps, date, dispatch, consultantId }) => {
                 date: date,
                 project: project.sys_id,
                 consultant: consultantId,
+                project_stage_role: psr.sys_id,
             };
             dispatch('INSERT_TIME_ENTRY', { data })
         }
@@ -72,6 +75,8 @@ const ClientDay = ({ entry, timestamps, date, dispatch, consultantId }) => {
             timeAdjustment *= (todayEntry.adjustment_direction == 'add')
                 ? 1 : -1;
         }
+
+        console.log('timestampHours', timestampHours, '\ntimeAdjustment', timeAdjustment)
         return <input
             className="project-item-time"
             type="number"
