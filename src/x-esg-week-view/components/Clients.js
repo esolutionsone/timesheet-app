@@ -3,7 +3,7 @@ import { getUTCTime, stringifyDuration } from '../../helpers';
 import ClientDay from './ClientDay';
 import { Stages } from './Stages';
 
-export const Clients = ({psrs}) => {
+export const Clients = ({ psrs, updateState }) => {
 
     console.log(psrs);
     const projectIds = [...new Set(psrs.map(role => role.project_role.project.sys_id))]

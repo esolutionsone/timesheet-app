@@ -75,6 +75,7 @@ export const view = (state, { updateState, dispatch }) => {
                     return (
                         <Clients
                             psrs={psrs}
+                            updateState={updateState}
 
                         />
                     );
