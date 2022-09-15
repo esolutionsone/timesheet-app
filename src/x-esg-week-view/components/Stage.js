@@ -3,9 +3,6 @@ import { Role } from "./Role";
 export const Stage = ({ psrs, name }) => {
 
     const roleIds = [...new Set(psrs.map(role => role.project_role.sys_id))]
-    
-
-    // console.log('all stages', stageIds);
 
     return (
         <div >

@@ -28,7 +28,6 @@ export default {
         errorActionType: 'LOG_ERROR'
     }),
     'SET_PROJECT_STAGE_ROLE': ({action, updateState}) => {
-        console.log('####### SET_PROJECT_STAGE_ROLE #######', action.payload.result);
         updateState({project_stage_roles: action.payload.result.map(obj => unflatten(obj))})
     },
     'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
