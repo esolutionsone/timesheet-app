@@ -55,7 +55,8 @@ export const view = (state, { updateState, dispatch }) => {
             />
             <WeeklySubHeader
                 selectedDay={selectedDay}
-                projectMap={projectMap}
+                entries={entries}
+                timestamps={timestamps}
                 dailyEntries={dailyEntries}
                 dateArr={dateArr}
             />
