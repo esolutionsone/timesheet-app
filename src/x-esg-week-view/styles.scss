@@ -205,6 +205,8 @@
 
 .duration-item {
     position: relative;
+    display: flex;
+    align-items: center;
 
     .hover-note {
         // display: none;
@@ -254,7 +256,7 @@
             width: 0;
             height: 0;
             bottom: 100%;
-            left: 1.5em; // offset should move with padding of parent
+            left: 2rem; // offset should move with padding of parent
             border: .75rem solid transparent;
             border-top: none;
 
