@@ -7,8 +7,6 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index
     const note = todayEntry ? todayEntry.note : '';
 
     const handleNoteBlur = (e, todayEntry) => {
-        console.log('textarea blurred')
-        console.log(e.target.value);
 
         dispatch('UPDATE_TIME_ENTRY', {
             sys_id: todayEntry.sys_id,
@@ -19,7 +17,6 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index
     }
 
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
-        console.log('input blurred')
         let inputHours = 0;
         if (e.target.value) {
             inputHours = Number(e.target.value);
