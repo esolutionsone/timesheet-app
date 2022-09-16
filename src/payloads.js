@@ -35,7 +35,7 @@ export const FETCH_PROJECT_STAGE_ROLE_PAYLOAD = (consultantId) => ({
 
 export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
     tableName,
-    sysparm_query: `consultant=${consultantId}^date>${start_time}^date<${end_time}
+    sysparm_query: `consultant=${consultantId}^date>${start_time}^date<=${end_time}
     ^ORDERBYstart_time`,
     sysparm_fields: `
         date,sys_id,time_adjustment,adjustment_direction,note,
@@ -52,6 +52,8 @@ export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_t
 export const FETCH_TIMESTAMPS_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
     tableName,
     sysparm_query: (start_time && end_time) ?
+        // start_time<end_time here should maybe be changed? but ensures that 
+        // we don't leave out timers that are started just before the end_time
         `consultant=${consultantId}^start_time>${start_time}^start_time<${end_time}
         ^ORDERBYstart_time`
         :
