@@ -7,7 +7,7 @@ export const Stage = (props) => {
 
     return (
         <div >
-            <pre>{name}</pre>
+            <div className='stage-item'>{name}</div>
             {psrs.map(psr => {
                 console.log('psr (role) => ', psr)
                 console.log('entries => ', entries)
