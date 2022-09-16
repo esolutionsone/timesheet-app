@@ -56,8 +56,6 @@ export default {
         errorActionType: 'LOG_ERROR',
     }),
     'SET_WEEKLY_TIMESTAMPS': ({ state, action, updateState, properties }) => {
-        console.log('Setting timestamps: action:', action);
-
         const { dailyEntries } = state;
         const projectMap = buildProjectMap(action.payload.result, dailyEntries)
         const clientMap = state.clientMap;
@@ -130,15 +128,11 @@ export default {
         // Get the time entries first
         axios.get(url)
             .then(entries => {
-                console.log('TIME ENTRIES:', entries);
-
                 const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay));
                 const url = `api/now/table/${timestampTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
                 axios.get(url)
                     .then(stamps => {
-                        console.log('stamps', stamps);
-
                         const dailyEntries = entries.data.result;
                         const projectMap = buildProjectMap(stamps.data.result, dailyEntries)
                         const clientMap = new Map();
@@ -146,7 +140,6 @@ export default {
                 
                         const allProjects = [...genericProjects, ...projects];
 
-                        console.log('ALL PROJECTS', allProjects)
                         const untrackedProjects = allProjects.filter(proj => {
                             return !Array.from(projectMap.values())
                                 .map(p => p.sys_id)
@@ -154,8 +147,6 @@ export default {
                         })
                 
                         // Include projects initialized from timestamps
-
-                        console.log('projectMap', projectMap);
                         projectMap.forEach(proj => {
                             proj.entries = [];
                 
@@ -185,7 +176,6 @@ export default {
 
                         dispatch('SET_WEEK_STATE', {projectMap, clientMap, dailyEntries});
                         // dispatch('SET_LOADING', {loading: false})
-                        console.log('clientMap', clientMap)
                         // updateState({ projectMap: projectMap, clientMap: clientMap, dailyEntries: dailyEntries });
                     })
             })

@@ -1,9 +1,20 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => {
+const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index }) => {
     const project = psr.project_role.project;
     
     const todayEntry = entry;
+    const note = todayEntry ? todayEntry.note : '';
+
+    const handleNoteBlur = (e, todayEntry) => {
+
+        dispatch('UPDATE_TIME_ENTRY', {
+            sys_id: todayEntry.sys_id,
+            data: {
+                note: e.target.value
+            }
+        })
+    }
 
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
         let inputHours = 0;
@@ -18,8 +29,6 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => 
 
         const adjustment_direction = difference >= 0 ? 'add' : 'subtract';
         const stringDuration = "1970-01-01 " + stringifyDuration(differenceDur);
-
-
 
         if (todayEntry) {
             dispatch('UPDATE_TIME_ENTRY', {
@@ -74,12 +83,23 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => 
                 ? 1 : -1;
         }
 
-        return <input
-            className="project-item-time"
+        const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
+
+        return <div className="duration-item">
+            <input
+            className={`project-item-time ${noNote && 'no-note'}`}
             type="number"
             value={timestampHours + timeAdjustment}
             on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
-        />
+            />
+            <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
+                <textarea 
+                    value={note}
+                    on-blur={(e) => handleNoteBlur(e, todayEntry)}
+                    placeholder="Add your notes here..."
+                />
+            </div>
+        </div>
     }
 }
 
