@@ -1,7 +1,7 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
-import { FETCH_PROJECT_STAGE_ROLE_PAYLOAD } from '../payloads';
-import { getSnDayBounds, getSnWeekBounds } from '../helpers';
+
+import { getSnDayBounds} from '../helpers';
 
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
@@ -17,9 +17,6 @@ export default {
             tableName: 'x_esg_one_core_consultant',
             sysparm_query: 'sys_user=javascript:gs.getUserID()'
         });
-        dispatch('FETCH_PROJECT_ROLE', {
-
-        })
     },
     'GET_CONSULTANT_ID': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -31,7 +28,6 @@ export default {
     'HANDLE_CONSULTANT_ID': ({action, updateState, dispatch}) => {
         const id = action.payload.result[0].sys_id || action.payload.sys_id;
         updateState({consultantId: id})
-        
         dispatch('FETCH_PROJECTS', {
             tableName: 'x_esg_one_core_project_role', 
             sysparm_query: `consultant_assigned=${id}`,

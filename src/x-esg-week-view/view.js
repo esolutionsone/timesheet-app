@@ -2,24 +2,32 @@ import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
 import { Client } from './components/Client';
 import { getWeekBounds } from "../helpers";
-import { unflatten } from "../helpers";
 
 export const view = (state, { updateState, dispatch }) => {
 
     const {
         selectedDay,
-        project_stage_roles,
-        addStages,
-        entries,
-        timestamps,
+        clientMap,
+        projectMap,
+        dailyEntries,
     } = state
 
     const {consultantId} = state.properties;
-    
-    // List unique client ids
-    const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))];
 
-    // Create array of mappable dates for the current week
+    //  // Sort Projects by client
+    // const allProjects = [...genericProjects, ...projects]
+    // const sortedProjects = new Map();
+
+    // allProjects.forEach(proj => {
+    //     const client_id = proj.client.sys_id;
+    //     if(sortedProjects.has(client_id)){
+    //         sortedProjects.get(client_id).push(proj);
+    //     }else{
+    //         sortedProjects.set(client_id, [proj]);
+    //     }
+    // })
+
+    // Create array of mappable dates
     const firstDate = getWeekBounds(selectedDay)[0];
     const dateArr = [];
     for(let i=0; i<7; i++){
@@ -36,30 +44,18 @@ export const view = (state, { updateState, dispatch }) => {
             />
             <WeeklySubHeader
                 selectedDay={selectedDay}
-                entries={entries}
-                timestamps={timestamps}
+                projectMap={projectMap}
+                dailyEntries={dailyEntries}
                 dateArr={dateArr}
             />
             <div>
-                {clientIds.map(sys_id => {
-                    // Filter psrs by client
-                    let psrs = project_stage_roles.filter(psr => {
-                        return sys_id === psr.project_role.project.client.sys_id
-                    })
-                    
-                    return (
-                        <Client
-                            psrs={psrs}
-                            updateState={updateState}
-                            addStages={addStages}
-                            name={psrs[0].project_role.project.client.short_description}
-                            entries={state.entries}
-                            timestamps={state.timestamps}
-                            dateArr={dateArr}
-                            dispatch={dispatch}
-                            consultantId={consultantId}
-                        />
-                    );
+                {Array.from(clientMap.values()).map(client => {
+                    return <Client 
+                        key={client.sys_id}
+                        client={client} 
+                        dateArr={dateArr} 
+                        dispatch={dispatch}
+                        consultantId={consultantId} />
                 })}
             </div>
         </div>
