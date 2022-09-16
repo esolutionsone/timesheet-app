@@ -19,32 +19,16 @@ export const view = (state, { updateState, dispatch }) => {
 
     const {consultantId} = state.properties;
     
-    const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))]
-    console.log(project_stage_roles);
-    console.log('all clients', clientIds);
+    // List unique client ids
+    const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))];
 
-    //  // Sort Projects by client
-    // const allProjects = [...genericProjects, ...projects]
-    // const sortedProjects = new Map();
-
-    // allProjects.forEach(proj => {
-    //     const client_id = proj.client.sys_id;
-    //     if(sortedProjects.has(client_id)){
-    //         sortedProjects.get(client_id).push(proj);
-    //     }else{
-    //         sortedProjects.set(client_id, [proj]);
-    //     }
-    // })
-
-    // Create array of mappable dates
+    // Create array of mappable dates for the current week
     const firstDate = getWeekBounds(selectedDay)[0];
     const dateArr = [];
     for(let i=0; i<7; i++){
         dateArr.push(new Date(firstDate));
         firstDate.setDate(firstDate.getDate() + 1);
     }
-
-    console.log('week state:', state)
 
     return (
         <div className="week-container">
@@ -57,21 +41,11 @@ export const view = (state, { updateState, dispatch }) => {
                 selectedDay={selectedDay}
                 entries={entries}
                 timestamps={timestamps}
-                dailyEntries={dailyEntries}
                 dateArr={dateArr}
             />
             <div>
-                {/* {Array.from(clientMap.values()).map(client => {
-                    return <Client 
-                        key={client.sys_id}
-                        client={client} 
-                        dateArr={dateArr} 
-                        dispatch={dispatch}
-                        consultantId={consultantId} 
-                        project_stage_roles={project_stage_roles}
-                        />
-                })} */}
                 {clientIds.map(sys_id => {
+                    // Filter psrs by client
                     let psrs = project_stage_roles.filter(psr => {
                         return sys_id === psr.project_role.project.client.sys_id
                     })
