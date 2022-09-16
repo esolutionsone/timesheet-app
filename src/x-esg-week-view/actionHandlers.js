@@ -1,8 +1,13 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 import axios from 'axios';
-import { getSnWeekBounds, buildProjectMap } from '../helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_ENTRIES_PAYLOAD, FETCH_PROJECT_STAGE_ROLE_PAYLOAD, FETCH_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
+import { getSnWeekBounds, buildProjectMap, unflatten } from '../helpers';
+import { 
+        FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, 
+        FETCH_ENTRIES_PAYLOAD, 
+        FETCH_PROJECT_STAGE_ROLE_PAYLOAD, 
+        FETCH_TIMESTAMPS_PAYLOAD, 
+        FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
 const { COMPONENT_BOOTSTRAPPED } = actionTypes;
 
@@ -24,7 +29,7 @@ export default {
     }),
     'SET_PROJECT_STAGE_ROLE': ({action, updateState}) => {
         console.log('####### SET_PROJECT_STAGE_ROLE #######', action.payload.result);
-        updateState({project_stage_roles: action.payload.result})
+        updateState({project_stage_roles: action.payload.result.map(obj => unflatten(obj))})
     },
     'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -33,7 +38,7 @@ export default {
         successActionType: 'FETCH_ENTRIES_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
-    'FETCH_ENTRIES_SUCCESS': ({action, updateState}) => updateState({entries: action.payload.result}),
+    'FETCH_ENTRIES_SUCCESS': ({action, updateState}) => updateState({entries: action.payload.result.map(obj => unflatten(obj))}),
     'FETCH_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -41,7 +46,7 @@ export default {
         successActionType: 'FETCH_TIMESTAMPS_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
-    'FETCH_TIMESTAMPS_SUCCESS': ({action, updateState}) => updateState({timestamps: action.payload.result}),
+    'FETCH_TIMESTAMPS_SUCCESS': ({action, updateState}) => updateState({timestamps: action.payload.result.map(obj => unflatten(obj))}),
     // END NEW STUFF
     'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',

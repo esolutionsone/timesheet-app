@@ -2,6 +2,7 @@ import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
 import { Client } from './components/Client';
 import { getWeekBounds } from "../helpers";
+import { unflatten } from "../helpers";
 
 export const view = (state, { updateState, dispatch }) => {
 
@@ -10,10 +11,15 @@ export const view = (state, { updateState, dispatch }) => {
         clientMap,
         projectMap,
         dailyEntries,
-        project_stage_roles
+        project_stage_roles,
+        addStages
     } = state
 
     const {consultantId} = state.properties;
+    
+    const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))]
+    console.log(project_stage_roles);
+    console.log('all clients', clientIds);
 
     //  // Sort Projects by client
     // const allProjects = [...genericProjects, ...projects]
@@ -52,7 +58,7 @@ export const view = (state, { updateState, dispatch }) => {
                 dateArr={dateArr}
             />
             <div>
-                {Array.from(clientMap.values()).map(client => {
+                {/* {Array.from(clientMap.values()).map(client => {
                     return <Client 
                         key={client.sys_id}
                         client={client} 
@@ -61,6 +67,20 @@ export const view = (state, { updateState, dispatch }) => {
                         consultantId={consultantId} 
                         project_stage_roles={project_stage_roles}
                         />
+                })} */}
+                {clientIds.map(sys_id => {
+                    let psrs = project_stage_roles.filter(psr => {
+                        return sys_id === psr.project_role.project.client.sys_id
+                    })
+                    
+                    return (
+                        <Client
+                            psrs={psrs}
+                            updateState={updateState}
+                            addStages={addStages}
+                            name={psrs[0].project_role.project.client.short_description}
+                        />
+                    );
                 })}
             </div>
         </div>
