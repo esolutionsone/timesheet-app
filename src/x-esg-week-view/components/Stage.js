@@ -1,7 +1,7 @@
 import { Role } from "./Role";
 
 export const Stage = (props) => {
-    const { psrs, name, entries, timestamps, dateArr } = props;
+    const { psrs, name, entries, timestamps } = props;
     const roleIds = [...new Set(psrs.map(role => role.project_role.sys_id))];
 
 
@@ -9,11 +9,12 @@ export const Stage = (props) => {
         <div >
             <div className='stage-item'>{name}</div>
             {psrs.map(psr => {
-                console.log('psr (role) => ', psr)
-                console.log('entries => ', entries)
-                const roleEntries = entries.filter(e => e.project_stage_role.sys_id == psr.sys_id)
-                const roleTimestamps = timestamps.filter(stamp => stamp.project_stage_role.sys_id == psr.sys_id);
-                console.log('timeStamps', timestamps)
+                
+                const roleEntries = entries
+                    .filter(e => e.project_stage_role.sys_id == psr.sys_id)
+                const roleTimestamps = timestamps
+                    .filter(stamp => stamp.project_stage_role.sys_id == psr.sys_id);
+                
                 return (
                     <Role
                         {...props}
@@ -21,7 +22,6 @@ export const Stage = (props) => {
                         name={psr.project_role.short_description}
                         entries={roleEntries}
                         timestamps={roleTimestamps}
-                        dateArr={dateArr}
                     />
                 )
             })}
