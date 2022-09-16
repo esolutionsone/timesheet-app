@@ -70,19 +70,27 @@
     
 
     .weekly-subheader {
-        padding: $item-padding;
+        // padding: $item-padding;
+        padding-left: 38px;
+        padding-top: 18px;
+        padding-bottom: 18px;
 
         .weekly-subheader-title {
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
             align-self: center;
         }
-        
-        .weekday-hours {
-            font-weight: $font-weight-bold;
 
-            &.weekday-hours-zero {
-                display: none;
+        .center-item {
+            margin-left: auto;
+            margin-right: auto;
+
+            .weekday-hours {
+                font-weight: $font-weight-bold;
+
+                &.weekday-hours-zero {
+                    display: none;
+                }
             }
         }
     }
@@ -112,9 +120,12 @@
     }
     
     .client-container {
-        padding: $item-padding;
+        // padding: $item-padding;
+        padding-left: 38px;
+        padding-top: 18px;
+        padding-bottom: 18px;
         border-top: $border-primary;
-        background-color: #F9F9F9;
+        // background-color: #F9F9F9;
 
         .client-name {
             color: $color-secondary;
@@ -144,29 +155,44 @@
             font-weight: $font-weight-bold;
             font-size: $font-size-medium;
             padding-top: 10px;
-            padding-bottom: 10px;
         }
 
         .role-project-grid {
             display: grid;
             grid-template-columns: 3fr repeat(7, 1fr);
+            height: 45px;
+            width: 100%;
+            align-items: center;
 
             &:hover {
                 background-color: $highlight-color;
-             }
+            }
+
+            &.active {
+                background-color: $highlight-color;
+            }
+
+            // .gid-item {
+            //     background-color: $highlight-color;
+            // }
 
             .role-item {
                 font-weight: $font-weight-bold;
                 font-size: $font-size-medium;
                 padding-left: 50px;
-
-                
+                background: $bg-primary;
+                // background-color: #F9F9F9;
+                height: 100%;
+                display: flex;
+                align-items: center;
             }
     
             .project-item-time {
                 @include input;
                 height: 25px;
                 width: 55px;
+                margin-left: auto;
+                margin-right: auto;
             }
         }
     }

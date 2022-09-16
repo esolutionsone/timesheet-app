@@ -17,7 +17,7 @@ export const Project = ({ psrs, updateState, addStages, name }) => {
     if (dropDownPsrs.length >= 1) {
         stagesDropDown = <select
                             on-change={(e)=>updateState({addStages: [e.target.value, ...addStages]})}>
-                            <option disabled selected>Choose a stage</option>
+                            <option disabled selected>Choose a Stage</option>
                             {dropDownPsrs.map(psr => {
                                 return (
                                     <option 
