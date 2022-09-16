@@ -168,7 +168,7 @@
                 background-color: $highlight-color;
             }
 
-            &.active {
+            &:focus-within {
                 background-color: $highlight-color;
             }
 
