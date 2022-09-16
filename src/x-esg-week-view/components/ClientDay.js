@@ -1,6 +1,6 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => {
+const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index }) => {
     const project = psr.project_role.project;
     
     const todayEntry = entry;
@@ -86,17 +86,20 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => 
                 ? 1 : -1;
         }
 
+        const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
+
         return <div className="duration-item">
             <input
-            className="project-item-time"
+            className={`project-item-time ${noNote && 'no-note'}`}
             type="number"
             value={timestampHours + timeAdjustment}
             on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
             />
-            <div className="hover-note">
+            <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
                 <textarea 
                     value={note}
                     on-blur={(e) => handleNoteBlur(e, todayEntry)}
+                    placeholder="Add your notes here..."
                 />
             </div>
         </div>
