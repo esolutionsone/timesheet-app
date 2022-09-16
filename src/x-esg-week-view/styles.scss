@@ -207,13 +207,17 @@
     position: relative;
 
     .hover-note {
-        display: none;
+        // display: none;
+        position: absolute;
+        visibility: hidden;
+        // width: 0;
+        // height: 0;
         z-index: 100;
 
         textarea {
             border: none;
             font-family: $font-primary;
-            height: 50px;
+            height: 100px;
             width: 300px;
 
             &:focus {
@@ -224,8 +228,10 @@
 
     @mixin note-active {
         // layout
-        display: inline-block;
+        // display: inline-block;
         position: absolute;
+        visibility: visible;
+        opacity: 1;
         // max-width: 30em;
 
         top: 40px;
