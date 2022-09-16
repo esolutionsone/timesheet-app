@@ -1,13 +1,9 @@
-import { format } from "date-fns";
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ project, day, dispatch, consultantId }) => {
-    const date = format(day, 'Y-MM-dd')
-    const todayEntry = project.time_entries ?
-        project.time_entries
-            .find(e => e.date == date)
-        :
-        null;
+const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => {
+    const project = psr.project_role.project;
+    
+    const todayEntry = entry;
 
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
         let inputHours = 0;
@@ -23,11 +19,14 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
         const adjustment_direction = difference >= 0 ? 'add' : 'subtract';
         const stringDuration = "1970-01-01 " + stringifyDuration(differenceDur);
 
+
+
         if (todayEntry) {
             dispatch('UPDATE_TIME_ENTRY', {
                 data: {
                     time_adjustment: stringDuration,
                     adjustment_direction,
+                    project_stage_role: psr.sys_id,
                 },
                 sys_id: todayEntry.sys_id,
             })
@@ -35,23 +34,24 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
             const data = {
                 adjustment_direction,
                 time_adjustment: stringDuration,
-                date: day,
+                date: date,
                 project: project.sys_id,
                 consultant: consultantId,
+                project_stage_role: psr.sys_id,
             };
             dispatch('INSERT_TIME_ENTRY', { data })
         }
     }
 
-    if (!todayEntry && !project.timestamps) {
+    if (!todayEntry && timestamps.length === 0) {
         return <input
             on-blur={(e) => handleBlur(e)}
             className="project-item-time" type="number" />
     } else {
         // set the timestamp hours for the project if they exist
         let timestampHours = 0
-        if (project.timestamps) {
-            timestampHours = project.timestamps
+        if (timestamps) {
+            timestampHours = timestamps
                 //filter by stamps matching date
                 .filter(stamp => {
                     return stamp.rounded_duration !== ''
@@ -73,6 +73,7 @@ const ClientDay = ({ project, day, dispatch, consultantId }) => {
             timeAdjustment *= (todayEntry.adjustment_direction == 'add')
                 ? 1 : -1;
         }
+
         return <input
             className="project-item-time"
             type="number"
