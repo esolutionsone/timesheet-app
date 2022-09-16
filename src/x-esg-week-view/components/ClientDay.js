@@ -74,12 +74,17 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId }) => 
                 ? 1 : -1;
         }
 
-        return <input
+        return <div className="duration-item">
+            <input
             className="project-item-time"
             type="number"
             value={timestampHours + timeAdjustment}
             on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
-        />
+            />
+            <div className="hover-note">
+                <textarea />
+            </div>
+        </div>
     }
 }
 
