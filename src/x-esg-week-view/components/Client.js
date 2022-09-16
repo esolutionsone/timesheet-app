@@ -2,7 +2,6 @@ import {format} from 'date-fns';
 import { getUTCTime, stringifyDuration } from '../../helpers';
 import ClientDay from './ClientDay';
 import { Project } from './Project';
-import { Stages } from './Stage';
 
 export const Client = (props) => {
     const { psrs, name } = props;
@@ -13,7 +12,7 @@ export const Client = (props) => {
     // console.log('Project_stage_roles in week state', project_stage_roles);
     return (
         <div className="client-container">
-            <span className="client-name">{name}</span>
+            <div className="client-name">{name}</div>
 
             <div>
                 {projectIds.map(sys_id => {
@@ -30,7 +29,7 @@ export const Client = (props) => {
                         </div>
                     );
 
-                })}
+            })}
                 {/* {projectList.map(project => {
                     return (
                         <div className="project-item week-view-grid">

@@ -9,8 +9,8 @@ export const Role = (props) => {
     // console.log('entries', entries)
     console.log(name, entries)
     return (
-        <div>
-            <div>{name}</div>
+        <div className='role-project-grid' >
+            <div className='role-item'>{name}</div>
 
             {dateArr.map(day => {
                 const date = format(day, 'Y-MM-dd');

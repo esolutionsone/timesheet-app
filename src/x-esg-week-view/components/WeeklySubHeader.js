@@ -41,7 +41,7 @@ export const WeeklySubHeader = ({
                 // Convert to hours
                 const totalHours = (totalTime + adjustmentMs) / 1000 / 60 / 60;
 
-                return <div>
+                return <div className="center-item">
                         <div>{format(date, 'MMM dd')}</div>
                         <div>{format(date, 'E')}</div>
                         <div 
