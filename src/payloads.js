@@ -35,7 +35,7 @@ export const FETCH_PROJECT_STAGE_ROLE_PAYLOAD = (consultantId) => ({
 
 export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
     tableName,
-    sysparm_query: `consultant=${consultantId}^date>${start_time}^date<${end_time}
+    sysparm_query: `consultant=${consultantId}^date>${start_time}^date<=${end_time}
     ^ORDERBYstart_time`,
     sysparm_fields: `
         date,sys_id,time_adjustment,adjustment_direction,note,
