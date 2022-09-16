@@ -15,6 +15,8 @@ createCustomElement('x-esg-week-view', {
 		dailyEntries: [],
 		project_stage_roles: [],
 		addStages: [],
+		entries: [],
+		timestamps: [],
 	},
 	styles,
 	properties: {

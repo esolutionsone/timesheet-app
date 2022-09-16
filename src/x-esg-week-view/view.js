@@ -8,9 +8,6 @@ export const view = (state, { updateState, dispatch }) => {
 
     const {
         selectedDay,
-        clientMap,
-        projectMap,
-        dailyEntries,
         project_stage_roles,
         addStages,
         entries,
