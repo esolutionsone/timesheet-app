@@ -4,14 +4,13 @@ import ClientDay from './ClientDay';
 import { Project } from './Project';
 import { Stages } from './Stage';
 
-export const Client = ({ psrs, updateState, addStages, name }) => {
-
-    console.log(psrs);
+export const Client = (props) => {
+    const { psrs, name } = props;
+    console.log('props', props)
     const projectIds = [...new Set(psrs.map(role => role.project_role.project.sys_id))]
     console.log('all projects', projectIds);
     // const projectList = client.projects;
     // console.log('Project_stage_roles in week state', project_stage_roles);
-    console.log(name); 
     return (
         <div className="client-container">
             <span className="client-name">{name}</span>
@@ -24,10 +23,9 @@ export const Client = ({ psrs, updateState, addStages, name }) => {
                     return (
                         <div>
                             <Project
+                                {...props}
                                 psrs={filteredPsrs}
-                                updateState={updateState}
-                                addStages={addStages}
-                                name={filteredPsrs[0].project_role.project.short_description}
+                                name={filteredPsrs[0].project_role.project.short_description}         
                             />
                         </div>
                     );
