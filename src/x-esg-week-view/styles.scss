@@ -28,7 +28,7 @@
 
             .chevron-left {
                 height: 36px;
-                width:46px;
+                width: 46px;
                 border: $border-primary;
                 background-color: $bg-primary;
                 outline: none;
@@ -42,7 +42,7 @@
 
             .chevron-right {
                 height: 36px;
-                width:46px;
+                width: 46px;
                 border: $border-primary;
                 background-color: $bg-primary;
                 outline: none;
@@ -67,7 +67,7 @@
         }
     }
 
-    
+
 
     .weekly-subheader {
         // padding: $item-padding;
@@ -94,7 +94,7 @@
             }
         }
     }
-    
+
     .add-project-container {
         display: flex;
         justify-content: space-evenly;
@@ -112,13 +112,13 @@
                 font-weight: $font-weight-bold;
                 font-size: $font-size-medium;
             }
-    
+
             .add-project-selections {
                 border-top: $border-primary;
             }
         }
     }
-    
+
     .client-container {
         // padding: $item-padding;
         padding-left: 38px;
@@ -186,16 +186,99 @@
                 display: flex;
                 align-items: center;
             }
-    
+
             .project-item-time {
                 @include input;
                 height: 25px;
                 width: 55px;
                 margin-left: auto;
                 margin-right: auto;
+
+                &.no-note {
+                    border-color: red;
+                }
             }
         }
     }
 }
 
 
+.duration-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .hover-note {
+        // display: none;
+        position: absolute;
+        visibility: hidden;
+        // width: 0;
+        // height: 0;
+        z-index: 100;
+
+        textarea {
+            border: none;
+            font-family: $font-primary;
+            height: 100px;
+            width: 300px;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    @mixin note-active {
+        // layout
+        // display: inline-block;
+        position: absolute;
+        visibility: visible;
+        opacity: 1;
+        // max-width: 30em;
+
+        top: 40px;
+        left: 0px;
+        // right: 0px;
+
+        // looks
+        background-color: #fff;
+        // padding: 1.125em 1.5em;
+        padding: .3em .4em;
+        font-size: 12px;
+        border-radius: 1rem;
+        box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
+        // max-width: 300px;
+
+        &::before {
+            // layout
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            bottom: 100%;
+            left: 2rem; // offset should move with padding of parent
+            border: .75rem solid transparent;
+            border-top: none;
+
+            // looks
+            border-bottom-color: #fff;
+            filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
+        }
+
+        &.note-reverse {
+            transform: translateX(-200px);
+
+            &::before {
+                transform: translateX(200px);
+            }
+        }
+    }
+
+    &:hover>.hover-note {
+        @include note-active;
+    }
+
+    &:focus-within>.hover-note {
+        @include note-active;
+    }
+}
