@@ -1,8 +1,7 @@
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
 import { Client } from './components/Client';
-import { getWeekBounds } from "../helpers";
-import { unflatten } from "../helpers";
+import { getWeekBounds, getUTCTime, msToString, unflatten } from "../helpers";
 
 export const view = (state, { updateState, dispatch }) => {
 
@@ -27,22 +26,34 @@ export const view = (state, { updateState, dispatch }) => {
         firstDate.setDate(firstDate.getDate() + 1);
     }
 
-    const handleSubmit = async () =>  {
-		console.log('submit clicked', entries);
-        // const delay = ms => new Promise(res => setTimeout(res, ms));
+    const handleStatus = () =>  {
+        let entryStatus = '';
+        switch (entries[0].status) {
+            case 'draft':
+                entryStatus = 'submitted';
+                break;
+            case 'submitted':
+                entryStatus = 'draft';
+                break;
+            default:
+                break;
+        }
 
         entries.forEach((entry, i) => {
-            dispatch('UPDATE_SUBMIT', {sys_id: entry.sys_id, data: { status: 'submitted'}})
-
-            // if (i == (entries.length - 1)) {
-            //     dispatch('WEEK_REFETCH')
-            // }
+            dispatch('UPDATE_SUBMIT', {sys_id: entry.sys_id, data: { status: entryStatus}})
         });
-        // await delay(1000);
-        // dispatch('TEST_BATCH')
-        // dispatch('WEEK_REFETCH')
-        
 	}   
+
+    let myTime = 0;
+    
+    entries.forEach(entry => {
+        let time = getUTCTime(entry.time_adjustment)
+        myTime += time.getTime();
+
+    });
+
+    console.log('My TIme ', myTime);
+    console.log('Entries in ',entries);
 
     return (
         <div>
@@ -86,12 +97,22 @@ export const view = (state, { updateState, dispatch }) => {
 					to guarantee inclusion in weekly invoicing/utilization batch jobs. 
 					Failure to do so may result in delays in payment/utilization.</div>
 				<div className="submit-time-container">
-					<div className="total-time-display">Total <b>40.00</b></div>
-					<button 
-						className="submit-button"
-						on-click={()=> handleSubmit()}>
-							Submit Week
-					</button>
+					<div className="total-time-display">Total <b>{msToString(myTime)}</b></div>
+                    {entries[0].status == 'invoiced' ?
+                        <button 
+                            className="submit-button disabled-button"
+                            on-click={()=> handleStatus()}
+                            disabled>
+                                {entries[0].status == 'draft' ? 'Submit Week' : 'Recall Timesheet'}
+					    </button> 
+                        : 
+                        <button 
+                            className="submit-button"
+                            on-click={()=> handleStatus()}
+                            >
+                                {entries[0].status == 'draft' ? 'Submit Week' : 'Recall Timesheet'}
+					    </button>
+                    }
 				</div>
 			</div>
         </div>
