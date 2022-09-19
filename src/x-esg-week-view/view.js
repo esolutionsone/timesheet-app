@@ -1,8 +1,7 @@
 import { WeeklySubHeader } from "./components/WeeklySubHeader";
 import { WeeklyHeader } from "./components/WeeklyHeader";
 import { Client } from './components/Client';
-import { getWeekBounds } from "../helpers";
-import { unflatten } from "../helpers";
+import { getWeekBounds, getUTCTime, msToString, unflatten } from "../helpers";
 
 export const view = (state, { updateState, dispatch }) => {
 
@@ -45,11 +44,15 @@ export const view = (state, { updateState, dispatch }) => {
         });
 	}   
 
-    let weekButton;
-
+    let myTime = 0;
     
- 
+    entries.forEach(entry => {
+        let time = getUTCTime(entry.time_adjustment)
+        myTime += time.getTime();
 
+    });
+
+    console.log('My TIme ', myTime);
     console.log('Entries in ',entries);
 
     return (
@@ -94,7 +97,7 @@ export const view = (state, { updateState, dispatch }) => {
 					to guarantee inclusion in weekly invoicing/utilization batch jobs. 
 					Failure to do so may result in delays in payment/utilization.</div>
 				<div className="submit-time-container">
-					<div className="total-time-display">Total <b>40.00</b></div>
+					<div className="total-time-display">Total <b>{msToString(myTime)}</b></div>
                     {entries[0].status == 'invoiced' ?
                         <button 
                             className="submit-button disabled-button"
