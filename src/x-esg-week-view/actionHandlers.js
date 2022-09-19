@@ -1,4 +1,4 @@
-import { actionTypes } from '@servicenow/ui-core';
+import { actionTypes, modifierTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 import axios from 'axios';
 import { getSnWeekBounds, buildProjectMap, unflatten } from '../helpers';
@@ -10,6 +10,7 @@ import {
         FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
 const { COMPONENT_BOOTSTRAPPED } = actionTypes;
+// const {DEBOUNCE, TAKE_LATEST} = modifierTypes
 
 export default {
     [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
@@ -197,6 +198,34 @@ export default {
         successActionType: 'WEEK_REFETCH',
         errorActionType: 'LOG_ERROR',
     }),
+    'UPDATE_SUBMIT': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry/:sys_id', {
+        method: 'PUT',
+        pathParams: ['sys_id'],
+        dataParam: 'data',
+        successActionType: 'LOG_LATEST',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'LOG_LATEST': { 
+        modifier: {name: 'debounce', delay: 600},
+        effect ({dispatch}) {
+            dispatch('WEEK_REFETCH')
+        }
+    },
+    // 'TEST_BATCH': createHttpEffect('api/now/v1/batch', {
+    //     method: 'POST',
+    //     batch_request_id: '1',
+    //     rest_requests: [
+    //         {
+    //             method: 'PUT',
+    //             body: {status: 'draft'},
+    //             url: 'api/now/table/x_esg_one_delivery_time_entry/9d1659671bfd9110c9df43b8b04bcb18',
+    //             id: '2'
+    //         }
+    //     ],
+    //     successActionType: 'LOG_RESULT'
+
+
+    // }),
     'INSERT_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry', {
         method: 'POST',
         dataParam: 'data',

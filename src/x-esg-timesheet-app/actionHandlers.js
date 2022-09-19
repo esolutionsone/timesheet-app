@@ -89,7 +89,7 @@ export default {
             loading: false,
         })
     },
-    'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
+    'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload, new Date().getTime()),
     'LOG_ERROR': ({action}) => console.error('ERROR', action.payload.msg, action.payload.data),
     'TEST_START': () => console.log('test start'),
     'INSERT_SUCCESS': ({updateState}) => updateState({addProjectStatus: false}),

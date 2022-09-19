@@ -282,3 +282,41 @@
         @include note-active;
     }
 }
+
+.footer-container {
+    @include flex-between-center;
+    width: 95%;
+    height: 100px;
+    margin: auto;
+    margin-top: 10px;
+
+    .note-container {
+        @include default-border;
+        font-family: $font-primary;
+        font-size: $font-size-medium;
+        padding: 18px 20px;
+        width: 75%;
+    }
+
+    .submit-time-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        height: 100%;
+
+        .total-time-display {
+            font-family: $font-primary;
+            font-size: $font-size-large;
+        }
+    
+        .submit-button {
+            @include button;
+            height: 36px;
+            width: 157px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}
