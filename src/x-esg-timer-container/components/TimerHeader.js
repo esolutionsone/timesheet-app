@@ -2,13 +2,14 @@ import { msToString, hhmmToSnTime, getSnDayBounds } from '../../helpers';
 import { format, formatDistanceToNow, isToday } from 'date-fns';
 import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD } from '../../payloads';
 
-export const TimerHeader = ({consultantId, dispatch, updateState, projectMap, selectedDay}) => {
+export const TimerHeader = ({consultantId, dispatch, updateState, projectMap, selectedDay, addProjectStatus}) => {
 
      /**
      * Increments state.selectedDay 1 day forward or backward
      * @param {bool} forward 
      */
       const incrementDate = (forward) => {
+        dispatch('UPDATE_ADD_PROJECT')
         // Calculate 1 day forward/backward
         let increment = 24 * 60 * 60 * 1000 * (forward ? 1: -1);
 
