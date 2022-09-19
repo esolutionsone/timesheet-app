@@ -9,7 +9,8 @@ export const AddProject = ({
                                 consultantId,
                                 timeEntryTable,
                                 timestampTable,
-                                dispatch }) => {
+                                dispatch,
+                                selectedDay }) => {
 
      // Combine Generic projects and user-specific projects,
     // Then filter out projects that are already being tracked today

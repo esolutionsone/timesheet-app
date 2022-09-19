@@ -94,4 +94,5 @@ export default {
     'TEST_START': () => console.log('test start'),
     'INSERT_SUCCESS': ({updateState}) => updateState({addProjectStatus: false}),
     'SET_LOADING': ({action, updateState}) => updateState(action.payload),
+    'UPDATE_ADD_PROJECT': ({action, updateState}) => updateState({addProjectStatus: false})
 }
