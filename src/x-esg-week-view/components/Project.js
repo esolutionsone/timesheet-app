@@ -2,9 +2,12 @@ import { Stage } from "./Stage"
 
 export const Project = (props) => {
     const { psrs, updateState, addStages, name, entries, timestamps, dateArr } = props;
+
+    let entryStages = [...new Set(entries.map(entry => entry.project_stage_role.project_stage.sys_id))]
+
     let stageIds = [...new Set(psrs
         .filter(psr => {
-            return (psr.project_role.project.current_stage.value == psr.project_stage.sys_id || addStages.includes(psr.project_stage.sys_id))
+            return (psr.project_role.project.current_stage.value == psr.project_stage.sys_id || addStages.includes(psr.project_stage.sys_id) || entryStages.includes(psr.project_stage.sys_id))
         })
         .map(psr => psr.project_stage.sys_id))]
 
@@ -16,6 +19,7 @@ export const Project = (props) => {
     let stagesDropDown
     if (dropDownPsrs.length >= 1) {
         stagesDropDown = <select
+                            className='stages-dropdown'
                             on-change={(e)=>updateState({addStages: [e.target.value, ...addStages]})}>
                             <option disabled selected>Choose a Stage</option>
                             {dropDownPsrs.map(psr => {

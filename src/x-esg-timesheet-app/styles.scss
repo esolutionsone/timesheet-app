@@ -54,6 +54,7 @@
     }
 
     .day-button {
+        color: #A0AFC4;
         height: 36px;
         width: 75px;
         border: $border-primary;
@@ -61,6 +62,8 @@
         outline: none;
         border-bottom-left-radius: $border-radius-default;
         border-top-left-radius: $border-radius-default;
+        font-family: $font-primary;
+        font-weight: $font-weight-bold;
 
         &:hover {
             cursor: pointer;
@@ -68,6 +71,7 @@
     }
     
     .week-button {
+        color: #A0AFC4;
         height: 36px;
         width: 75px;
         border: $border-primary;
@@ -75,6 +79,8 @@
         outline: none;
         border-bottom-right-radius: $border-radius-default;
         border-top-right-radius: $border-radius-default;
+        font-family: $font-primary;
+        font-weight: $font-weight-bold;
 
         &:hover {
             cursor: pointer;
@@ -83,5 +89,7 @@
 
     .active {
         background-color: $highlight-color;
+        color: #3178C6;        
     }
 }
+
