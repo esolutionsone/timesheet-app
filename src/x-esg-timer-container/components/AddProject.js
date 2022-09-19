@@ -22,14 +22,14 @@ export const AddProject = ({
         if (selectedProject == '') {
             alert('Please select a project before continuing.')
         } else {
-            dispatch('NEW_ENTRY', {
-                data: {
-                    project: selectedProject,
-                    consultant: consultantId,
-                    note: entryNotes,
-                },
-                tableName: timeEntryTable,
-            });
+            // dispatch('NEW_ENTRY', {
+            //     data: {
+            //         project: selectedProject,
+            //         consultant: consultantId,
+            //         note: entryNotes,
+            //     },
+            //     tableName: timeEntryTable,
+            // });
             dispatch('INSERT_TIMESTAMP', {
                 data: { 
                     active: true, 

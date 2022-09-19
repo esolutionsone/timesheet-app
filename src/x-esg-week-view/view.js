@@ -55,12 +55,16 @@ export const view = (state, { updateState, dispatch }) => {
     let myTime = 0;
     
     entries.forEach(entry => {
-        let time = getUTCTime(entry.time_adjustment)
-        myTime += time.getTime();
-
+        if ( entry.time_adjustment != '') {
+            let time = getUTCTime(entry.time_adjustment);
+            myTime += time.getTime();
+        } else {
+            let time = getUTCTime("1970-01-01 00:00:00");
+            myTime += time.getTime();
+        }
     });
 
-    console.log('My TIme ', myTime);
+    console.log('My Time ', myTime);
     console.log('Entries in ',entries);
 
     return (
