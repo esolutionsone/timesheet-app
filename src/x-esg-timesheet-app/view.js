@@ -9,7 +9,8 @@ export default (state, {updateState}) => {
 		genericProjects,
         projects,
 		location,
-		loading
+		loading,
+		selectedDay
 	} = state;
 	const {timestampTable, timeEntryTable} = state.properties;
 	// Load Custom Fonts
