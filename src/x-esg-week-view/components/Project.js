@@ -19,6 +19,7 @@ export const Project = (props) => {
     let stagesDropDown
     if (dropDownPsrs.length >= 1) {
         stagesDropDown = <select
+                            className='stages-dropdown'
                             on-change={(e)=>updateState({addStages: [e.target.value, ...addStages]})}>
                             <option disabled selected>Choose a Stage</option>
                             {dropDownPsrs.map(psr => {
