@@ -27,21 +27,29 @@ export const view = (state, { updateState, dispatch }) => {
     }
 
     const handleStatus = () =>  {
+        
         let entryStatus = '';
+        let submitMessage = '';
+
         switch (entries[0].status) {
             case 'draft':
                 entryStatus = 'submitted';
+                submitMessage = 'submit';
                 break;
             case 'submitted':
                 entryStatus = 'draft';
+                submitMessage = 'recall and edit';
                 break;
             default:
                 break;
         }
 
-        entries.forEach((entry, i) => {
-            dispatch('UPDATE_SUBMIT', {sys_id: entry.sys_id, data: { status: entryStatus}})
-        });
+        if (confirm(`Click OK to ${submitMessage} timesheet`) == true) {
+
+            entries.forEach(entry => {
+                dispatch('UPDATE_SUBMIT', {sys_id: entry.sys_id, data: { status: entryStatus}})
+            });
+        }
 	}   
 
     let myTime = 0;
