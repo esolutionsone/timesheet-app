@@ -76,9 +76,6 @@ export const view = (state, { updateState, dispatch }) => {
 
     const today = new Date();
 
-    console.log('My Time ', myTime);
-    console.log('Entries in ',entries);
-
     return (
         <div>
             <div className="week-container">
