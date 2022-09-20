@@ -85,7 +85,7 @@ export default (state, {updateState}) => {
 					: 
 					<div></div>
 				}
-				<div className={`${(location == 'week') ? 'timer-week-showing' : ''}`}>
+				{/* <div className={`${(location == 'week') ? 'timer-week-showing' : ''}`}>
 					<button 
 						className={`day-button ${(location == 'day') ? 'active' : ''}`}
 						on-click={()=> updateState({location: 'day', addProjectStatus: false, editMode: false})}>
@@ -96,7 +96,7 @@ export default (state, {updateState}) => {
 						on-click={()=> updateState({location: 'week', addProjectStatus: false, editMode: false})}>
 							Week
 					</button>
-				</div>
+				</div> */}
 			</div>
 			{jsx}
 		</div>
