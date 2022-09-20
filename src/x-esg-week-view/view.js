@@ -64,6 +64,18 @@ export const view = (state, { updateState, dispatch }) => {
         }
     });
 
+    timestamps.forEach(stamp => {
+        if ( stamp.rounded_duration != '') {
+            let time = getUTCTime(stamp.rounded_duration);
+            myTime += time.getTime();
+        } else {
+            let time = getUTCTime("1970-01-01 00:00:00");
+            myTime += time.getTime();
+        }
+    });
+
+    const today = new Date();
+
     console.log('My Time ', myTime);
     console.log('Entries in ',entries);
 
@@ -99,6 +111,7 @@ export const view = (state, { updateState, dispatch }) => {
                                 dateArr={dateArr}
                                 dispatch={dispatch}
                                 consultantId={consultantId}
+                                selectedDay={selectedDay}
                             />
                         );
                     })}
@@ -110,7 +123,10 @@ export const view = (state, { updateState, dispatch }) => {
 					Failure to do so may result in delays in payment/utilization.</div>
 				<div className="submit-time-container">
 					<div className="total-time-display">Total <b>{msToString(myTime)}</b></div>
-                    {entries[0].status == 'invoiced' ?
+                    {selectedDay.getDate() != today.getDate() ?
+                        ''
+                        :
+                        (entries[0].status == 'invoiced') ?
                         <button 
                             className="submit-button disabled-button"
                             on-click={()=> handleStatus()}
