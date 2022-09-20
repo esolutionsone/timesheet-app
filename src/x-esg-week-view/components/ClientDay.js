@@ -22,8 +22,6 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index
         } 
     }
 
-    console.log('selectedDay = ', selectedDay);
-
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
         let inputHours = 0;
         if (e.target.value) {
