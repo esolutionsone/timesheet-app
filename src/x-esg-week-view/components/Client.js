@@ -4,7 +4,7 @@ import ClientDay from './ClientDay';
 import { Project } from './Project';
 
 export const Client = (props) => {
-    const { psrs, name } = props;
+    const { psrs, name, entries } = props;
     const projectIds = [...new Set(psrs.map(role => role.project_role.project.sys_id))]
 
     return (
