@@ -1,13 +1,22 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index, selectedDay }) => {
+const ClientDay = ({ 
+    psr,
+    entry, 
+    timestamps, 
+    date, 
+    dispatch, 
+    consultantId, 
+    index, 
+    selectedDay, 
+    entries }) => {
+
     const project = psr.project_role.project;
     const today = new Date();
     const todayEntry = entry;
     const note = todayEntry ? todayEntry.note : '';
 
     const handleNoteBlur = (e, todayEntry) => {
-
         dispatch('UPDATE_TIME_ENTRY', {
             sys_id: todayEntry.sys_id,
             data: {
@@ -59,14 +68,20 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index
     }
 
     if (!todayEntry && timestamps.length === 0) {
-        if (selectedDay.getDate() == today.getDate()) {
-        return <input
-            on-blur={(e) => handleBlur(e)}
-            className="project-item-time" type="number" />
+        if (selectedDay.getDate() == today.getDate() && entries[0].status == 'draft') {
+            return <input
+                on-blur={(e) => handleBlur(e)}
+                className="project-item-time" type="number" />
         } else {
             return (
                 <div className="duration-item">
                     <div>0</div>
+                    <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
+                        <textarea 
+                            value=''
+                            placeholder="No note was recorded"
+                        />
+                    </div>
                 </div>
             );
         }
@@ -100,8 +115,8 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index
         const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
         
 
-        if (selectedDay.getDate() == today.getDate()) {
-            return( 
+        if (selectedDay.getDate() == today.getDate() && entries[0].status == 'draft') {
+            return ( 
                 <div className="duration-item">
                         <input
                     className={`project-item-time ${noNote && 'no-note'}`}
