@@ -63,6 +63,14 @@ export default (state, {updateState}) => {
 	return (
 		<div>
 			<div className="outer-buttons">
+				<div className='time-box'>
+					<div>Time increments are logged in quarters.</div>
+					<div className='time-box-increments'>
+						<div>.25 = 15 min</div>
+						<div>.50 = 30 min</div>
+						<div>.75 = 45 min</div>
+					</div>
+				</div>
 				{location == 'day' ?
 					<div className="add-edit-buttons">
 						<button 
@@ -85,18 +93,19 @@ export default (state, {updateState}) => {
 					: 
 					<div></div>
 				}
-				<div className={`${(location == 'week') ? 'timer-week-showing' : ''}`}>
-					<button 
-						className={`day-button ${(location == 'day') ? 'active' : ''}`}
-						on-click={()=> updateState({location: 'day', addProjectStatus: false, editMode: false})}>
-							Timers
-					</button>
-					<button 
-						className={`week-button ${(location == 'week') ? 'active' : ''}`}
-						on-click={()=> updateState({location: 'week', addProjectStatus: false, editMode: false})}>
-							Week
-					</button>
-				</div>
+				{/* Allows toggle between timers and week view. 
+					<div className={`${(location == 'week') ? 'timer-week-showing' : ''}`}>
+						<button 
+							className={`day-button ${(location == 'day') ? 'active' : ''}`}
+							on-click={()=> updateState({location: 'day', addProjectStatus: false, editMode: false})}>
+								Timers
+						</button>
+						<button 
+							className={`week-button ${(location == 'week') ? 'active' : ''}`}
+							on-click={()=> updateState({location: 'week', addProjectStatus: false, editMode: false})}>
+								Week
+						</button>
+					</div> */}
 			</div>
 			{jsx}
 		</div>

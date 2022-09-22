@@ -1,19 +1,34 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index }) => {
+const ClientDay = ({ 
+    psr,
+    entry, 
+    timestamps, 
+    date, 
+    dispatch, 
+    consultantId, 
+    index, 
+    selectedDay, 
+    entries }) => {
+
     const project = psr.project_role.project;
-    
+    const today = new Date();
     const todayEntry = entry;
     const note = todayEntry ? todayEntry.note : '';
 
     const handleNoteBlur = (e, todayEntry) => {
-
         dispatch('UPDATE_TIME_ENTRY', {
             sys_id: todayEntry.sys_id,
             data: {
                 note: e.target.value
             }
         })
+    }
+
+    const enforceMinMax = (e) => {
+        if (e.target.value > 24) {
+            e.target.value = 24;
+        } 
     }
 
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
@@ -53,9 +68,23 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index
     }
 
     if (!todayEntry && timestamps.length === 0) {
-        return <input
-            on-blur={(e) => handleBlur(e)}
-            className="project-item-time" type="number" />
+        if (selectedDay.getDate() == today.getDate() && entries[0].status == 'draft') {
+            return <input
+                on-blur={(e) => handleBlur(e)}
+                className="project-item-time" type="number" />
+        } else {
+            return (
+                <div className="duration-item">
+                    <div>0</div>
+                    <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
+                        <textarea 
+                            value=''
+                            placeholder="No note was recorded"
+                        />
+                    </div>
+                </div>
+            );
+        }
     } else {
         // set the timestamp hours for the project if they exist
         let timestampHours = 0
@@ -84,22 +113,42 @@ const ClientDay = ({ psr, entry, timestamps, date, dispatch, consultantId, index
         }
 
         const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
+        
 
-        return <div className="duration-item">
-            <input
-            className={`project-item-time ${noNote && 'no-note'}`}
-            type="number"
-            value={timestampHours + timeAdjustment}
-            on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
-            />
-            <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
-                <textarea 
-                    value={note}
-                    on-blur={(e) => handleNoteBlur(e, todayEntry)}
-                    placeholder="Add your notes here..."
-                />
-            </div>
-        </div>
+        if (selectedDay.getDate() == today.getDate() && entries[0].status == 'draft') {
+            return ( 
+                <div className="duration-item">
+                        <input
+                    className={`project-item-time ${noNote && 'no-note'}`}
+                    type="number"
+                    value={timestampHours + timeAdjustment}
+                    min='0'
+                    max='24'
+                    on-keyup={(e)=>enforceMinMax(e)}
+                    on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
+                    />
+                    <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
+                        <textarea 
+                            value={note}
+                            on-blur={(e) => handleNoteBlur(e, todayEntry)}
+                            placeholder="Add your notes here..."
+                        />
+                    </div>
+                </div>
+            );
+        } else {
+            return( 
+                <div className="duration-item">
+                    <div>{timestampHours + timeAdjustment}</div>
+                    <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
+                        <textarea 
+                            value={note}
+                            placeholder="No note was recorded"
+                        />
+                    </div>
+                </div>
+            );
+        }
     }
 }
 
