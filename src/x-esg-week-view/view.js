@@ -18,7 +18,7 @@ export const view = (state, { updateState, dispatch }) => {
     const inDraftState = entries.filter(entry => entry.status != 'draft')
         .length < 1;
 
-    console.log(inDraftState);
+    console.log('inDraftState', inDraftState);
     
     // List unique client ids
     const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))];
