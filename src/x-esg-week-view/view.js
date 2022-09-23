@@ -14,6 +14,11 @@ export const view = (state, { updateState, dispatch }) => {
     } = state
 
     const {consultantId} = state.properties;
+    // Check if any entries are submitted;
+    const inDraftState = entries.filter(entry => entry.status != 'draft')
+        .length < 1;
+
+    console.log(inDraftState);
     
     // List unique client ids
     const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))];
@@ -31,18 +36,26 @@ export const view = (state, { updateState, dispatch }) => {
         let entryStatus = '';
         let submitMessage = '';
 
-        switch (entries[0].status) {
-            case 'draft':
-                entryStatus = 'submitted';
-                submitMessage = 'submit';
-                break;
-            case 'submitted':
-                entryStatus = 'draft';
-                submitMessage = 'recall and edit';
-                break;
-            default:
-                break;
+        if(inDraftState){
+            entryStatus = 'submitted';
+            submitMessage = 'submit';
+        }else{
+            entryStatus = 'draft';
+            submitMessage = 'recall and edit'
         }
+
+        // switch (entries[0].status) {
+        //     case 'draft':
+        //         entryStatus = 'submitted';
+        //         submitMessage = 'submit';
+        //         break;
+        //     case 'submitted':
+        //         entryStatus = 'draft';
+        //         submitMessage = 'recall and edit';
+        //         break;
+        //     default:
+        //         break;
+        // }
 
         if (confirm(`Click OK to ${submitMessage} timesheet`) == true) {
 
@@ -109,6 +122,7 @@ export const view = (state, { updateState, dispatch }) => {
                                 dispatch={dispatch}
                                 consultantId={consultantId}
                                 selectedDay={selectedDay}
+                                inDraftState={inDraftState}
                             />
                         );
                     })}
@@ -123,7 +137,7 @@ export const view = (state, { updateState, dispatch }) => {
                     {selectedDay.getDate() != today.getDate() ?
                         ''
                         :
-                        (entries[0].status == 'invoiced') ?
+                        (!inDraftState && entries[0].status == 'invoiced') ?
                         <button 
                             className="submit-button disabled-button"
                             on-click={()=> handleStatus()}
@@ -135,7 +149,7 @@ export const view = (state, { updateState, dispatch }) => {
                             className="submit-button"
                             on-click={()=> handleStatus()}
                             >
-                                {entries[0].status == 'draft' ? 'Submit Week' : 'Recall Timesheet'}
+                                {inDraftState ? 'Submit Week' : 'Recall Timesheet'}
 					    </button>
                     }
 				</div>
