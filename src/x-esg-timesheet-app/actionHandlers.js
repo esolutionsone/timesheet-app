@@ -17,9 +17,6 @@ export default {
             tableName: 'x_esg_one_core_consultant',
             sysparm_query: 'sys_user=javascript:gs.getUserID()'
         });
-        dispatch('FETCH_PROJECT_ROLE', {
-
-        })
     },
     'GET_CONSULTANT_ID': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -30,6 +27,7 @@ export default {
     }),
     'HANDLE_CONSULTANT_ID': ({action, updateState, dispatch}) => {
         const id = action.payload.result[0].sys_id || action.payload.sys_id;
+        console.log('id retrieved: ', id);
         updateState({consultantId: id})
         
         dispatch('FETCH_PROJECTS', {
@@ -43,26 +41,26 @@ export default {
             `
         })
     },
-    'FETCH_GENERIC_PROJECTS': createHttpEffect(
-        'api/now/table/x_esg_one_core_project',
-        {
-            method: 'GET',
-            queryParams: ['sysparm_query', 'sysparm_fields'],
-            successActionType: 'SET_GENERIC_PROJECTS',
-            errorActionType: 'LOG_ERROR'
-    }),
-    'SET_GENERIC_PROJECTS': ({action, updateState}) => {
-        const response = action.payload.result;
-        for(let proj of response){
-            proj["client"] = {
-                short_description: proj["client.short_description"],
-                sys_id: proj["client.sys_id"],
-            }
-            delete proj["client.short_description"];
-            delete proj["client.sys_id"];
-        }
-        updateState({genericProjects: response})
-    },
+    // 'FETCH_GENERIC_PROJECTS': createHttpEffect(
+    //     'api/now/table/x_esg_one_core_project',
+    //     {
+    //         method: 'GET',
+    //         queryParams: ['sysparm_query', 'sysparm_fields'],
+    //         successActionType: 'SET_GENERIC_PROJECTS',
+    //         errorActionType: 'LOG_ERROR'
+    // }),
+    // 'SET_GENERIC_PROJECTS': ({action, updateState}) => {
+    //     const response = action.payload.result;
+    //     for(let proj of response){
+    //         proj["client"] = {
+    //             short_description: proj["client.short_description"],
+    //             sys_id: proj["client.sys_id"],
+    //         }
+    //         delete proj["client.short_description"];
+    //         delete proj["client.sys_id"];
+    //     }
+    //     updateState({genericProjects: response})
+    // },
     'FETCH_PROJECTS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],

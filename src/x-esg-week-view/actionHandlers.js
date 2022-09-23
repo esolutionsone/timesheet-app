@@ -29,6 +29,7 @@ export default {
         errorActionType: 'LOG_ERROR'
     }),
     'SET_PROJECT_STAGE_ROLE': ({action, updateState}) => {
+        console.log('SET_PROJECT_STAGE_ROLE:', action.payload)
         updateState({project_stage_roles: action.payload.result.map(obj => unflatten(obj))})
     },
     'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
@@ -38,7 +39,10 @@ export default {
         successActionType: 'FETCH_ENTRIES_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
-    'FETCH_ENTRIES_SUCCESS': ({action, updateState}) => updateState({entries: action.payload.result.map(obj => unflatten(obj))}),
+    'FETCH_ENTRIES_SUCCESS': ({action, updateState}) => {
+        console.log('FETCH_ENTRIES_SUCCESS', action.payload);
+        updateState({entries: action.payload.result.map(obj => unflatten(obj))})
+    },
     'FETCH_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -46,78 +50,82 @@ export default {
         successActionType: 'FETCH_TIMESTAMPS_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
-    'FETCH_TIMESTAMPS_SUCCESS': ({action, updateState}) => updateState({timestamps: action.payload.result.map(obj => unflatten(obj))}),
+    'FETCH_TIMESTAMPS_SUCCESS': ({action, updateState}) =>{
+        console.log('FETCH_TIMESTAMPS_SUCCESS');
+        updateState({timestamps: action.payload.result.map(obj => unflatten(obj))})
+    },
     // END NEW STUFF
-    'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
-        method: 'GET',
-        pathParams: ['tableName'],
-        queryParams: ['sysparm_query', 'sysparm_fields'],
-        successActionType: 'SET_WEEKLY_TIMESTAMPS',
-        errorActionType: 'LOG_ERROR',
-    }),
-    'SET_WEEKLY_TIMESTAMPS': ({ state, action, updateState, properties }) => {
-        const { dailyEntries } = state;
-        const projectMap = buildProjectMap(action.payload.result, dailyEntries)
-        const clientMap = state.clientMap;
-        const {genericProjects, projects} = properties;
+    // 'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
+    //     method: 'GET',
+    //     pathParams: ['tableName'],
+    //     queryParams: ['sysparm_query', 'sysparm_fields'],
+    //     successActionType: 'SET_WEEKLY_TIMESTAMPS',
+    //     errorActionType: 'LOG_ERROR',
+    // }),
+    // 'SET_WEEKLY_TIMESTAMPS': ({ state, action, updateState, properties }) => {
+    //     const { dailyEntries } = state;
+    //     const projectMap = buildProjectMap(action.payload.result, dailyEntries)
+    //     const clientMap = state.clientMap;
+    //     const {genericProjects, projects} = properties;
 
-        const allProjects = [...genericProjects, ...projects];
-        const untrackedProjects = allProjects.filter(proj => {
-            return !Array.from(projectMap.values())
-                .map(p => p.sys_id)
-                .includes(proj.sys_id)
-        })
+    //     const allProjects = [...genericProjects, ...projects];
+    //     const untrackedProjects = allProjects.filter(proj => {
+    //         return !Array.from(projectMap.values())
+    //             .map(p => p.sys_id)
+    //             .includes(proj.sys_id)
+    //     })
 
-        // Include projects initialized from timestamps
-        projectMap.forEach(proj => {
-            proj.entries = [];
+    //     // Include projects initialized from timestamps
+    //     projectMap.forEach(proj => {
+    //         proj.entries = [];
 
-            if (clientMap.has(proj['client.sys_id'])) {
-                clientMap.get(proj['client.sys_id']).projects.push(proj);
-            } else {
-                clientMap.set(proj['client.sys_id'], {
-                    short_description: proj.client,
-                    projects: [proj],
-                    sys_id: proj['client.sys_id'],
-                });
-            }
-        })
+    //         if (clientMap.has(proj['client.sys_id'])) {
+    //             clientMap.get(proj['client.sys_id']).projects.push(proj);
+    //         } else {
+    //             clientMap.set(proj['client.sys_id'], {
+    //                 short_description: proj.client,
+    //                 projects: [proj],
+    //                 sys_id: proj['client.sys_id'],
+    //             });
+    //         }
+    //     })
 
-        // Include projects with no timestamps
-        untrackedProjects.forEach(proj => {
-            if(clientMap.has(proj.client.sys_id)){
-                clientMap.get(proj.client.sys_id).projects.push(proj);
-            }else{
-                clientMap.set(proj.client.sys_id, {
-                    short_description: proj.client.short_description,
-                    projects: [proj],
-                    sys_id: proj.client.sys_id,
-                })
-            }     
-        })
-        updateState({ projectMap: projectMap, clientMap: clientMap });
-    },
-    'FETCH_WEEKLY_TIME_ENTRIES': createHttpEffect('api/now/table/:tableName', {
-        method: 'GET',
-        pathParams: ['tableName'],
-        queryParams: ['sysparm_query', 'sysparm_fields'],
-        successActionType: 'SET_WEEKLY_TIME_ENTRIES',
-        errorActionType: 'LOG_ERROR',
-    }),
-    'SET_WEEKLY_TIME_ENTRIES': ({ action, state, properties, updateState, dispatch }) => {
-        updateState({ dailyEntries: action.payload.result });
-        const { selectedDay } = state;
-        const { consultantId, timeEntryTable } = properties;
-        dispatch('FETCH_WEEKLY_TIMESTAMPS',
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
-        );
-    },
+    //     // Include projects with no timestamps
+    //     untrackedProjects.forEach(proj => {
+    //         if(clientMap.has(proj.client.sys_id)){
+    //             clientMap.get(proj.client.sys_id).projects.push(proj);
+    //         }else{
+    //             clientMap.set(proj.client.sys_id, {
+    //                 short_description: proj.client.short_description,
+    //                 projects: [proj],
+    //                 sys_id: proj.client.sys_id,
+    //             })
+    //         }     
+    //     })
+    //     updateState({ projectMap: projectMap, clientMap: clientMap });
+    // },
+    // 'FETCH_WEEKLY_TIME_ENTRIES': createHttpEffect('api/now/table/:tableName', {
+    //     method: 'GET',
+    //     pathParams: ['tableName'],
+    //     queryParams: ['sysparm_query', 'sysparm_fields'],
+    //     successActionType: 'SET_WEEKLY_TIME_ENTRIES',
+    //     errorActionType: 'LOG_ERROR',
+    // }),
+    // 'SET_WEEKLY_TIME_ENTRIES': ({ action, state, properties, updateState, dispatch }) => {
+    //     updateState({ dailyEntries: action.payload.result });
+    //     const { selectedDay } = state;
+    //     const { consultantId, timeEntryTable } = properties;
+    //     dispatch('FETCH_WEEKLY_TIMESTAMPS',
+    //         FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
+    //     );
+    // },
     'WEEK_REFETCH': async ({ dispatch, state, properties, updateState }) => {
+        console.log('week refetch');
         const { selectedDay } = state;
         const { consultantId, timeEntryTable, timestampTable } = properties;
 
         const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
+        // const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
         const bounds = getSnWeekBounds(selectedDay);
         //New entries fetch
@@ -125,60 +133,60 @@ export default {
         dispatch('FETCH_TIMESTAMPS', FETCH_TIMESTAMPS_PAYLOAD(consultantId, timestampTable, ...bounds))
 
 
-        // Get the time entries first
-        axios.get(url)
-            .then(entries => {
-                const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay));
-                const url = `api/now/table/${timestampTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
+        // // Get the time entries first
+        // axios.get(url)
+        //     .then(entries => {
+        //         const {sysparm_query, sysparm_fields} = FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay));
+        //         const url = `api/now/table/${timestampTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
 
-                axios.get(url)
-                    .then(stamps => {
-                        const dailyEntries = entries.data.result;
-                        const projectMap = buildProjectMap(stamps.data.result, dailyEntries)
-                        const clientMap = new Map();
-                        const {genericProjects, projects} = properties;
+        //         axios.get(url)
+        //             .then(stamps => {
+        //                 const dailyEntries = entries.data.result;
+        //                 const projectMap = buildProjectMap(stamps.data.result, dailyEntries)
+        //                 const clientMap = new Map();
+        //                 const {genericProjects, projects} = properties;
                 
-                        const allProjects = [...genericProjects, ...projects];
+        //                 const allProjects = [...genericProjects, ...projects];
 
-                        const untrackedProjects = allProjects.filter(proj => {
-                            return !Array.from(projectMap.values())
-                                .map(p => p.sys_id)
-                                .includes(proj.sys_id)
-                        })
+        //                 const untrackedProjects = allProjects.filter(proj => {
+        //                     return !Array.from(projectMap.values())
+        //                         .map(p => p.sys_id)
+        //                         .includes(proj.sys_id)
+        //                 })
                 
-                        // Include projects initialized from timestamps
-                        projectMap.forEach(proj => {
-                            proj.entries = [];
+        //                 // Include projects initialized from timestamps
+        //                 projectMap.forEach(proj => {
+        //                     proj.entries = [];
                 
-                            if (clientMap.has(proj['client.sys_id'])) {
-                                clientMap.get(proj['client.sys_id']).projects.push(proj);
-                            } else {
-                                clientMap.set(proj['client.sys_id'], {
-                                    short_description: proj.client,
-                                    projects: [proj],
-                                    sys_id: proj['client.sys_id'],
-                                });
-                            }
-                        })
+        //                     if (clientMap.has(proj['client.sys_id'])) {
+        //                         clientMap.get(proj['client.sys_id']).projects.push(proj);
+        //                     } else {
+        //                         clientMap.set(proj['client.sys_id'], {
+        //                             short_description: proj.client,
+        //                             projects: [proj],
+        //                             sys_id: proj['client.sys_id'],
+        //                         });
+        //                     }
+        //                 })
                 
-                        // Include projects with no timestamps
-                        untrackedProjects.forEach(proj => {
-                            if(clientMap.has(proj.client.sys_id)){
-                                clientMap.get(proj.client.sys_id).projects.push(proj);
-                            }else{
-                                clientMap.set(proj.client.sys_id, {
-                                    short_description: proj.client.short_description,
-                                    projects: [proj],
-                                    sys_id: proj.client.sys_id,
-                                })
-                            }     
-                        })
+        //                 // Include projects with no timestamps
+        //                 untrackedProjects.forEach(proj => {
+        //                     if(clientMap.has(proj.client.sys_id)){
+        //                         clientMap.get(proj.client.sys_id).projects.push(proj);
+        //                     }else{
+        //                         clientMap.set(proj.client.sys_id, {
+        //                             short_description: proj.client.short_description,
+        //                             projects: [proj],
+        //                             sys_id: proj.client.sys_id,
+        //                         })
+        //                     }     
+        //                 })
 
-                        dispatch('SET_WEEK_STATE', {projectMap, clientMap, dailyEntries});
-                        // dispatch('SET_LOADING', {loading: false})
-                        // updateState({ projectMap: projectMap, clientMap: clientMap, dailyEntries: dailyEntries });
-                    })
-            })
+        //                 dispatch('SET_WEEK_STATE', {projectMap, clientMap, dailyEntries});
+        //                 // dispatch('SET_LOADING', {loading: false})
+        //                 // updateState({ projectMap: projectMap, clientMap: clientMap, dailyEntries: dailyEntries });
+        //             })
+        //     })
 
         //     // .then((res)=>console.log(res))
         // updateState({ clientMap: new Map() });

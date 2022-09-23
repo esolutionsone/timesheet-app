@@ -18,8 +18,6 @@ const ClientDay = ({
     const todayEntry = entry;
     const note = todayEntry ? todayEntry.note : '';
 
-    console.log(entries);
-
     const handleNoteBlur = (e, todayEntry) => {
         dispatch('UPDATE_TIME_ENTRY', {
             sys_id: todayEntry.sys_id,
