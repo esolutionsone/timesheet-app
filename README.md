@@ -27,8 +27,9 @@
 - We'll need to try to promote again, fixing the name in the package.json as well
 
 ## User Access Requirements
-Roles:
-x_esg_one_delivery.user
-x_esg_one_core.user
 
-At least one valid Project Stage Role
+- Roles
+    - x_esg_one_delivery.user (or .admin)
+    - x_esg_one_core.user (or .admin)
+- A consultant record linked to user's sys_user (else will stick on loading)
+- At least one valid Project Stage Role with appropriate relations (since projects, etc. are assigned, not chosen by the user - else won't render any projects to track time on, obviously)

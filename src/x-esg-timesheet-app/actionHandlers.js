@@ -1,7 +1,6 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
-import { FETCH_PROJECT_STAGE_ROLE_PAYLOAD } from '../payloads';
-import { getSnDayBounds, getSnWeekBounds } from '../helpers';
+
 
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
@@ -27,7 +26,6 @@ export default {
     }),
     'HANDLE_CONSULTANT_ID': ({action, updateState, dispatch}) => {
         const id = action.payload.result[0].sys_id || action.payload.sys_id;
-        console.log('id retrieved: ', id);
         updateState({consultantId: id})
         
         dispatch('FETCH_PROJECTS', {
@@ -41,26 +39,6 @@ export default {
             `
         })
     },
-    // 'FETCH_GENERIC_PROJECTS': createHttpEffect(
-    //     'api/now/table/x_esg_one_core_project',
-    //     {
-    //         method: 'GET',
-    //         queryParams: ['sysparm_query', 'sysparm_fields'],
-    //         successActionType: 'SET_GENERIC_PROJECTS',
-    //         errorActionType: 'LOG_ERROR'
-    // }),
-    // 'SET_GENERIC_PROJECTS': ({action, updateState}) => {
-    //     const response = action.payload.result;
-    //     for(let proj of response){
-    //         proj["client"] = {
-    //             short_description: proj["client.short_description"],
-    //             sys_id: proj["client.sys_id"],
-    //         }
-    //         delete proj["client.short_description"];
-    //         delete proj["client.sys_id"];
-    //     }
-    //     updateState({genericProjects: response})
-    // },
     'FETCH_PROJECTS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
@@ -92,5 +70,5 @@ export default {
     'TEST_START': () => console.log('test start'),
     'INSERT_SUCCESS': ({updateState}) => updateState({addProjectStatus: false}),
     'SET_LOADING': ({action, updateState}) => updateState(action.payload),
-    'UPDATE_ADD_PROJECT': ({action, updateState}) => updateState({addProjectStatus: false})
+    'UPDATE_ADD_PROJECT': ({updateState}) => updateState({addProjectStatus: false})
 }
