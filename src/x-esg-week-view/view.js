@@ -13,62 +13,57 @@ export const view = (state, { updateState, dispatch }) => {
         timestamps,
     } = state
 
-    const {consultantId} = state.properties;
+    const today = new Date();
+    const { consultantId } = state.properties;
     // Check if any entries are submitted;
-    const inDraftState = entries.filter(entry => entry.status != 'draft')
-        .length < 1;
+    let entryState = 'draft';
+    if (entries.filter(entry => entry.status == 'invoiced').length > 0) {
+        entryState = 'invoiced';
+    } else if (entries.filter(entry => entry.status == 'submitted').length > 0) {
+        entryState = 'submitted';
+    }
 
-    console.log('inDraftState', inDraftState);
-    
+    console.log('entries', entries);
+
     // List unique client ids
     const clientIds = [...new Set(project_stage_roles.map(role => role.project_role.project.client.sys_id))];
 
     // Create array of mappable dates for the current week
     const firstDate = getWeekBounds(selectedDay)[0];
     const dateArr = [];
-    for(let i=0; i<7; i++){
+    for (let i = 0; i < 7; i++) {
         dateArr.push(new Date(firstDate));
         firstDate.setDate(firstDate.getDate() + 1);
     }
 
-    const handleStatus = () =>  {
-        
+    const handleStatus = () => {
+
         let entryStatus = '';
         let submitMessage = '';
 
-        if(inDraftState){
+        if (entryState === 'draft') {
             entryStatus = 'submitted';
             submitMessage = 'submit';
-        }else{
+        } else if (entryState === 'submitted') {
             entryStatus = 'draft';
             submitMessage = 'recall and edit'
+        } else {
+            console.error('Err: entry status not draft or submitted');
+            return;
         }
-
-        // switch (entries[0].status) {
-        //     case 'draft':
-        //         entryStatus = 'submitted';
-        //         submitMessage = 'submit';
-        //         break;
-        //     case 'submitted':
-        //         entryStatus = 'draft';
-        //         submitMessage = 'recall and edit';
-        //         break;
-        //     default:
-        //         break;
-        // }
 
         if (confirm(`Click OK to ${submitMessage} timesheet`) == true) {
-
             entries.forEach(entry => {
-                dispatch('UPDATE_SUBMIT', {sys_id: entry.sys_id, data: { status: entryStatus}})
+                dispatch('UPDATE_SUBMIT', { sys_id: entry.sys_id, data: { status: entryStatus } })
             });
         }
-	}   
+    }
 
+
+    // Get total time for the week
     let myTime = 0;
-    
     entries.forEach(entry => {
-        if ( entry.time_adjustment != '') {
+        if (entry.time_adjustment != '') {
             let time = getUTCTime(entry.time_adjustment);
             myTime += time.getTime();
         } else {
@@ -78,7 +73,7 @@ export const view = (state, { updateState, dispatch }) => {
     });
 
     timestamps.forEach(stamp => {
-        if ( stamp.rounded_duration != '') {
+        if (stamp.rounded_duration != '') {
             let time = getUTCTime(stamp.rounded_duration);
             myTime += time.getTime();
         } else {
@@ -87,7 +82,7 @@ export const view = (state, { updateState, dispatch }) => {
         }
     });
 
-    const today = new Date();
+    
 
     return (
         <div>
@@ -109,7 +104,7 @@ export const view = (state, { updateState, dispatch }) => {
                         let psrs = project_stage_roles.filter(psr => {
                             return sys_id === psr.project_role.project.client.sys_id
                         })
-                        
+
                         return (
                             <Client
                                 psrs={psrs}
@@ -122,38 +117,60 @@ export const view = (state, { updateState, dispatch }) => {
                                 dispatch={dispatch}
                                 consultantId={consultantId}
                                 selectedDay={selectedDay}
-                                inDraftState={inDraftState}
+                                entryState={entryState}
                             />
                         );
                     })}
                 </div>
             </div>
             <div className="footer-container">
-				<div className="note-container">Please note that all timesheets must be <b>submitted and approved by Sunday at 11 pm each week </b>
-					to guarantee inclusion in weekly invoicing/utilization batch jobs. 
-					Failure to do so may result in delays in payment/utilization.</div>
-				<div className="submit-time-container">
-					<div className="total-time-display">Total <b>{msToString(myTime)}</b></div>
-                    {selectedDay.getDate() != today.getDate() ?
-                        ''
-                        :
-                        (!inDraftState && entries[0].status == 'invoiced') ?
-                        <button 
-                            className="submit-button disabled-button"
-                            on-click={()=> handleStatus()}
-                            disabled>
-                                {entries[0].status == 'draft' ? 'Submit Week' : 'Recall Timesheet'}
-					    </button> 
-                        : 
-                        <button 
-                            className="submit-button"
-                            on-click={()=> handleStatus()}
-                            >
-                                {inDraftState ? 'Submit Week' : 'Recall Timesheet'}
-					    </button>
+                <div className="note-container">Please note that all timesheets must be <b>submitted and approved by Sunday at 11 pm each week </b>
+                    to guarantee inclusion in weekly invoicing/utilization batch jobs.
+                    Failure to do so may result in delays in payment/utilization.</div>
+                <div className="submit-time-container">
+                    <div className="total-time-display">Total <b>{msToString(myTime)}</b></div>
+                    {//Display Submit only on current week or earlier
+                        selectedDay > today ? '' 
+                            : 
+                        <SubmitButton entryState={entryState} handleStatus={handleStatus}/>
                     }
-				</div>
-			</div>
+                </div>
+               
+            </div>
         </div>
     );
+}
+
+const SubmitButton = ({entryState, handleStatus}) => {
+    switch (entryState) {
+        case 'draft':
+            return (
+                <button
+                    className="submit-button"
+                    on-click={() => handleStatus()}>
+                    {'Submit Week'}
+                </button>
+            );
+        // assume that times that are archived were invoiced
+        case 'archived':
+        case 'invoiced':
+            return (
+                <button
+                    className="submit-button disabled-button"
+                    disabled>
+                    {'Invoiced'}
+                </button>
+            );
+        //Assume that times that are approved were submitted
+        case 'approved':
+        case 'submitted':
+            return (
+                <button
+                    className="submit-button"
+                    on-click={() => handleStatus()}>
+                    {'Recall Timesheet'}
+                </button>
+            )
+    }
+    return '';
 }
