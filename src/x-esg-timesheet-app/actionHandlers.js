@@ -1,7 +1,6 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
 
-import { getSnDayBounds} from '../helpers';
 
 const {COMPONENT_BOOTSTRAPPED} = actionTypes;
 
@@ -28,6 +27,7 @@ export default {
     'HANDLE_CONSULTANT_ID': ({action, updateState, dispatch}) => {
         const id = action.payload.result[0].sys_id || action.payload.sys_id;
         updateState({consultantId: id})
+        
         dispatch('FETCH_PROJECTS', {
             tableName: 'x_esg_one_core_project_role', 
             sysparm_query: `consultant_assigned=${id}`,
@@ -38,26 +38,6 @@ export default {
                 project.client.sys_id
             `
         })
-    },
-    'FETCH_GENERIC_PROJECTS': createHttpEffect(
-        'api/now/table/x_esg_one_core_project',
-        {
-            method: 'GET',
-            queryParams: ['sysparm_query', 'sysparm_fields'],
-            successActionType: 'SET_GENERIC_PROJECTS',
-            errorActionType: 'LOG_ERROR'
-    }),
-    'SET_GENERIC_PROJECTS': ({action, updateState}) => {
-        const response = action.payload.result;
-        for(let proj of response){
-            proj["client"] = {
-                short_description: proj["client.short_description"],
-                sys_id: proj["client.sys_id"],
-            }
-            delete proj["client.short_description"];
-            delete proj["client.sys_id"];
-        }
-        updateState({genericProjects: response})
     },
     'FETCH_PROJECTS': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -85,9 +65,10 @@ export default {
             loading: false,
         })
     },
-    'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload),
+    'LOG_RESULT': ({action}) => console.log('LOGGED RESULT', action.payload, new Date().getTime()),
     'LOG_ERROR': ({action}) => console.error('ERROR', action.payload.msg, action.payload.data),
     'TEST_START': () => console.log('test start'),
     'INSERT_SUCCESS': ({updateState}) => updateState({addProjectStatus: false}),
     'SET_LOADING': ({action, updateState}) => updateState(action.payload),
+    'UPDATE_ADD_PROJECT': ({updateState}) => updateState({addProjectStatus: false})
 }

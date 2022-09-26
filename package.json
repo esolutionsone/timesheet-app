@@ -25,7 +25,6 @@
 		"@servicenow/ui-core": "quebec",
 		"@servicenow/ui-effect-http": "^19.4.2",
 		"@servicenow/ui-renderer-snabbdom": "quebec",
-		"axios": "^0.27.2",
 		"date-fns": "^2.29.1",
 		"webfontloader": "^1.6.28"
 	},

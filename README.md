@@ -19,3 +19,17 @@
 ## Errors
 - Cannot create property 'elm' on boolean 'false' at createElm
     - While we can use short circuits in jsx, we can't use them to wipe out an entire element. Instead, use a ternary (I guess so there's something to replace it with on the VDOM, even if it's just a string?)
+
+## Architectural Q's
+
+- Will the project_role and project_stage 'active' statuses be updated and in sync? Do we need to check project.state as well?
+- What's the road to deployment? Apparently, components within an AES app don't get promoted along with the app
+- We'll need to try to promote again, fixing the name in the package.json as well
+
+## User Access Requirements
+
+- Roles
+    - x_esg_one_delivery.user (or .admin)
+    - x_esg_one_core.user (or .admin)
+- A consultant record linked to user's sys_user (else will stick on loading)
+- At least one valid Project Stage Role with appropriate relations (since projects, etc. are assigned, not chosen by the user - else won't render any projects to track time on, obviously)
