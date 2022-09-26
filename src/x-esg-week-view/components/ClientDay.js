@@ -18,6 +18,7 @@ const ClientDay = ({
     const today = new Date();
     const todayEntry = entry;
     const note = todayEntry ? todayEntry.note : '';
+    const editableInputs = entryState === 'draft' && selectedDay <= today;
 
     const handleNoteBlur = (e, todayEntry) => {
         dispatch('UPDATE_TIME_ENTRY', {
@@ -71,7 +72,7 @@ const ClientDay = ({
     }
 
     if (!todayEntry && timestamps.length === 0) {
-        if (entryState === 'draft') {
+        if (editableInputs) {
             return <input
                 on-blur={(e) => handleBlur(e)}
                 className="project-item-time" type="number" />
@@ -117,9 +118,8 @@ const ClientDay = ({
         }
 
         const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
-        
 
-        if (entryState === 'draft') {
+        if (editableInputs) {
             return ( 
                 <div className="duration-item">
                         <input
