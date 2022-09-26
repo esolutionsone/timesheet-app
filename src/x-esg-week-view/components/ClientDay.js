@@ -82,6 +82,7 @@ const ClientDay = ({
                         <textarea 
                             value=''
                             placeholder="No note was recorded"
+                            readonly
                         />
                     </div>
                 </div>
@@ -146,6 +147,7 @@ const ClientDay = ({
                         <textarea 
                             value={note}
                             placeholder="No note was recorded"
+                            readonly
                         />
                     </div>
                 </div>
