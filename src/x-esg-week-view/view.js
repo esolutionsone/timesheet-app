@@ -13,6 +13,7 @@ export const view = (state, { updateState, dispatch }) => {
         timestamps,
     } = state
 
+    const today = new Date();
     const { consultantId } = state.properties;
     // Check if any entries are submitted;
     let entryState = 'draft';
@@ -58,8 +59,9 @@ export const view = (state, { updateState, dispatch }) => {
         }
     }
 
-    let myTime = 0;
 
+    // Get total time for the week
+    let myTime = 0;
     entries.forEach(entry => {
         if (entry.time_adjustment != '') {
             let time = getUTCTime(entry.time_adjustment);
@@ -80,7 +82,7 @@ export const view = (state, { updateState, dispatch }) => {
         }
     });
 
-    const today = new Date();
+    
 
     return (
         <div>
@@ -127,7 +129,11 @@ export const view = (state, { updateState, dispatch }) => {
                     Failure to do so may result in delays in payment/utilization.</div>
                 <div className="submit-time-container">
                     <div className="total-time-display">Total <b>{msToString(myTime)}</b></div>
-                    <SubmitButton entryState={entryState} handleStatus={handleStatus}/>
+                    {//Display Submit only on current week or earlier
+                        selectedDay > today ? '' 
+                            : 
+                        <SubmitButton entryState={entryState} handleStatus={handleStatus}/>
+                    }
                 </div>
                
             </div>
