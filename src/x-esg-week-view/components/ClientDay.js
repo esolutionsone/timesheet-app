@@ -10,7 +10,8 @@ const ClientDay = ({
     index, 
     selectedDay, 
     entries,
-    inDraftState,
+    // inDraftState,
+    entryState,
 }) => {
 
     const project = psr.project_role.project;
@@ -70,7 +71,7 @@ const ClientDay = ({
     }
 
     if (!todayEntry && timestamps.length === 0) {
-        if (selectedDay.getDate() == today.getDate() && inDraftState) {
+        if (entryState === 'draft') {
             return <input
                 on-blur={(e) => handleBlur(e)}
                 className="project-item-time" type="number" />
@@ -118,7 +119,7 @@ const ClientDay = ({
         const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
         
 
-        if (selectedDay.getDate() == today.getDate() && inDraftState) {
+        if (entryState === 'draft') {
             return ( 
                 <div className="duration-item">
                         <input
