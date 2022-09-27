@@ -31,7 +31,7 @@
             justify-content: space-evenly;
             width: 300px;
             height: 68px;
-            // margin-bottom: 10px;
+
             font-family: $font-primary;
             font-size: $font-size-small;
             margin-left: auto;
@@ -197,7 +197,6 @@
                 font-family: $font-primary;
                 padding-left: 50px;
                 background: $bg-primary;
-                // background-color: #F9F9F9;
                 height: 100%;
                 display: flex;
                 align-items: center;
@@ -235,26 +234,20 @@
         transform-origin: 20% -10px;
         top: 40px;
         left: 0px;
-        // margin-top: 15px;
-        // width: 0;
-        // height: 0;
         z-index: 100;
         background-color: #fff;
-        // padding: 1.125em 1.5em;
         padding: .3em .4em;
         font-size: 12px;
         border-radius: 1rem;
         box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
 
         &.note-reverse {
-            // transform: translateX(-200px);
             left: -200px;
             transform: scale(0);
             transform-origin: 80% -10px;
 
             &::before {
-                transform: translateX(200px);
-                
+                transform: translateX(200px);     
             }
         }
 
@@ -289,28 +282,18 @@
 
     @mixin note-active {
         // layout
-        // display: inline-block;
         position: absolute;
         visibility: visible;
         transform: scale(1);
         transition-delay: 0s;
-        
-        
         opacity: 1;
-        // max-width: 30em;
-
-        // top: 40px;
-        // left: 0px;
-        // right: 0px;
 
         // looks
         background-color: #fff;
-        // padding: 1.125em 1.5em;
         padding: .3em .4em;
         font-size: 12px;
         border-radius: 1rem;
         box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
-        // max-width: 300px;
 
         &::before {
             // layout
@@ -332,14 +315,12 @@
         
 
         &.note-reverse {
-            // transform: translateX(-200px);
             left: -200px;
             transform: scale(1);
             transform-origin: 80% -10px;
 
             &::before {
-                transform: translateX(200px);
-                
+                transform: translateX(200px);   
             }
         }
     }
@@ -363,8 +344,8 @@
     .note-container {
         @include default-border;
         font-family: $font-primary;
-        font-size: $font-size-medium;
-        padding: 18px 20px;
+        font-size: $font-size-small;
+        padding: $item-padding;
         width: 75%;
     }
 
@@ -383,7 +364,6 @@
         .submit-button {
             @include button;
             height: 36px;
-            // width: 157px;
 
             &.disabled-button {
                 background-color: grey;
