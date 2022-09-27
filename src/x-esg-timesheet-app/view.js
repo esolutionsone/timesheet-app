@@ -63,14 +63,6 @@ export default (state, {updateState}) => {
 	return (
 		<div>
 			<div className="outer-buttons">
-				<div className='time-box'>
-					<div>Time increments are logged in quarters.</div>
-					<div className='time-box-increments'>
-						<div>.25 = 15 min</div>
-						<div>.50 = 30 min</div>
-						<div>.75 = 45 min</div>
-					</div>
-				</div>
 				{location == 'day' ?
 					<div className="add-edit-buttons">
 						<button 

@@ -33,6 +33,14 @@ export const WeeklyHeader = ({selectedDay, updateState, dispatch}) => {
 
             <div className="weekly-date-start">Week of</div>
             <div className="weekly-date-end">{startDay} to {endDay}</div>
+            <div className='time-box'>
+					<div>Time increments are logged in quarters.</div>
+					<div className='time-box-increments'>
+						<div>.25 = 15 min</div>
+						<div>.50 = 30 min</div>
+						<div>.75 = 45 min</div>
+					</div>
+				</div>
         </div>
     );
 }
