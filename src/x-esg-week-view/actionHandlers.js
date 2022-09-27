@@ -11,10 +11,11 @@ const { COMPONENT_BOOTSTRAPPED } = actionTypes;
 // const {DEBOUNCE, TAKE_LATEST} = modifierTypes
 
 export default {
-    [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
+    [COMPONENT_BOOTSTRAPPED]: ({ state, dispatch }) => {
         const { consultantId } = state.properties;
 
-        console.log('WEEK VIEW BOOTSTRAPPED');     
+        console.log('WEEK VIEW BOOTSTRAPPED');
+        console.log('project_stage_role payload', FETCH_PROJECT_STAGE_ROLE_PAYLOAD(consultantId)) 
         dispatch('FETCH_PROJECT_STAGE_ROLE', FETCH_PROJECT_STAGE_ROLE_PAYLOAD(consultantId))
         dispatch('WEEK_REFETCH');
     },
@@ -26,7 +27,9 @@ export default {
         errorActionType: 'LOG_ERROR'
     }),
     'SET_PROJECT_STAGE_ROLE': ({action, updateState}) => {
-        updateState({project_stage_roles: action.payload.result.map(obj => unflatten(obj))})
+        const project_stage_roles = action.payload.result.map(obj => unflatten(obj))
+        console.log('project_stage_roles:', project_stage_roles);
+        updateState({project_stage_roles})
     },
     'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
@@ -52,12 +55,10 @@ export default {
         console.log('week refetch');
         const { selectedDay } = state;
         const { consultantId, timeEntryTable, timestampTable } = properties;
-
-        const {sysparm_query, sysparm_fields} = FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        // const url = `api/now/table/${timeEntryTable}?sysparm_query=${encodeURIComponent(sysparm_query)}&sysparm_fields=${encodeURIComponent(sysparm_fields)}`
-
         const bounds = getSnWeekBounds(selectedDay);
+
         //New entries fetch
+        console.log('FETCH_ENTRIES payload:', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...bounds))
         dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...bounds));
         dispatch('FETCH_TIMESTAMPS', FETCH_TIMESTAMPS_PAYLOAD(consultantId, timestampTable, ...bounds))
 
