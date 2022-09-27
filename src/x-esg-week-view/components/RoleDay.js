@@ -133,6 +133,7 @@ const RoleDay = ({
                 value={getTimeAdjustment() + getTimestampHours()}
                 min='0'
                 max='24'
+                step='.25'
                 on-keyup={(e) => enforceMinMax(e)}
                 on-blur={(e) => editableInputs && handleBlur(e, todayEntry)}
                 disabled={!editableInputs}
