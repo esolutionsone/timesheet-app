@@ -1,11 +1,31 @@
 @import '../styles/variables.scss';
 @import '../styles/materialSymbols.scss';
+@import '../components/LoadingIcon.scss';
 
 .outer-buttons {
     display: flex;
     justify-content: space-between;
-    width: 80%;
+    width: 95%;
     margin: auto;
+
+    .time-box {
+        @include default-border;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 350px;
+        height: 68px;
+        margin-bottom: 10px;
+        font-family: $font-primary;
+        font-size: $font-size-medium;
+
+        .time-box-increments {
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+        }
+    }
 
     .add-edit-buttons{
         display: flex;
@@ -48,7 +68,12 @@
         }
     }
 
+    .timer-week-showing {
+        margin-bottom: 23px;
+    }
+
     .day-button {
+        color: #A0AFC4;
         height: 36px;
         width: 75px;
         border: $border-primary;
@@ -56,6 +81,8 @@
         outline: none;
         border-bottom-left-radius: $border-radius-default;
         border-top-left-radius: $border-radius-default;
+        font-family: $font-primary;
+        font-weight: $font-weight-bold;
 
         &:hover {
             cursor: pointer;
@@ -63,6 +90,7 @@
     }
     
     .week-button {
+        color: #A0AFC4;
         height: 36px;
         width: 75px;
         border: $border-primary;
@@ -70,6 +98,8 @@
         outline: none;
         border-bottom-right-radius: $border-radius-default;
         border-top-right-radius: $border-radius-default;
+        font-family: $font-primary;
+        font-weight: $font-weight-bold;
 
         &:hover {
             cursor: pointer;
@@ -78,5 +108,7 @@
 
     .active {
         background-color: $highlight-color;
+        color: #3178C6;        
     }
 }
+

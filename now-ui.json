@@ -1,39 +1,5 @@
 {
 	"components": {
-	    "x-esg-timer-button": {
-	        "innerComponents": ["now-icon"],
-			"uiBuilder": {
-				"associatedTypes": ["global.core", "global.landing-page"],
-				"label": "Single Timer Button",
-				"icon": "document-outline",
-				"description": "A description of my component",
-				"category": "primitives"
-			},
-			"properties": [
-				{
-					"name": "timestampTable",
-					"label": "Timestamp Table",
-					"type": "string",
-					"default": "x_esg_one_delivery_timestamp"
-				},
-				{
-					"name": "sysId",
-					"label": "sys_id",
-					"type": "string",
-					"default": ""
-				}
-			]
-	    },
-		"x-esg-timer-container": {
-			"innerComponents": ["x-esg-timer-button"],
-			"uiBuilder": {
-				"associatedTypes": ["global.core", "global.landing-page"],
-				"label": "Time Tracker",
-				"icon": "document-outline",
-				"description": "A description of my component",
-				"category": "primitives"
-			}
-		},
 		"x-esg-timesheet-app": {
 			"innerComponents": ["x-esg-timer-container", "x-esg-week-view"],
 			"uiBuilder": {
@@ -45,5 +11,5 @@
 			}
 		}
 	},
-	"scopeName": "x_esg_one_delivery_timer_b_0"
+	"scopeName": "x_esg_one_d_time_0"
 }

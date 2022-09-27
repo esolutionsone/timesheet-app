@@ -50,8 +50,12 @@ export const stringifyDuration = (duration) => {
     // coerce to strings and pad to get hh:mm:ss format
     const result = { hours, minutes, seconds };
     for (let el in result){
-		result[el] = result[el].toString().padStart(2, '0');
-	}
+        if(!result[el]){
+            result[el] = '00';
+        }else{
+            result[el] = result[el].toString().padStart(2, '0');
+        }
+    }
     return `${result.hours || '00'}:${result.minutes || '00'}:${result.seconds || '00'}`;
 }
 
@@ -63,7 +67,7 @@ export const stringifyDuration = (duration) => {
  */
 export const getUTCTime = (dateString) => {
     if(!dateString){
-        console.error('Cannot transform datestring of type', typeof(dateString), '\ndate: ', dateString);
+        console.error('undefined datestring');
         return new Date();
     } 
     const arr = dateString.split(/[\-\s:]/g);
@@ -265,10 +269,25 @@ export const buildProjectMap = (timestamps, entries) => {
                         time_entries: entries.filter(en => {
                             return en['project.sys_id'] == entry['project.sys_id']
                         }),
+                        client: entry['project.client.short_description'],
+                        ["client.sys_id"]: entry['project.client.sys_id'],
+                        short_description: entry['project.short_description'],
+                        sys_id: entry['project.sys_id'],
                     })
                 }
             }
         }
         
         return stampsByProject;
+}
+
+export const unflatten = (data) => {
+    let result = {}
+    for (let i in data) {
+        let keys = i.split('.')
+        keys.reduce(function(r, e, j) {
+            return r[e] || (r[e] = isNaN(Number(keys[j + 1])) ? (keys.length - 1 == j ? data[i] : {}) : [])
+        }, result)
+    }
+  return result
 }

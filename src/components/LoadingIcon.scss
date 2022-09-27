@@ -1,0 +1,96 @@
+.loading-icon {
+    color: green;
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 30px auto;
+    background-color: white;
+
+    .text {
+        position: absolute;
+        top: 47%;
+        left: 10%;
+        font-size: 80px;
+        transform: translateY(-50%);
+        font-family: 'Monserrat', sans-serif;
+        color: #006FC7;
+        font-weight: bold;
+    }
+
+    .ball {
+        position: absolute;
+        top: 0;
+        offset-path: path("M107.97,.5c33.7,0,52.76,3.25,79.51,28.36,7.14,6.7,11.19,16.06,11.23,25.85l.4,106.01c.04,9.9-4.07,19.34-11.26,26.14-26.71,25.25-46.29,28.88-79.73,28.58C49.81,214.92,1.67,168.45,.52,110.14-.67,49.79,47.89,.5,107.97,.5Z");
+        width: 40px;
+        height: 40px;  
+        transform-origin: center;
+        border-radius: 50%;
+
+        $anim-props: 3s infinite ease-in-out;
+
+        &.first {
+            animation: move-first $anim-props;
+            background-color: #EE7D31;
+        }
+
+        &.middle {
+            animation: move-middle $anim-props;
+            background-color: #006FC7;
+        }
+
+        &.last {
+            animation: move-last $anim-props;
+            background-color: #C00000;
+        }
+    }
+
+    @keyframes move-first {
+        0%{
+            offset-distance: 17%;
+        }
+        20%{
+            offset-distance: 17%;
+        }
+        100%{
+            offset-distance: 117%;
+        }
+    }
+    
+    @keyframes move-middle {
+        0%{
+            offset-distance: 25%;
+        }
+        10%{
+            offset-distance: 25%;
+        }
+        90%{
+            offset-distance: 125%;
+        }
+        100%{
+            offset-distance: 125%;
+        }
+    }
+    
+    @keyframes move-last {
+        0%{
+            offset-distance: 33%;
+        }
+        80%{
+            offset-distance: 133%;
+        }
+        100%{
+            offset-distance: 133%;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

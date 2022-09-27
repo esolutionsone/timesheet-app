@@ -17,6 +17,8 @@ createCustomElement('x-esg-timesheet-app', {
 		editMode: false,
 		genericProjects: [],
 		projects: [],
+		loading: true,
+		selectedDay: new Date(),
 	},
 	properties: {
 		timestampTable: {default: "x_esg_one_delivery_timestamp"},

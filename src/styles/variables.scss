@@ -21,6 +21,7 @@ $input-border-radius: 8px;
 
 //Buttons
 $button-color: #3178C6;
+$button-border-radius: 15px;
 
 // Common Mixins
 @mixin flex-between-center {
@@ -45,4 +46,15 @@ $button-color: #3178C6;
     border: $border-primary;
     font-family: $font-primary;
     padding: $input-padding;
+}
+
+@mixin button {
+    border-radius: $button-border-radius;
+    border: none;
+    background-color: $button-color;
+    padding: 8px 20px;
+    font-family: $font-primary;
+    font-weight: $font-size-large;
+    font-size: $font-size-medium;
+    color: white;
 }

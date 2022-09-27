@@ -1,64 +1,93 @@
 import { actionTypes } from '@servicenow/ui-core';
 import { createHttpEffect } from '@servicenow/ui-effect-http';
-import { getSnWeekBounds, buildProjectMap } from '../helpers';
-import { FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD, FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
+import { getSnWeekBounds, unflatten } from '../helpers';
+import { 
+        FETCH_ENTRIES_PAYLOAD, 
+        FETCH_PROJECT_STAGE_ROLE_PAYLOAD, 
+        FETCH_TIMESTAMPS_PAYLOAD, 
+        FETCH_TIME_ENTRIES_PAYLOAD } from '../payloads';
 
 const { COMPONENT_BOOTSTRAPPED } = actionTypes;
+// const {DEBOUNCE, TAKE_LATEST} = modifierTypes
 
 export default {
-    [COMPONENT_BOOTSTRAPPED]: ({ state, properties, dispatch, updateState }) => {
-        console.log('WEEK VIEW BOOTSTRAPPED');        
+    [COMPONENT_BOOTSTRAPPED]: ({ state, dispatch }) => {
+        const { consultantId } = state.properties;
+
+        console.log('WEEK VIEW BOOTSTRAPPED');
+        console.log('project_stage_role payload', FETCH_PROJECT_STAGE_ROLE_PAYLOAD(consultantId)) 
+        dispatch('FETCH_PROJECT_STAGE_ROLE', FETCH_PROJECT_STAGE_ROLE_PAYLOAD(consultantId))
         dispatch('WEEK_REFETCH');
     },
-    'FETCH_WEEKLY_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
+    'FETCH_PROJECT_STAGE_ROLE':  createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
-        successActionType: 'SET_WEEKLY_TIMESTAMPS',
-        errorActionType: 'LOG_ERROR',
+        successActionType: 'SET_PROJECT_STAGE_ROLE',
+        errorActionType: 'LOG_ERROR'
     }),
-    'SET_WEEKLY_TIMESTAMPS': ({ state, action, updateState, dispatch }) => {
-        console.log('Setting timestamps: action:', action);
-
-        const { dailyEntries } = state;
-        const projectMap = buildProjectMap(action.payload.result, dailyEntries)
-        const clientMap = state.clientMap;
-        projectMap.forEach(proj => {
-            proj.entries = [];
-            if (clientMap.has(proj['client.sys_id'])) {
-                clientMap.get(proj['client.sys_id']).projects.push(proj);
-            } else {
-                clientMap.set(proj['client.sys_id'], {
-                    short_description: proj.client,
-                    projects: [proj],
-                    sys_id: proj['client.sys_id'],
-                });
-            }
-        })
-        updateState({ projectMap: projectMap, clientMap: clientMap });
+    'SET_PROJECT_STAGE_ROLE': ({action, updateState}) => {
+        const project_stage_roles = action.payload.result.map(obj => unflatten(obj))
+        console.log('project_stage_roles:', project_stage_roles);
+        updateState({project_stage_roles})
     },
-    'FETCH_WEEKLY_TIME_ENTRIES': createHttpEffect('api/now/table/:tableName', {
+    'FETCH_ENTRIES': createHttpEffect('api/now/table/:tableName', {
         method: 'GET',
         pathParams: ['tableName'],
         queryParams: ['sysparm_query', 'sysparm_fields'],
-        successActionType: 'SET_WEEKLY_TIME_ENTRIES',
+        successActionType: 'FETCH_ENTRIES_SUCCESS',
         errorActionType: 'LOG_ERROR',
     }),
-    'SET_WEEKLY_TIME_ENTRIES': ({ action, state, properties, updateState, dispatch }) => {
-        updateState({ dailyEntries: action.payload.result });
-        const { selectedDay } = state;
-        const { consultantId, timeEntryTable } = properties;
-        dispatch('FETCH_WEEKLY_TIMESTAMPS',
-            FETCH_CONSULTANT_TIMESTAMPS_PAYLOAD(consultantId, ...getSnWeekBounds(selectedDay))
-        );
+    'FETCH_ENTRIES_SUCCESS': ({action, updateState}) => {
+        updateState({entries: action.payload.result.map(obj => unflatten(obj))})
     },
-    'WEEK_REFETCH': ({ dispatch, state, properties, updateState }) => {
+    'FETCH_TIMESTAMPS': createHttpEffect('api/now/table/:tableName', {
+        method: 'GET',
+        pathParams: ['tableName'],
+        queryParams: ['sysparm_query', 'sysparm_fields'],
+        successActionType: 'FETCH_TIMESTAMPS_SUCCESS',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'FETCH_TIMESTAMPS_SUCCESS': ({action, updateState}) =>{
+        updateState({timestamps: action.payload.result.map(obj => unflatten(obj))})
+    },
+    'WEEK_REFETCH': async ({ dispatch, state, properties, updateState }) => {
+        console.log('week refetch');
         const { selectedDay } = state;
-        const { consultantId, timeEntryTable } = properties;
+        const { consultantId, timeEntryTable, timestampTable } = properties;
+        const bounds = getSnWeekBounds(selectedDay);
 
-        updateState({ clientMap: new Map() });
-        dispatch('FETCH_WEEKLY_TIME_ENTRIES',
-            FETCH_TIME_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...getSnWeekBounds(selectedDay))
-        );
+        //New entries fetch
+        console.log('FETCH_ENTRIES payload:', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...bounds))
+        dispatch('FETCH_ENTRIES', FETCH_ENTRIES_PAYLOAD(consultantId, timeEntryTable, ...bounds));
+        dispatch('FETCH_TIMESTAMPS', FETCH_TIMESTAMPS_PAYLOAD(consultantId, timestampTable, ...bounds))
+
     },
+    'SET_WEEK_STATE': ({action, updateState}) => updateState(action.payload),
+    'UPDATE_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry/:sys_id', {
+        method: 'PUT',
+        pathParams: ['sys_id'],
+        dataParam: 'data',
+        successActionType: 'WEEK_REFETCH',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'UPDATE_SUBMIT': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry/:sys_id', {
+        method: 'PUT',
+        pathParams: ['sys_id'],
+        dataParam: 'data',
+        successActionType: 'LOG_LATEST',
+        errorActionType: 'LOG_ERROR',
+    }),
+    'LOG_LATEST': { 
+        modifier: {name: 'debounce', delay: 600},
+        effect ({dispatch}) {
+            dispatch('WEEK_REFETCH')
+        }
+    },
+    'INSERT_TIME_ENTRY': createHttpEffect('api/now/table/x_esg_one_delivery_time_entry', {
+        method: 'POST',
+        dataParam: 'data',
+        successActionType: 'WEEK_REFETCH',
+        errorActionType: 'LOG_ERROR',
+    })
 } 

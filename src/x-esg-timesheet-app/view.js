@@ -1,4 +1,5 @@
 import WebFont from "webfontloader";
+import LoadingIcon from "../components/LoadingIcon";
 
 export default (state, {updateState}) => {
 	const {
@@ -7,7 +8,9 @@ export default (state, {updateState}) => {
 		editMode,
 		genericProjects,
         projects,
-		location
+		location,
+		loading,
+		selectedDay
 	} = state;
 	const {timestampTable, timeEntryTable} = state.properties;
 	// Load Custom Fonts
@@ -22,8 +25,8 @@ export default (state, {updateState}) => {
 	})
 
     //Load state while waiting for initial fetch
-	if(consultantId == ''){
-		return <div>Loading...</div>
+	if(loading){
+		return <LoadingIcon style={{transform: 'scale(.5)'}}/>
 	}
 
 	// Router
@@ -60,42 +63,51 @@ export default (state, {updateState}) => {
 	return (
 		<div>
 			<div className="outer-buttons">
-				<div className="add-edit-buttons">
-					<button 
-						className="add-project-button"
-						on-click={()=>updateState({
-										addProjectStatus: !addProjectStatus, 
-										editMode: false
-									})
-								}>
-							<span className="material-symbols-outlined">add</span>
-							Time Entry
-					</button>
-					<button 
-						className="edit-button"
-						on-click={()=>updateState({editMode: !editMode})}>
-							<span className="material-symbols-outlined">edit_square</span>
-							Edit
-					</button>
+				<div className='time-box'>
+					<div>Time increments are logged in quarters.</div>
+					<div className='time-box-increments'>
+						<div>.25 = 15 min</div>
+						<div>.50 = 30 min</div>
+						<div>.75 = 45 min</div>
+					</div>
 				</div>
-				<div>
-					<button 
-						className={`day-button ${(location == 'day') ? 'active' : ''}`}
-						on-click={()=> updateState({location: 'day', addProjectStatus: false, editMode: false})}>
-							Timers
-					</button>
-					<button 
-						className={`week-button ${(location == 'week') ? 'active' : ''}`}
-						on-click={()=> updateState({location: 'week', addProjectStatus: false, editMode: false})}>
-							Week
-					</button>
-				</div>
+				{location == 'day' ?
+					<div className="add-edit-buttons">
+						<button 
+							className="add-project-button"
+							on-click={()=>updateState({
+											addProjectStatus: !addProjectStatus, 
+											editMode: false
+										})
+									}>
+								<span className="material-symbols-outlined">add</span>
+								Time Entry
+						</button>
+						<button 
+							className="edit-button"
+							on-click={()=>updateState({editMode: !editMode})}>
+								<span className="material-symbols-outlined">edit_square</span>
+								Edit
+						</button>
+					</div> 
+					: 
+					<div></div>
+				}
+				{/* Allows toggle between timers and week view. 
+					<div className={`${(location == 'week') ? 'timer-week-showing' : ''}`}>
+						<button 
+							className={`day-button ${(location == 'day') ? 'active' : ''}`}
+							on-click={()=> updateState({location: 'day', addProjectStatus: false, editMode: false})}>
+								Timers
+						</button>
+						<button 
+							className={`week-button ${(location == 'week') ? 'active' : ''}`}
+							on-click={()=> updateState({location: 'week', addProjectStatus: false, editMode: false})}>
+								Week
+						</button>
+					</div> */}
 			</div>
 			{jsx}
-			<div >
-
-			</div>
 		</div>
-		
 	)
 }
