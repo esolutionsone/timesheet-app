@@ -1,16 +1,14 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({ 
+const ClientDay = ({
     psr,
-    entry, 
-    timestamps, 
-    date, 
-    dispatch, 
-    consultantId, 
-    index, 
-    selectedDay, 
-    entries,
-    // inDraftState,
+    entry,
+    timestamps,
+    date,
+    dispatch,
+    consultantId,
+    index,
+    selectedDay,
     entryState,
 }) => {
 
@@ -21,18 +19,29 @@ const ClientDay = ({
     const editableInputs = entryState === 'draft' && selectedDay <= today;
 
     const handleNoteBlur = (e, todayEntry) => {
-        dispatch('UPDATE_TIME_ENTRY', {
-            sys_id: todayEntry.sys_id,
-            data: {
-                note: e.target.value
-            }
-        })
+        if (todayEntry) {
+            dispatch('UPDATE_TIME_ENTRY', {
+                sys_id: todayEntry.sys_id,
+                data: {
+                    note: e.target.value
+                }
+            })
+        } else {
+            const data = {
+                date: date,
+                project: project.sys_id,
+                consultant: consultantId,
+                project_stage_role: psr.sys_id,
+                note: e.target.value,
+            };
+            dispatch('INSERT_TIME_ENTRY', { data })
+        }
     }
 
     const enforceMinMax = (e) => {
         if (e.target.value > 24) {
             e.target.value = 24;
-        } 
+        }
     }
 
     const handleBlur = (e, timestampHours = 0, todayEntry) => {
@@ -71,17 +80,32 @@ const ClientDay = ({
         }
     }
 
-    if (!todayEntry && timestamps.length === 0) {
+    if (!todayEntry) {
         if (editableInputs) {
-            return <input
-                on-blur={(e) => handleBlur(e)}
-                className="project-item-time" type="number" />
+            return <div className="duration-item">
+                <input
+                    className={`project-item-time`}
+                    type="number"
+                    value={0}
+                    min='0'
+                    max='24'
+                    on-keyup={(e) => enforceMinMax(e)}
+                    on-blur={(e) => handleBlur(e)}
+                />
+                <div className={`hover-note ${index >= 4 && 'note-reverse'}`}>
+                    <textarea
+                        value={note}
+                        on-blur={(e) => handleNoteBlur(e)}
+                        placeholder="Add your notes here..."
+                    />
+                </div>
+            </div>
         } else {
             return (
                 <div className="duration-item">
                     <div>0</div>
                     <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
-                        <textarea 
+                        <textarea
                             value=''
                             placeholder="No note was recorded"
                             readonly
@@ -109,7 +133,7 @@ const ClientDay = ({
         // Add time adjustment from timeEntry
         let timeAdjustment = 0;
         if (todayEntry) {
-            if(todayEntry.time_adjustment){
+            if (todayEntry.time_adjustment) {
                 timeAdjustment = getUTCTime(todayEntry.time_adjustment).getTime();
             }
             timeAdjustment = timeAdjustment / 1000 / 60 / 60;
@@ -120,19 +144,19 @@ const ClientDay = ({
         const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
 
         if (editableInputs) {
-            return ( 
+            return (
                 <div className="duration-item">
-                        <input
-                    className={`project-item-time ${noNote && 'no-note'}`}
-                    type="number"
-                    value={timestampHours + timeAdjustment}
-                    min='0'
-                    max='24'
-                    on-keyup={(e)=>enforceMinMax(e)}
-                    on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
+                    <input
+                        className={`project-item-time ${noNote && 'no-note'}`}
+                        type="number"
+                        value={timestampHours + timeAdjustment}
+                        min='0'
+                        max='24'
+                        on-keyup={(e) => enforceMinMax(e)}
+                        on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
                     />
                     <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
-                        <textarea 
+                        <textarea
                             value={note}
                             on-blur={(e) => handleNoteBlur(e, todayEntry)}
                             placeholder="Add your notes here..."
@@ -141,11 +165,11 @@ const ClientDay = ({
                 </div>
             );
         } else {
-            return( 
+            return (
                 <div className="duration-item">
                     <div>{timestampHours + timeAdjustment}</div>
                     <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
-                        <textarea 
+                        <textarea
                             value={note}
                             placeholder="No note was recorded"
                             readonly
