@@ -1,10 +1,7 @@
-import {format} from 'date-fns';
-import { getUTCTime, stringifyDuration } from '../../helpers';
-import ClientDay from './ClientDay';
 import { Project } from './Project';
 
 export const Client = (props) => {
-    const { psrs, name, entries } = props;
+    const { psrs, name } = props;
     const projectIds = [...new Set(psrs.map(role => role.project_role.project.sys_id))]
 
     return (
@@ -25,7 +22,6 @@ export const Client = (props) => {
                             />
                         </div>
                     );
-
             })}
             </div>
         </div>

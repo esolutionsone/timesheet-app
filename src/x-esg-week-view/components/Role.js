@@ -1,4 +1,4 @@
-import ClientDay from './ClientDay.js';
+import RoleDay from './RoleDay.js';
 import {format} from 'date-fns';
 
 export const Role = (props) => {
@@ -11,7 +11,7 @@ export const Role = (props) => {
             {dateArr.map((day, i) => {
                 const date = format(day, 'Y-MM-dd');
                 const entry = entries.find(e => e.date == date);
-                return <ClientDay
+                return <RoleDay
                     {...props}
                     key={date}
                     date={date}
