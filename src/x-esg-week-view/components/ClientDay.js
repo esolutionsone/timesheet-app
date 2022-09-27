@@ -15,7 +15,6 @@ const ClientDay = ({
     const project = psr.project_role.project;
     const today = new Date();
     const todayEntry = entry;
-    const note = todayEntry ? todayEntry.note : '';
     const editableInputs = entryState === 'draft' && selectedDay <= today;
 
     const handleNoteBlur = (e, todayEntry) => {
@@ -44,7 +43,7 @@ const ClientDay = ({
         }
     }
 
-    const handleBlur = (e, timestampHours = 0, todayEntry) => {
+    const handleBlur = (e, todayEntry, timestampHours = 0) => {
         let inputHours = 0;
         if (e.target.value) {
             inputHours = Number(e.target.value);
@@ -80,41 +79,9 @@ const ClientDay = ({
         }
     }
 
-    if (!todayEntry) {
-        if (editableInputs) {
-            return <div className="duration-item">
-                <input
-                    className={`project-item-time`}
-                    type="number"
-                    value={0}
-                    min='0'
-                    max='24'
-                    on-keyup={(e) => enforceMinMax(e)}
-                    on-blur={(e) => handleBlur(e)}
-                />
-                <div className={`hover-note ${index >= 4 && 'note-reverse'}`}>
-                    <textarea
-                        value={note}
-                        on-blur={(e) => handleNoteBlur(e)}
-                        placeholder="Add your notes here..."
-                    />
-                </div>
-            </div>
-        } else {
-            return (
-                <div className="duration-item">
-                    <div>0</div>
-                    <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
-                        <textarea
-                            value=''
-                            placeholder="No note was recorded"
-                            readonly
-                        />
-                    </div>
-                </div>
-            );
-        }
-    } else {
+    console.log(date, todayEntry)
+
+    const getTimestampHours = () => {
         // set the timestamp hours for the project if they exist
         let timestampHours = 0
         if (timestamps) {
@@ -130,6 +97,10 @@ const ClientDay = ({
                 }, 0) / 1000 / 60 / 60;
         }
 
+        return timestampHours;
+    }
+
+    const getTimeAdjustment = () => {
         // Add time adjustment from timeEntry
         let timeAdjustment = 0;
         if (todayEntry) {
@@ -140,45 +111,43 @@ const ClientDay = ({
             timeAdjustment *= (todayEntry.adjustment_direction == 'add')
                 ? 1 : -1;
         }
-
-        const noNote = timestampHours + timeAdjustment > 0 && todayEntry.note === '';
-
-        if (editableInputs) {
-            return (
-                <div className="duration-item">
-                    <input
-                        className={`project-item-time ${noNote && 'no-note'}`}
-                        type="number"
-                        value={timestampHours + timeAdjustment}
-                        min='0'
-                        max='24'
-                        on-keyup={(e) => enforceMinMax(e)}
-                        on-blur={(e) => handleBlur(e, timestampHours, todayEntry)}
-                    />
-                    <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
-                        <textarea
-                            value={note}
-                            on-blur={(e) => handleNoteBlur(e, todayEntry)}
-                            placeholder="Add your notes here..."
-                        />
-                    </div>
-                </div>
-            );
-        } else {
-            return (
-                <div className="duration-item">
-                    <div>{timestampHours + timeAdjustment}</div>
-                    <div className={`hover-note ${index >= 5 && 'note-reverse'}`}>
-                        <textarea
-                            value={note}
-                            placeholder="No note was recorded"
-                            readonly
-                        />
-                    </div>
-                </div>
-            );
-        }
+        return timeAdjustment;
     }
+
+    const getNoteValue = () => {
+        if(!todayEntry || !todayEntry.note) return '';
+        return todayEntry.note;
+    }
+
+    const isMissingNote = () => {
+        if(!todayEntry) return false;
+        if(getTimeAdjustment() + getTimestampHours() === 0)return false;
+        if(todayEntry.note) return false;
+        return true;
+    }
+
+    return (
+        <div className="duration-item">
+            <input
+                className={`project-item-time ${isMissingNote() && "no-note"}`}
+                type="number"
+                value={getTimeAdjustment() + getTimestampHours()}
+                min='0'
+                max='24'
+                on-keyup={(e) => enforceMinMax(e)}
+                on-blur={(e) => editableInputs && handleBlur(e, todayEntry)}
+                disabled={!editableInputs}
+            />
+            <div className={`hover-note ${index >= 4 && 'note-reverse'}`}>
+                <textarea
+                    value={getNoteValue()}
+                    on-blur={(e) => editableInputs && handleNoteBlur(e, todayEntry)}
+                    placeholder={editableInputs ? "Add your notes here..." : "No note recorded"}
+                    readonly={!editableInputs}
+                />
+            </div>
+        </div>
+    )
 }
 
 export default ClientDay;
