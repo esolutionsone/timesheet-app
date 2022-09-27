@@ -20,7 +20,6 @@
         justify-content: flex-start;
         align-items: center;
         padding: $item-padding;
-
         border-bottom: $border-primary;
         font-family: $font-primary;
 
@@ -30,11 +29,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            width: 350px;
+            width: 300px;
             height: 68px;
             // margin-bottom: 10px;
             font-family: $font-primary;
-            font-size: $font-size-medium;
+            font-size: $font-size-small;
             margin-left: auto;
     
             .time-box-increments {
