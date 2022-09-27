@@ -118,6 +118,7 @@ const RoleDay = ({
     }
 
     const isMissingNote = () => {
+        // Check for entry, non-zero hours, and lack of note
         if(!todayEntry) return false;
         if(getTimeAdjustment() + getTimestampHours() === 0)return false;
         if(todayEntry.note) return false;
