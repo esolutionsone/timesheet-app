@@ -32,6 +32,7 @@ const RoleDay = ({
                 consultant: consultantId,
                 project_stage_role: psr.sys_id,
                 note: e.target.value,
+                time_adjustment: 0
             };
             dispatch('INSERT_TIME_ENTRY', { data })
         }
