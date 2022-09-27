@@ -239,6 +239,10 @@
     align-items: center;
     justify-content: center;
 
+    input:focus::placeholder{
+        color: transparent;
+    }
+
     .hover-note {
         // display: none;
         position: absolute;
