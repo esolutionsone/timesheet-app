@@ -125,18 +125,22 @@ const RoleDay = ({
         return true;
     }
 
+    const time = getTimeAdjustment() + getTimestampHours();
+    const itemValue = time > 0 ? time : ''
+
     return (
         <div className="duration-item">
             <input
                 className={`project-item-time ${isMissingNote() && "no-note"}`}
                 type="number"
-                value={getTimeAdjustment() + getTimestampHours()}
+                value={itemValue}
                 min='0'
                 max='24'
                 step='.25'
                 on-keyup={(e) => enforceMinMax(e)}
                 on-blur={(e) => editableInputs && handleBlur(e, todayEntry)}
                 disabled={!editableInputs}
+                placeholder={0}
             />
             <div className={`hover-note ${index >= 4 && 'note-reverse'}`}>
                 <textarea
