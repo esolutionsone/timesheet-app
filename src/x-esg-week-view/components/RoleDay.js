@@ -1,6 +1,6 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
 
-const ClientDay = ({
+const RoleDay = ({
     psr,
     entry,
     timestamps,
@@ -79,8 +79,6 @@ const ClientDay = ({
         }
     }
 
-    console.log(date, todayEntry)
-
     const getTimestampHours = () => {
         // set the timestamp hours for the project if they exist
         let timestampHours = 0
@@ -150,4 +148,4 @@ const ClientDay = ({
     )
 }
 
-export default ClientDay;
+export default RoleDay;
