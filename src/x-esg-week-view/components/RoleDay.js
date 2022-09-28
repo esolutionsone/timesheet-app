@@ -5,6 +5,7 @@ import {
     getTimeAdjustment,
     getNoteValue,
     isMissingNote,
+    moveVerticalFocus,
  } from "./RoleDayHelpers";
 
 const RoleDay = ({
@@ -88,12 +89,7 @@ const RoleDay = ({
         }
     }
 
-    const handleKeyComb = (e) => {
-        if((e.metaKey || e.ctrlKey) && e.key === 'Enter'){
-            console.log(date);
-            console.log(e.target.shadowRoot);
-        }
-    }
+
 
     return (
         <div className="duration-item">
@@ -109,7 +105,7 @@ const RoleDay = ({
                 disabled={!editableInputs}
                 placeholder={0}
                 data-date={date}
-                on-keydown={handleKeyComb}
+                on-keydown={(e) => moveVerticalFocus(e, date)}
             />
             <div className={`hover-note ${index >= 4 && 'note-reverse'}`}>
                 <textarea
@@ -117,6 +113,8 @@ const RoleDay = ({
                     on-blur={(e) => editableInputs && handleNoteBlur(e, entry)}
                     placeholder={editableInputs ? "Add your notes here..." : "No note recorded"}
                     readonly={!editableInputs}
+                    on-keydown={(e) => moveVerticalFocus(e, date,
+                        ["parentElement", "previousSibling"])}
                 />
             </div>
         </div>
