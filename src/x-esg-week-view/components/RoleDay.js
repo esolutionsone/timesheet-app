@@ -22,6 +22,9 @@ const RoleDay = ({
     const today = new Date();
     const editableInputs = entryState === 'draft' && selectedDay <= today;
 
+    // Get sum of today's entry and today's timestamps
+    const hours = getTimeAdjustment(entry) + getTimestampHours(timestamps);
+
     const handleNoteBlur = (e, entry) => {
         if (entry) {
             dispatch('UPDATE_TIME_ENTRY', {
@@ -84,23 +87,22 @@ const RoleDay = ({
         }
     }
 
-    const isMissingNote = () => {
+    const isMissingNote = (entry, hours) => {
         // Check for entry, non-zero hours, and lack of note
         if(!entry) return false;
-        if(getTimeAdjustment(entry) + getTimestampHours(timestamps) === 0)return false;
+        if(hours === 0)return false;
         if(entry.note) return false;
         return true;
     }
 
-    const time = getTimeAdjustment(entry) + getTimestampHours(timestamps);
-    const itemValue = time > 0 ? time : ''
+
 
     return (
         <div className="duration-item">
             <input
-                className={`project-item-time ${isMissingNote() && "no-note"}`}
+                className={`project-item-hours ${isMissingNote() && "no-note"}`}
                 type="number"
-                value={itemValue}
+                value={hours > 0 ? hours : ''}
                 min='0'
                 max='24'
                 step={0.25}
