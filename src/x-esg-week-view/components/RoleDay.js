@@ -91,7 +91,7 @@ const RoleDay = ({
     return (
         <div className="duration-item">
             <input
-                className={`project-item-hours ${isMissingNote(entry, hours) && "no-note"}`}
+                className={`project-item-time ${isMissingNote(entry, hours) && "no-note"}`}
                 type="number"
                 value={hours > 0 ? hours : ''}
                 min='0'
