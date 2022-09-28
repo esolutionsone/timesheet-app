@@ -41,7 +41,7 @@ export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_t
 
     return {
         tableName,
-        sysparm_query: `consultant=${consultantId}^date>=${start_date}^date<=${end_date}
+        sysparm_query: `consultant=${consultantId}^date>=${start_date}^date<${end_date}
         ^ORDERBYstart_time`,
         sysparm_fields: `
             date,sys_id,time_adjustment,adjustment_direction,note,status,
