@@ -1,4 +1,10 @@
 import { getUTCTime, stringifyDuration } from "../../helpers";
+import { 
+    enforceMinMax,
+    getTimestampHours,
+    getTimeAdjustment,
+    getNoteValue,
+ } from "./RoleDayHelpers";
 
 const RoleDay = ({
     psr,
@@ -14,13 +20,12 @@ const RoleDay = ({
 
     const project = psr.project_role.project;
     const today = new Date();
-    const todayEntry = entry;
     const editableInputs = entryState === 'draft' && selectedDay <= today;
 
-    const handleNoteBlur = (e, todayEntry) => {
-        if (todayEntry) {
+    const handleNoteBlur = (e, entry) => {
+        if (entry) {
             dispatch('UPDATE_TIME_ENTRY', {
-                sys_id: todayEntry.sys_id,
+                sys_id: entry.sys_id,
                 data: {
                     note: e.target.value
                 }
@@ -38,14 +43,8 @@ const RoleDay = ({
         }
     }
 
-    const enforceMinMax = (e) => {
-        // Clamp to 24 hour max
-        if (e.target.value > 24) {
-            e.target.value = 24;
-        }
-    }
 
-    const handleBlur = (e, todayEntry, timestampHours = 0) => {
+    const handleBlur = (e, entry, timestampHours = 0) => {
         let inputHours = 0;
         if (e.target.value) {
             // Set number of hours and round to nearest .25;
@@ -53,7 +52,6 @@ const RoleDay = ({
             if(inputHours % .25 !== 0){
                 inputHours = Math.round(e.target.value / .25) * .25;
             }
-            console.log(inputHours);
         }
         const difference = inputHours - timestampHours;
         const differenceDur = {
@@ -64,14 +62,14 @@ const RoleDay = ({
         const adjustment_direction = difference >= 0 ? 'add' : 'subtract';
         const stringDuration = "1970-01-01 " + stringifyDuration(differenceDur);
 
-        if (todayEntry) {
+        if (entry) {
             dispatch('UPDATE_TIME_ENTRY', {
                 data: {
                     time_adjustment: stringDuration,
                     adjustment_direction,
                     project_stage_role: psr.sys_id,
                 },
-                sys_id: todayEntry.sys_id,
+                sys_id: entry.sys_id,
             })
         } else {
             const data = {
@@ -86,53 +84,15 @@ const RoleDay = ({
         }
     }
 
-    const getTimestampHours = () => {
-        // set the timestamp hours for the project if they exist
-        let timestampHours = 0
-        if (timestamps) {
-            timestampHours = timestamps
-                //filter by stamps matching date
-                .filter(stamp => {
-                    return stamp.rounded_duration !== ''
-                        && stamp.start_time.split(' ')[0] == date;
-                })
-                // reduce on time, and convert to hours
-                .reduce((acc, stamp) => {
-                    return acc + getUTCTime(stamp.rounded_duration).getTime();
-                }, 0) / 1000 / 60 / 60;
-        }
-
-        return timestampHours;
-    }
-
-    const getTimeAdjustment = () => {
-        // Add time adjustment from timeEntry
-        let timeAdjustment = 0;
-        if (todayEntry) {
-            if (todayEntry.time_adjustment) {
-                timeAdjustment = getUTCTime(todayEntry.time_adjustment).getTime();
-            }
-            timeAdjustment = timeAdjustment / 1000 / 60 / 60;
-            timeAdjustment *= (todayEntry.adjustment_direction == 'add')
-                ? 1 : -1;
-        }
-        return timeAdjustment;
-    }
-
-    const getNoteValue = () => {
-        if(!todayEntry || !todayEntry.note) return '';
-        return todayEntry.note;
-    }
-
     const isMissingNote = () => {
         // Check for entry, non-zero hours, and lack of note
-        if(!todayEntry) return false;
-        if(getTimeAdjustment() + getTimestampHours() === 0)return false;
-        if(todayEntry.note) return false;
+        if(!entry) return false;
+        if(getTimeAdjustment(entry) + getTimestampHours(timestamps) === 0)return false;
+        if(entry.note) return false;
         return true;
     }
 
-    const time = getTimeAdjustment() + getTimestampHours();
+    const time = getTimeAdjustment(entry) + getTimestampHours(timestamps);
     const itemValue = time > 0 ? time : ''
 
     return (
@@ -145,14 +105,14 @@ const RoleDay = ({
                 max='24'
                 step={0.25}
                 on-keyup={(e) => enforceMinMax(e)}
-                on-blur={(e) => editableInputs && handleBlur(e, todayEntry)}
+                on-blur={(e) => editableInputs && handleBlur(e, entry)}
                 disabled={!editableInputs}
                 placeholder={0}
             />
             <div className={`hover-note ${index >= 4 && 'note-reverse'}`}>
                 <textarea
-                    value={getNoteValue()}
-                    on-blur={(e) => editableInputs && handleNoteBlur(e, todayEntry)}
+                    value={getNoteValue(entry)}
+                    on-blur={(e) => editableInputs && handleNoteBlur(e, entry)}
                     placeholder={editableInputs ? "Add your notes here..." : "No note recorded"}
                     readonly={!editableInputs}
                 />
