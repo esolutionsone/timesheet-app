@@ -33,21 +33,28 @@ export const FETCH_PROJECT_STAGE_ROLE_PAYLOAD = (consultantId) => ({
         project_stage.name`
 })
 
-export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
-    tableName,
-    sysparm_query: `consultant=${consultantId}^date>${start_time}^date<=${end_time}
-    ^ORDERBYstart_time`,
-    sysparm_fields: `
-        date,sys_id,time_adjustment,adjustment_direction,note,status,
-        project_stage_role.sys_id,
-        project_stage_role.project_stage.sys_id,
-        project_stage_role.project_stage.project.sys_id,
-        project_stage_role.project_stage.project.short_description,
-        project_stage_role.project_stage.project.client.sys_id,
-        project_stage_role.project_stage.project.client.short_description,
-        project_stage_role.project_role.sys_id
+export const FETCH_ENTRIES_PAYLOAD = (consultantId, tableName, start_time, end_time) => {
+    console.log('start_time', start_time, '\nend_time', end_time);
+    const start_date = start_time.split(' ')[0]
+    const end_date = end_time.split(' ')[0]
+    console.log('start_date', start_date, 'end_date', end_date);
+
+    return {
+        tableName,
+        sysparm_query: `consultant=${consultantId}^date>=${start_date}^date<=${end_date}
+        ^ORDERBYstart_time`,
+        sysparm_fields: `
+            date,sys_id,time_adjustment,adjustment_direction,note,status,
+            project_stage_role.sys_id,
+            project_stage_role.project_stage.sys_id,
+            project_stage_role.project_stage.project.sys_id,
+            project_stage_role.project_stage.project.short_description,
+            project_stage_role.project_stage.project.client.sys_id,
+            project_stage_role.project_stage.project.client.short_description,
+            project_stage_role.project_role.sys_id
         `
-})
+    }
+}
 
 export const FETCH_TIMESTAMPS_PAYLOAD = (consultantId, tableName, start_time, end_time) => ({
     tableName,
