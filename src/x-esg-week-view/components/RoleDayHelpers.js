@@ -10,7 +10,7 @@ export const enforceMinMax = (e) => {
     }
 }
 
-export const getTimestampHours = (timestamps) => {
+export const getTimestampHours = (timestamps, date) => {
     // set the timestamp hours for the project if they exist
     let timestampHours = 0
     if (timestamps) {

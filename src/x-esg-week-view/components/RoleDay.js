@@ -24,7 +24,7 @@ const RoleDay = ({
     const editableInputs = entryState === 'draft' && selectedDay <= today;
 
     // Get sum of today's entry and today's timestamps
-    const hours = getTimeAdjustment(entry) + getTimestampHours(timestamps);
+    const hours = getTimeAdjustment(entry) + getTimestampHours(timestamps, date);
 
     const handleNoteBlur = (e, entry) => {
         if (entry) {
