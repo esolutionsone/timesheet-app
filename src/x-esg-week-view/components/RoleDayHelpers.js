@@ -1,7 +1,10 @@
 import { getUTCTime } from "../../helpers";
 
+/**
+ * Clamps input values to range 0-24 inclusive
+ * @param {Event} e 
+ */
 export const enforceMinMax = (e) => {
-    // Clamp to 24 hour max
     if (e.target.value > 24) {
         e.target.value = 24;
     }
@@ -45,3 +48,17 @@ export const getNoteValue = (entry) => {
     return entry.note;
 }
 
+/**
+ * Takes in the daily entry and hours, returns true if note is missing
+ * and hours are not zero
+ * @param {} entry 
+ * @param {number} hours 
+ * @returns boolean
+ */
+export const isMissingNote = (entry, hours) => {
+    // Check for entry, non-zero hours, and lack of note
+    if(!entry) return false;
+    if(hours === 0)return false;
+    if(entry.note) return false;
+    return true;
+}

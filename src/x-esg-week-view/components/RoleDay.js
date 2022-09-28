@@ -1,9 +1,10 @@
-import { getUTCTime, stringifyDuration } from "../../helpers";
+import { stringifyDuration } from "../../helpers";
 import { 
     enforceMinMax,
     getTimestampHours,
     getTimeAdjustment,
     getNoteValue,
+    isMissingNote,
  } from "./RoleDayHelpers";
 
 const RoleDay = ({
@@ -87,20 +88,10 @@ const RoleDay = ({
         }
     }
 
-    const isMissingNote = (entry, hours) => {
-        // Check for entry, non-zero hours, and lack of note
-        if(!entry) return false;
-        if(hours === 0)return false;
-        if(entry.note) return false;
-        return true;
-    }
-
-
-
     return (
         <div className="duration-item">
             <input
-                className={`project-item-hours ${isMissingNote() && "no-note"}`}
+                className={`project-item-hours ${isMissingNote(entry, hours) && "no-note"}`}
                 type="number"
                 value={hours > 0 ? hours : ''}
                 min='0'
