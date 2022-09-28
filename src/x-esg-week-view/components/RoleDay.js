@@ -39,6 +39,7 @@ const RoleDay = ({
     }
 
     const enforceMinMax = (e) => {
+        // Clamp to 24 hour max
         if (e.target.value > 24) {
             e.target.value = 24;
         }
@@ -47,7 +48,12 @@ const RoleDay = ({
     const handleBlur = (e, todayEntry, timestampHours = 0) => {
         let inputHours = 0;
         if (e.target.value) {
+            // Set number of hours and round to nearest .25;
             inputHours = Number(e.target.value);
+            if(inputHours % .25 !== 0){
+                inputHours = Math.round(e.target.value / .25) * .25;
+            }
+            console.log(inputHours);
         }
         const difference = inputHours - timestampHours;
         const differenceDur = {
@@ -137,7 +143,7 @@ const RoleDay = ({
                 value={itemValue}
                 min='0'
                 max='24'
-                step='.25'
+                step={0.25}
                 on-keyup={(e) => enforceMinMax(e)}
                 on-blur={(e) => editableInputs && handleBlur(e, todayEntry)}
                 disabled={!editableInputs}
