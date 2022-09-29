@@ -1,4 +1,5 @@
 import { Stage } from "./Stage"
+import { getTimeAdjustment } from "./RoleDayHelpers";
 
 export const Project = (props) => {
     const { psrs, updateState, addStages, name, entries, timestamps, dateArr } = props;
@@ -10,6 +11,16 @@ export const Project = (props) => {
             return (psr.project_role.project.current_stage.value == psr.project_stage.sys_id || addStages.includes(psr.project_stage.sys_id) || entryStages.includes(psr.project_stage.sys_id))
         })
         .map(psr => psr.project_stage.sys_id))]
+
+    let projects = [...new Set(psrs.map(psr => psr.sys_id))]
+    let projectEntries = entries.filter( entry => projects.includes(entry.project_stage_role.sys_id))
+    let projectHours = 0;
+
+    projectEntries.forEach(entry => {
+        //once timestamps are incorporated, will need to add timestamp hours too
+        projectHours += getTimeAdjustment(entry)
+    });
+    console.log('Hours spent on project', projectHours);
 
     // gets psrs that aren't visible on dom
     let dropDownPsrs = psrs.filter(psr => {
@@ -36,11 +47,10 @@ export const Project = (props) => {
         stagesDropDown = ''
     }
     
-    
-    
     return (
         <div>
             <div className='project-item'>{name} <span>{stagesDropDown}</span> </div>
+            <div>{projectHours}</div>
             {stageIds.map(sys_id => {
                 let filteredPsrs = psrs.filter(psr => {
                     return sys_id === psr.project_stage.sys_id
