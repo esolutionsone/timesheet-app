@@ -17,6 +17,7 @@ createCustomElement('x-esg-week-view', {
 		addStages: [],
 		entries: [],
 		timestamps: [],
+		focus: {date: '', psr: ''},
 	},
 	styles,
 	properties: {
