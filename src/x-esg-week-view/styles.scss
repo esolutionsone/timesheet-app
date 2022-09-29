@@ -22,6 +22,44 @@
         padding: $item-padding;
         border-bottom: $border-primary;
         font-family: $font-primary;
+        position: relative;
+
+        .help-info {
+            $from-corner: 5px;
+            cursor:default;
+
+            .help-icon {
+                font-size: 30px;
+                color: $color-secondary;
+                position: absolute;
+                top: $from-corner;
+                right: $from-corner;
+            }
+
+            .help-text {
+                display: none;
+            }
+
+            &:hover .help-text {
+                display:inline-block;
+                padding: $item-padding 10px $item-padding 5px;
+                border: $border-primary;
+                border-radius: $border-radius-default;
+                position: absolute;
+                top: $from-corner * 6;
+                right: $from-corner * 6;
+                background-color: #fff;
+                max-width: 400px; 
+                z-index: 100;
+                font-size: $font-size-small;
+
+                li {
+                    margin: 10px auto;
+                }
+                // top: $from-corner * 2
+
+            }
+        }
 
         .time-box {
             @include default-border;
