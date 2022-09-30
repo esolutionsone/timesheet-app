@@ -33,3 +33,6 @@
     - x_esg_one_core.user (or .admin)
 - A consultant record linked to user's sys_user (else will stick on loading)
 - At least one valid Project Stage Role with appropriate relations (since projects, etc. are assigned, not chosen by the user - else won't render any projects to track time on, obviously)
+
+## Deployment
+- For some reason, I'm having trouble getting changes to appear on our dev instance unless I deploy twice.
