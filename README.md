@@ -46,11 +46,13 @@ core_consultant }o--|| core_project_role : ""
 core_project_role ||--o{ core_project_stage_role : ""
 sys_user ||--o| core_consultant : ""
 core_project ||--o{ core_project_role : ""
+delivery_time_entry |o--|| core_consultant : ""
 
 
 delivery_time_entry {
     duration time_adjustment "User-entered (not timestamped) time"
     float total_time_float
+    reference consultant FK
 }
 core_consultant {
     reference sys_user FK
