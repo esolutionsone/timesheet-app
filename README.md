@@ -40,17 +40,24 @@
 erDiagram
 
 delivery_time_entry }|--|| core_project_stage_role : ""
-core_project_stage_role }|--|| core_project_stage : ""
-core_project_stage }|--|| core_project: ""
+core_project_stage_role }o--|| core_project_stage : ""
+core_project_stage }o--|| core_project: ""
 core_consultant }o--|| core_project_role : ""
-core_project_role }|--|| core_project_stage_role : ""
+core_project_role ||--o{ core_project_stage_role : ""
 sys_user ||--o| core_consultant : ""
+core_project ||--o{ core_project_role : ""
 
 
 delivery_time_entry {
-    serial sys_id PK
     duration time_adjustment "User-entered (not timestamped) time"
     float total_time_float
+}
+core_consultant {
+    reference sys_user FK
+}
+core_project_role {
+    string short_description "Project Role"
+    reference consultant FK
 }
 
 ```
