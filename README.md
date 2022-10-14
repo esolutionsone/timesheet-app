@@ -33,3 +33,33 @@
     - x_esg_one_core.user (or .admin)
 - A consultant record linked to user's sys_user (else will stick on loading)
 - At least one valid Project Stage Role with appropriate relations (since projects, etc. are assigned, not chosen by the user - else won't render any projects to track time on, obviously)
+
+## ERD
+
+```mermaid
+erDiagram
+
+delivery_time_entry }|--|| core_project_stage_role : ""
+core_project_stage_role }o--|| core_project_stage : ""
+core_project_stage }o--|| core_project: ""
+core_consultant }o--|| core_project_role : ""
+core_project_role ||--o{ core_project_stage_role : ""
+sys_user ||--o| core_consultant : ""
+core_project ||--o{ core_project_role : ""
+delivery_time_entry |o--|| core_consultant : ""
+
+
+delivery_time_entry {
+    duration time_adjustment "User-entered (not timestamped) time"
+    float total_time_float
+    reference consultant FK
+}
+core_consultant {
+    reference sys_user FK
+}
+core_project_role {
+    string short_description "Project Role"
+    reference consultant FK
+}
+
+```
